@@ -55,6 +55,12 @@ spring:
 
 server:
   port: ${SERVER_PORT:8080}
+  # Tomcat's 8 KB default rejects the whole request with a bare "HTTP Status 400 - Bad Request"
+  # once the Cookie header outgrows it. Cookies ignore the port, so every other project ever
+  # served from localhost contributes to the jar this app is sent, and a developer machine
+  # crosses 8 KB easily. The failure gives no clue what happened, so the ceiling is raised
+  # rather than left as a trap for anyone cloning this repo.
+  max-http-request-header-size: 64KB
   error:
     include-message: always
 

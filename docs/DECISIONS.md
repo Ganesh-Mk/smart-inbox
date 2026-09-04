@@ -692,3 +692,61 @@ convention rather than raw column maps, but that changes the API surface and eve
 reference in the UI; it is recorded here as the real cause rather than smuggled into a UI commit.
 
 **Affects:** `frontend/src/app/detail/detail.component.{html,ts}`.
+
+---
+
+### D-023 · Two ways the browser broke the app that the application never saw · 5 Sep 2026
+
+Both reported from a real browser session while the app itself was healthy — `curl` succeeded
+throughout, which is exactly why neither showed up in earlier testing.
+
+**1 · A native sign-in dialog over the running application**
+
+The security config was an allow-list of static paths sitting in front of
+`.anyRequest().authenticated()`. That challenges every path that is not on the list —
+*including paths that do not exist* — and a 401 carrying `WWW-Authenticate: Basic` is an
+instruction to the browser to ask the user for a password itself.
+
+Browsers speculatively request a surprising number of things:
+
+```
+/.well-known/appspecific/com.chrome.devtools.json   401   ← devtools or an extension attaching
+/manifest.json                                      401
+/apple-touch-icon.png                               401
+/main-<hash>.js.map                                 401   ← devtools open
+/robots.txt                                         401
+```
+
+Every one produced a credentials prompt. The trigger in practice was opening devtools, or a
+browser extension attaching its debugger.
+
+**Fix:** invert the rule. `/api/**` is the security boundary and is authenticated; actuator
+beyond `health`/`info` is authenticated; **everything else is `permitAll`**. The Angular bundle
+is content-hashed and public regardless, and the SPA owns every non-API route, so nothing is
+lost — and a path that simply is not here now answers **404, not a password prompt**.
+
+Verified: the five paths above return 404; `/api/messages` 401 without credentials and 200 with;
+`/api/documents/.../image` 401; `/actuator/env` 401. 45 backend tests pass.
+
+**2 · `HTTP Status 400 – Bad Request` on every page**
+
+Tomcat's log:
+
+```
+java.lang.IllegalArgumentException: Request header is too large
+```
+
+`maxHttpHeaderSize` defaults to 8 KB. **Cookies ignore the port**, so every project ever served
+from `localhost` contributes to the jar sent to this app, and a developer machine crosses 8 KB
+easily. Reproduced exactly: a 9 KB `Cookie` header returns 400, a small one returns 200.
+
+The failure page says nothing about cookies or headers, so it reads as "the app is broken".
+Raised `server.max-http-request-header-size` to 64 KB rather than leave the trap for anyone
+cloning the repo. A 20 KB cookie header now returns 200.
+
+**What these have in common:** the application was correct and every server-side check passed.
+Both faults live in the space between the browser and the app — speculative requests, and state
+the browser accumulated from unrelated software. `curl` cannot see either one, and neither can a
+test suite. Only a real browser session found them.
+
+**Affects:** `SecurityConfig.java`, `application.yml`.

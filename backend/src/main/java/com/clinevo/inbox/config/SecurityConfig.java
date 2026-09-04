@@ -56,16 +56,24 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        // The API is the security boundary. Everything else — the content-hashed Angular
+        // bundle, the SPA's own routes, and the assorted paths a browser probes for on its
+        // own — is public.
+        //
+        // This used to be the other way round: an allow-list of static paths with
+        // `.anyRequest().authenticated()` behind it. That challenged every *unknown* path,
+        // and a 401 carrying `WWW-Authenticate: Basic` makes the browser open its own
+        // sign-in dialog over the application. Browsers speculatively request a surprising
+        // number of things that do not exist here — `/manifest.json`,
+        // `/apple-touch-icon.png`, `.js.map` when devtools is open, and
+        // `/.well-known/appspecific/com.chrome.devtools.json` whenever devtools or an
+        // extension debugger attaches. Each one produced a credentials prompt. A path that
+        // simply is not here should answer 404, not demand a password.
         .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/**").authenticated()
             .requestMatchers("/actuator/health", "/actuator/info").permitAll()
-            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            // The built Angular bundle. Filenames are content-hashed (main-BN4H6VEW.js), and
-            // the SPA router owns every non-/api path, so the whole static surface is public
-            // and the API behind it is not.
-            .requestMatchers("/", "/index.html", "/favicon.ico", "/*.js", "/*.css",
-                "/*.txt", "/*.json", "/assets/**", "/media/**").permitAll()
-            .requestMatchers("/queue", "/queue/**", "/messages/**").permitAll()
-            .anyRequest().authenticated())
+            .requestMatchers("/actuator/**").authenticated()
+            .anyRequest().permitAll())
         .httpBasic(basic -> {});
     return http.build();
   }
