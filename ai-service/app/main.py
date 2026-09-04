@@ -14,7 +14,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.routes import analyse, literature, meta, parse
-from app.settings import get_settings
+from app.settings import api_key_problem, get_settings
 
 logging.basicConfig(
     level=logging.INFO,
@@ -68,7 +68,18 @@ app.include_router(literature.router)
 
 @app.on_event("startup")
 async def on_startup() -> None:
+    """Refuse to start without a usable key.
+
+    This used to log a warning and carry on. The service then came up reporting `UP`, the queue
+    handed it work, and every model call failed — each one burning its retry budget (E36) before
+    the job dead-lettered. A missing key was indistinguishable from a broken model, and the cost
+    of finding out was a corrupted run.
+
+    Failing here is loud and cheap: uvicorn exits non-zero with a message naming the fix.
+    """
     settings = get_settings()
+    problem = api_key_problem(settings)
+    if problem:
+        log.error("Refusing to start: %s", problem)
+        raise RuntimeError(problem)
     log.info("Smart Inbox AI service starting — model=%s", settings.ai_model)
-    if not settings.openrouter_api_key:
-        log.warning("OPENROUTER_API_KEY is not set; LLM-backed endpoints will fail")

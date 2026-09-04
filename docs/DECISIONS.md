@@ -995,3 +995,46 @@ it. Both assertions now compare explicitly.
 
 **Affects:** `schemas.py`, `extract.py`, `prompts/P2b_extract_products/v2.md`,
 `tests/test_product_fields.py`.
+
+---
+
+### D-027 · The AI service started happily without an API key · 5 Sep 2026
+
+`on_startup` logged a warning and carried on:
+
+```python
+if not settings.openrouter_api_key:
+    log.warning("OPENROUTER_API_KEY is not set; LLM-backed endpoints will fail")
+```
+
+So the service came up, `/health` answered **`UP`** with `api_key_configured: false` beside it,
+the queue handed it work, and every model call failed — each burning its retry budget (E36)
+before the job dead-lettered. From the outside a missing key was indistinguishable from a broken
+model, and the cost of finding out was a corrupted run.
+
+Reporting the key state in a subordinate field of a healthy response is the specific mistake.
+Nothing reads a sub-field to decide whether a dependency is usable; a health check is consulted
+for its status.
+
+**Fix.** `settings.api_key_problem()` returns why the key is unusable, or None:
+
+- missing or blank
+- still the `.env.example` placeholder — the likeliest way to arrive here
+- not starting `sk-or-` — an OpenAI or Anthropic key will not work against OpenRouter
+  (CLAUDE.md constraint 1), and that mistake would otherwise surface as a 401 per job
+
+Startup raises, so uvicorn exits non-zero with a message naming the fix. `/health` reports
+`DOWN` with **HTTP 503** and the reason, so compose and the Spring client both see it. Only the
+key's shape is checked — whether it authenticates is OpenRouter's to say. The message never
+contains the key, which is a test rather than a convention.
+
+**Verified against a placeholder key:** exit code 3, `Refusing to start: OPENROUTER_API_KEY still
+holds the placeholder…`, and the port never bound.
+
+**Then it caught a real one immediately.** The next start failed with "OPENROUTER_API_KEY is not
+set" — the key was present in `.env` but **commented out**. Under the old code that would have
+started cleanly and failed one expensive job at a time.
+
+Six tests in `tests/test_api_key_guard.py`; 141 Python tests pass.
+
+**Affects:** `app/settings.py`, `app/main.py`, `app/routes/meta.py`.
