@@ -90,9 +90,9 @@ DONE (phase P0, mostly):
 IN PROGRESS / NEXT:
   - `docker pull gvenzl/oracle-free:23-slim-faststart` may still be running or may need re-running.
     Check `docker images` first.
-  - The project directory on disk may still be named `firstpass\` because a background docker pull
-    held a lock on it. If so, rename it to `smart-inbox\` (nothing inside it or on GitHub is
-    affected). Verify no stray "firstpass" strings remain: grep -ril firstpass --exclude-dir=.git .
+  - DONE: the project directory on disk is now `smart-inbox\` (it had been left as `firstpass\`
+    because something held a lock on it). Contents, git history and the GitHub remote are unaffected.
+    An empty `..\firstpass\` husk may still sit next to it until the locking process exits — delete it.
   - Then start phase P1 in docs/PHASES.md and work straight through to P7.
 
 ## Environment gotchas already discovered — do not rediscover these the hard way

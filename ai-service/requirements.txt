@@ -1,0 +1,28 @@
+# Smart Inbox AI service — pinned, pure-wheel dependencies only.
+# No native OCR stack: PyMuPDF renders, Claude Haiku 4.5 vision reads. See PROJECT_PLAN §6.
+# Versions are the ones actually installed and tested on this machine (Python 3.12.7, win32).
+
+fastapi==0.115.0
+uvicorn==0.32.0
+pydantic==2.10.0
+pydantic-settings==2.6.0
+python-multipart==0.0.12
+httpx==0.28.0
+
+# PDF understanding
+pymupdf==1.28.2
+pillow==12.1.0
+
+# language detection + fuzzy evidence verification
+lingua-language-detector==2.2.0
+rapidfuzz==3.14.6
+
+# the one permitted LLM path: OpenAI SDK -> OpenRouter -> anthropic/claude-haiku-4.5
+openai==1.58.1
+
+# corpus generation (shared with testdata/generator)
+reportlab==5.0.1
+
+# test
+pytest==8.3.0
+pytest-asyncio==0.24.0

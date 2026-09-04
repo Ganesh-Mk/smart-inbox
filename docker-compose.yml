@@ -1,0 +1,72 @@
+# Smart Inbox — local infrastructure.
+#
+#   docker compose up -d          Oracle 23ai Free + GreenMail (the demo mailbox)
+#   docker compose down -v        wipe everything, including the database volume
+#
+# Memory budget on the 8 GB development machine (PROJECT_PLAN §19): Oracle is capped at 2 GB,
+# GreenMail at 512 MB, leaving room for the JVM (-Xmx512m), the Python service and a browser.
+
+name: smart-inbox
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim-faststart
+    container_name: smart-inbox-oracle
+    environment:
+      # SYS / SYSTEM password. Read from .env; there is no default on purpose.
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?set ORACLE_PASSWORD in .env}
+      # gvenzl's image creates this user inside the FREEPDB1 pluggable database on first run.
+      APP_USER: ${ORACLE_APP_USER:-SMARTINBOX}
+      APP_USER_PASSWORD: ${ORACLE_APP_PASSWORD:?set ORACLE_APP_PASSWORD in .env}
+    ports:
+      - "${ORACLE_PORT:-1521}:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      # Runs once, on the first start only: extra grants the application needs beyond the
+      # defaults gvenzl gives APP_USER (see infra/oracle/init/).
+      - ./infra/oracle/init:/container-entrypoint-initdb.d:ro
+    # Oracle Database Free is licence-limited to 2 GB of RAM; the container limit makes that
+    # explicit and stops the database sizing itself against all 8 GB of host memory.
+    mem_limit: 2g
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD", "/opt/oracle/healthcheck.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 60
+      start_period: 60s
+    restart: unless-stopped
+
+  greenmail:
+    image: greenmail/standalone:latest
+    container_name: smart-inbox-greenmail
+    environment:
+      # A genuine IMAP/SMTP server, so the ingestion code path is real IMAP (E1).
+      # Four config values in .env repoint the identical code at Gmail — see the README.
+      GREENMAIL_OPTS: >-
+        -Dgreenmail.setup.test.all
+        -Dgreenmail.hostname=0.0.0.0
+        -Dgreenmail.users=${MAIL_USER:-safety@smart-inbox.test}:${MAIL_PASSWORD:?set MAIL_PASSWORD in .env}
+        -Dgreenmail.auth.disabled=false
+        -Dgreenmail.verbose
+      JAVA_TOOL_OPTIONS: -Xmx384m
+    ports:
+      - "3025:3025"   # SMTP  — scripts/seed_mailbox.py posts the corpus here
+      - "3143:3143"   # IMAP  — the Spring Boot MailPoller reads here
+      - "3110:3110"   # POP3
+      - "3465:3465"   # SMTPS
+      - "3993:3993"   # IMAPS
+      - "8085:8080"   # GreenMail REST API (8080 on the host belongs to Spring Boot)
+    mem_limit: 512m
+    healthcheck:
+      # The image ships no curl, wget or nc, so probe the IMAP port with bash's /dev/tcp —
+      # and probe 3143 specifically, because that is the port the MailPoller depends on.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/3143"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  oracle-data:

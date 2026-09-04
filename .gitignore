@@ -38,3 +38,7 @@ Thumbs.db
 
 # generated corpus renders (keep source corpus, drop derived images)
 testdata/corpus/**/renders/
+
+# portable toolchain (Angular 22's CLI needs Node >= 22.22.3; this machine's system Node is
+# 22.18.0, so a local Node 24 LTS lives here. ~100 MB, never committed.)
+.tools/

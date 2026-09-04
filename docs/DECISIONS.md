@@ -114,3 +114,106 @@ use. It can be restored, or deleted to reclaim 22.5 GB of D:. Not Smart Inbox's 
 `-Encoding utf8` on Windows PowerShell 5.1 — it adds a BOM. Use `utf8NoBOM` (PS 7+) or write bytes from Python.
 
 **Affects:** `CLAUDE.md` environment section corrected; no application impact.
+
+---
+
+### D-007 · Prompt caching verified live: threshold, field names and the real saving · 4 Sep 2026
+
+Follow-up to D-004, which predicted caching would not engage below Anthropic's minimum cacheable
+prefix but did not establish the threshold or the field names. Both are now measured.
+
+A ~700-token system prompt (`scripts/smoke_llm.py`) still reports `cached_tokens: 0,
+cache_write_tokens: 0` — silently not cached, no error. A **4,376-token** preamble caches on the
+first call and reads back on the second:
+
+| Call | `prompt_tokens` | `cached_tokens` | `cache_write_tokens` | `cost` |
+|---|---|---|---|---|
+| 1 (cold) | 4,385 | 0 | 4,376 | $0.005504 |
+| 2 (warm) | 4,386 | 4,376 | 0 | $0.000468 |
+
+**An 11.8× cost reduction on the cached segment, measured rather than claimed.** This is the number
+the write-up quotes.
+
+Two concrete corrections to the implementation:
+
+1. **Field location.** OpenRouter reports *both* counters inside `usage.prompt_tokens_details`
+   (`cached_tokens`, `cache_write_tokens`). It does **not** surface Anthropic's native
+   `cache_creation_input_tokens` at the top level. `LlmClient._usage_of` originally read the
+   top-level name and would have recorded every cache write as zero — silently under-reporting
+   spend and making the cache look ineffective. Fixed.
+2. **Cached tokens are counted inside `prompt_tokens`**, not in addition to it (4,386 total of
+   which 4,376 cached). `estimate_cost` therefore prices the *fresh* remainder only. The fallback
+   estimator is a backstop anyway: `usage.cost` is present on every call and is what we store.
+
+**Affects:** `ai-service/app/llm/client.py`; the `P0_system` authoring target of ≥ 2,048 tokens in
+D-004 is confirmed as necessary (and comfortably exceeded by the real preamble); the cache-hit-rate
+metric in `eval/run_eval.py` reads `prompt_tokens_details.cache_write_tokens`.
+
+---
+
+### D-008 · Audit triggers fire on every UPDATE, but only on REVIEWER inserts · 4 Sep 2026
+
+Plan §9.4 specifies `TRG_FIELD_AUDIT` and `TRG_CLASSIFICATION_AUDIT` firing "on update/insert" as a
+safety net so nothing can change without an audit row. Implemented with one deliberate narrowing.
+
+**Every UPDATE is audited, unconditionally.** The schema is append-only by design (E40), so an
+in-place change to a classification or an extracted field is exactly the anomaly the net exists to
+catch — including the one legitimate update, setting `superseded_by`.
+
+**INSERTs are audited only when `decided_by = 'REVIEWER'`.** Auditing the AI's own inserts would add
+roughly 40 rows per case — on the ~38-document corpus, well over a thousand `AUDIT_EVENT` rows that
+say nothing a reviewer needs. It would also make the message audit timeline in the UI unreadable,
+which defeats the purpose of having one. The AI's inserts lose nothing: `AI_CALL_LOG` already holds
+the exact request, response, prompt version, tokens and cost behind every one of them, and the
+handler writes a single case-level audit event.
+
+The rule in one line: **a human action is always an audit event; a machine action is always an
+`AI_CALL_LOG` entry; an in-place mutation is always both.**
+
+**Affects:** `V4__triggers_views.sql`; the audit timeline in the P5 detail view stays legible.
+
+---
+
+### D-009 · `FOR UPDATE SKIP LOCKED` verified under 8-way concurrency · 4 Sep 2026
+
+Oracle locks rows for a `FOR UPDATE` cursor at OPEN time, which raised a real doubt about the
+dequeue design: if opening the cursor locked the whole PENDING backlog, the first worker to arrive
+would claim everything and the other three would idle — correct, but not a queue.
+
+`PKG_JOB_QUEUE.dequeue` therefore uses `OPEN` → `FETCH BULK COLLECT ... LIMIT n` → `CLOSE`, and
+`JobQueueConcurrencyTest.skipLockedGivesNoDoubleDequeue` measures what actually happens: **8 threads
+released simultaneously from a `CyclicBarrier`, 20 jobs, batch size 3.** Result: all 20 claimed,
+every one exactly once, no thread starved, no PENDING row left behind. Combined with
+`SKIP LOCKED`, the fetch limit does bound what gets locked.
+
+Two supporting choices fell out of this:
+
+1. **`dequeue` runs in its own short transaction** (`Propagation.REQUIRES_NEW`). The row locks are
+   released as soon as the claim commits; the claim is then carried by `state = 'RUNNING'`. Holding
+   database row locks for the minute a handler spends waiting on the LLM would be the wrong trade —
+   the lease plus `reap_stale_locks` is what protects an abandoned job (E37), not a long-lived lock.
+2. **The result cursor binds `SYS.ODCINUMBERLIST`**, not a `locked_by = :me` filter. A worker that
+   claimed jobs on a previous call would otherwise see them again in this call's result set.
+
+**Affects:** `V3__packages.sql`; `JobQueueRepository.dequeue`; the walkthrough can cite a measured
+concurrency result rather than a claim about Oracle semantics.
+
+---
+
+### D-010 · Angular 22's CLI needs Node ≥ 22.22.3; a portable Node 24 LTS sits in `.tools/` · 4 Sep 2026
+
+`npx @angular/cli@22 new` refuses to run on this machine's Node 22.18.0:
+*"The Angular CLI requires a minimum Node.js version of v22.22.3 or v24.15.0 or v26.0.0."*
+
+Three options were available: downgrade to Angular 20/21 (off the plan's stated stack, and Angular
+is the one framework the brief names), upgrade the system Node (an installer, and it changes a
+machine the user shares with other work), or vendor a portable runtime.
+
+**Chosen: a portable Node 24.20.0 LTS extracted to `.tools/node-v24.20.0-win-x64/`,** used only for
+frontend commands. No installer, no admin prompt, nothing about the user's system Node touched.
+`.tools/` is gitignored — it is ~100 MB of downloaded runtime, not source.
+
+The README states Node ≥ 22.22.3 (or 24 LTS) as a prerequisite, which is Angular 22's real
+requirement and not something we invented. A reviewer on a current Node needs nothing extra.
+
+**Affects:** `.gitignore`; frontend build commands take a `PATH` prefix; README prerequisites.

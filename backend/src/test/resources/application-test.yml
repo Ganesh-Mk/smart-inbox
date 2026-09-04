@@ -1,0 +1,16 @@
+# Test profile: the same Oracle from `docker compose up`, with the mail poller off so tests are
+# not racing an IMAP fetch, and Flyway left alone (the schema is already migrated).
+spring:
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+inbox:
+  mail:
+    poll-enabled: false
+  queue:
+    # The tests drive the queue directly; a background pool would steal their jobs.
+    worker-threads: 0
+    reap-interval-ms: 3600000

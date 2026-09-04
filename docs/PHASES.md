@@ -13,8 +13,8 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blocked ·
 
 | Phase | Title | Status | Target day |
 |---|---|---|---|
-| P0 | Environment & foundations | `[~]` | Day 0 |
-| P1 | Oracle schema, PL/SQL, queue, Spring skeleton | `[ ]` | Day 1 |
+| P0 | Environment & foundations | `[x]` | Day 0 |
+| P1 | Oracle schema, PL/SQL, queue, Spring skeleton | `[~]` | Day 1 |
 | P2 | Mail ingestion + synthetic corpus | `[ ]` | Day 2 |
 | P3 | PDF understanding (Python) | `[ ]` | Day 3 |
 | P4 | LLM pipeline + evidence verification | `[ ]` | Day 4 |
@@ -40,9 +40,10 @@ The core rubric (85%) is P0–P5 and must never be sacrificed.
 - [x] Create repo root `smart-inbox/`, `CLAUDE.md`, `docs/PHASES.md`, `docs/DECISIONS.md`
 - [x] Docker daemon healthy (28.3.3, 6 CPU / 4 GB cap). Relocation partially reverted — see DECISIONS D-006. Old images orphaned but preserved on D:
 - [x] `git init`, `.gitignore` (`.env` confirmed ignored), `.env` + `.env.example`
-- [ ] Pull `gvenzl/oracle-free:23-slim-faststart` and `greenmail/standalone`
-- [ ] Scaffold the four projects (backend, ai-service, frontend, testdata)
-- [ ] `scripts/smoke_llm.py` committed — proves schema-valid call + usage accounting
+- [x] Pull `gvenzl/oracle-free:23-slim-faststart` (6.46 GB) and `greenmail/standalone` (435 MB)
+- [x] Scaffold the four projects (backend, ai-service, frontend, testdata)
+- [x] `scripts/smoke_llm.py` committed — proves schema-valid call + usage accounting, abstention
+      and measured cost; prompt caching separately verified at 11.8x saving (DECISIONS D-007)
 
 **Exit criteria:** Docker healthy, both images pulled, all four project skeletons present, smoke test green.
 
@@ -50,18 +51,19 @@ The core rubric (85%) is P0–P5 and must never be sacrificed.
 
 ## P1 — Oracle schema, PL/SQL, queue, Spring skeleton · Day 1
 
-- [ ] `docker-compose.yml`: Oracle 23ai Free (SGA capped ~1.2 GB) + GreenMail, healthchecks, named volumes
-- [ ] `infra/oracle/init/` bootstrap: app user, tablespace, grants
-- [ ] Flyway `V1__tables.sql` — 16 tables (plan §9.1–9.3)
-- [ ] Flyway `V2__indexes.sql` — queue, dedupe UQ, FK, review-queue covering indexes
-- [ ] Flyway `V3__packages.sql` — `PKG_JOB_QUEUE`, `PKG_AUDIT`, `PKG_REVIEW`
-- [ ] Flyway `V4__triggers_views.sql` — audit triggers, `V_REVIEW_QUEUE`
-- [ ] Spring Boot 3.5.16 project via Initializr zip, pom retargeted to 3.5.x / Java 21
-- [ ] Datasource + Flyway wired; app boots against Oracle
-- [ ] `JobQueueRepository` + `JobWorkerPool` (4 threads)
-- [ ] **Test:** concurrent workers, `SKIP LOCKED` gives no double-dequeue
-- [ ] **Test:** retry backoff, `DEAD` past max attempts, `reap_stale_locks` recovers abandoned jobs
-- [ ] **Test:** `PKG_AUDIT` autonomous transaction survives a rolled-back business txn
+- [x] `docker-compose.yml`: Oracle 23ai Free (2 GB container cap) + GreenMail, healthchecks, named volumes
+- [x] `infra/oracle/init/` bootstrap: app user, tablespace, grants
+- [x] Flyway `V1__tables.sql` — 20 tables (18 core + 2 for the literature bonus; plan §9.1–9.3)
+- [x] Flyway `V2__indexes.sql` — 33 indexes: queue hot path, dedupe UQ, FKs, review-queue covering
+- [x] Flyway `V3__packages.sql` — `PKG_JOB_QUEUE`, `PKG_AUDIT`, `PKG_REVIEW` (all VALID, 0 errors)
+- [x] Flyway `V4__triggers_views.sql` — audit triggers (scope: DECISIONS D-008), `V_REVIEW_QUEUE`
+- [x] Spring Boot 3.5.16 — Initializr no longer offers 3.5.x, so the zip was taken at 4.0.8 for the
+      wrapper and the pom rewritten to 3.5.16 / `--release 21`. Builds clean on JDK 24.
+- [x] Datasource + Flyway wired; app boots against Oracle, V1–V4 applied clean
+- [x] `JobQueueRepository` + `JobWorkerPool` (4 threads, idempotent handler SPI, stale-lock reaper)
+- [x] **Test:** 8 threads / 20 jobs from a `CyclicBarrier` — each claimed exactly once (D-009)
+- [x] **Test:** 2^n backoff measured, `DEAD` after 3 attempts and never re-served, reaper recovers
+- [x] **Test:** `PKG_AUDIT` autonomous transaction survives a rolled-back business txn
 
 **Exit criteria:** `docker compose up` → Flyway applies clean → Spring boots → queue tests green.
 
@@ -211,4 +213,5 @@ _(none currently)_
 
 | Date | Session | What happened |
 |---|---|---|
+| 2026-09-04 | 2 | P0 closed and P1 built: both Docker images confirmed; `docker compose up` brings up Oracle 23ai Free + GreenMail healthy; Flyway V1–V4 apply clean (20 tables, 33 indexes, 3 PL/SQL packages, 4 triggers, `V_REVIEW_QUEUE`, zero compile errors); `JobQueueRepository` + `JobWorkerPool`; **10/10 backend tests green** incl. 8-way SKIP LOCKED concurrency and autonomous-transaction audit survival; LLM client + smoke test proving schema-valid output, abstention, measured cost and an 11.8× prompt-cache saving. Decisions D-007..D-010 recorded. |
 | 2026-09-04 | 1 | Assignment analysed; `PROJECT_PLAN.md` written; OpenRouter model verified and key smoke-tested; Docker data relocated to D: (freed 22.5 GB); repo + tracking docs created |
