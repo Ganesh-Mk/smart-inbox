@@ -172,10 +172,17 @@ class LlmClient:
         try:
             schema_model.model_validate(call.parsed)
             return call
-        except ValidationError as first_error:
+        except ValidationError as exc:
+            # Python unbinds the `as` name when the except block exits, so the error has to be
+            # copied out here. Referring to it below would raise UnboundLocalError and take
+            # down the repair path — the one code path that only runs when something has
+            # already gone wrong, and therefore the one least likely to be exercised by
+            # accident. Found by running a schema the model actually failed on.
+            first_error = exc
             if self.settings.llm_repair_attempts < 1:
                 raise SchemaRepairFailed(str(first_error)) from first_error
-            log.warning("[%s] schema validation failed, attempting one repair: %s", purpose, first_error)
+            log.warning("[%s] schema validation failed, attempting one repair: %s",
+                        purpose, _short(str(first_error), 400))
 
         # E36: exactly one repair round-trip, with the validation error in the conversation.
         repair_messages = messages + [
@@ -283,10 +290,7 @@ class LlmClient:
     ) -> LlmCall:
         raw = completion.choices[0].message.content or ""
         usage = self._usage_of(completion)
-        try:
-            parsed = json.loads(raw)
-        except json.JSONDecodeError:
-            parsed = {}
+        parsed = _parse_json(raw)
         response_json = completion.model_dump(mode="json") if hasattr(completion, "model_dump") else {}
         return LlmCall(
             purpose=purpose,
@@ -321,6 +325,33 @@ class LlmClient:
         reported = data.get("cost")
         usage.cost_usd = float(reported) if reported is not None else estimate_cost(usage)
         return usage
+
+
+def _parse_json(raw: str) -> dict[str, Any]:
+    """Parse the model's reply, tolerating a markdown code fence.
+
+    With `response_format` honoured the reply is bare JSON and the first attempt succeeds. The
+    fence appears when structured output was *not* applied — which happens silently when the
+    provider drops an over-complex schema (D-013). In that situation the content may still be
+    perfectly good JSON, and throwing it away would turn a recoverable schema mismatch into a
+    parse failure with nothing useful in the repair round-trip.
+    """
+    text = (raw or "").strip()
+    if not text:
+        return {}
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError:
+        if text.startswith("```"):
+            fenced = text.split("\n", 1)[-1]           # drop the ```json opener
+            fenced = fenced.rsplit("```", 1)[0].strip()  # drop the closing fence
+            try:
+                value = json.loads(fenced)
+            except json.JSONDecodeError:
+                return {}
+        else:
+            return {}
+    return value if isinstance(value, dict) else {"value": value}
 
 
 def _short(text: str, limit: int = 1500) -> str:

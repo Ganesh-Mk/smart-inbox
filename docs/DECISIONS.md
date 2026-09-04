@@ -296,3 +296,83 @@ the actual E17 case. All four now detect correctly: de, fr, ja, and de.
 **Affects:** `ai-service/app/pdf/layout.py`, `ai-service/app/lang/detect.py`,
 `testdata/generator/corpus_messages.py`; 31 Python tests, each written from an observed
 failure rather than from imagination.
+
+---
+
+### D-013 · OpenRouter silently discards a `response_format` schema above ~4 KB · 4 Sep 2026
+
+The first live test of `P2_extract_icsr` came back as free-form JSON in a markdown fence, in a
+shape nothing like the schema. `finish_reason` was a perfectly ordinary `stop`. No error, no
+warning, no indication anything had gone wrong — it looked exactly like a model quality problem.
+
+It was a transport problem. `prompt_tokens` gave it away:
+
+| Request | schema size | `prompt_tokens` | outcome |
+|---|---|---|---|
+| system prompt, no schema at all | — | 2,648 | baseline |
+| `P1_classify` | 3,281 B | 4,011 | schema sent, output conformed |
+| `P2_extract_icsr` | 8,807 B | **2,648** | **schema never sent** |
+
+`prompt_tokens` for the large schema is *identical to sending no schema*. OpenRouter drops it
+and forwards the request unconstrained. Bracketed with synthetic schemas, the cliff sits
+between **3,527 B (sent)** and **4,683 B (dropped)** — and it is size, not `$defs` count:
+a fully inlined 3,527 B schema with zero `$defs` is transmitted, while an inlined 4,683 B one
+is not.
+
+Three responses, in order of importance:
+
+1. **Make the failure loud.** `strict_schema` now measures every schema and raises
+   `SchemaTooLarge` above 4,000 B. A schema that would be silently ignored is a build-time
+   bug, not something to diagnose later from oddly-shaped output. This is the part that
+   matters: the defect was not that a schema was too big, it was that nothing said so.
+2. **Split the extraction.** `IcsrCase` (9,388 B) is no longer sent at all. Three calls —
+   `IcsrParties` (3,205 B), `IcsrProducts` (2,533 B), `IcsrReactions` (2,795 B) — are assembled
+   in code by `IcsrCase.assemble`, taking the case confidence as the minimum of the three. This
+   is the "decompose the task rather than reach for a bigger model" answer the plan anticipated
+   in §19, and each call gets a shorter, more focused instruction as a bonus.
+3. **Strip descriptions from the transmitted schema.** They were ~35% of every schema's bytes.
+   They are also paid for in full on every call, because `response_format` is *not* covered by
+   the prompt cache — unlike the system prompt, which is. So the field conventions moved into
+   `P0_system` §9, where they are cached, and the pydantic `description=` text stays in the
+   source as documentation for humans. Largest transmitted schema is now 3,205 B.
+
+Verified live afterwards: all three extraction calls conform with no repair round-trip, and
+correctly return age 71 YEAR from "71-year-old", batch `FNQ-2210A`, start date `2026-04-17` at
+`DAY` precision, and `HOSPITALISATION_OR_PROLONGATION` as the single seriousness criterion.
+
+**Affects:** `app/llm/schema_tools.py`, `app/llm/schemas.py`, `P0_system` §9; the write-up gains
+a concrete, measured provider limitation worth describing.
+
+---
+
+### D-014 · The prompt cache is keyed per schema, so batch by prompt type · 4 Sep 2026
+
+With `P0_system` at ~3,100 tokens, caching finally engages (D-004 and D-007 established that it
+does not below the minimum prefix). But the three split extraction calls all reported
+`cache_write_tokens ≈ 4,700` and `cached_tokens = 0` — every call writing, none ever reading.
+
+Measured directly:
+
+| Call | schema | `cached_tokens` | cost |
+|---|---|---|---|
+| 1 | IcsrParties (cold) | 0 → writes | $0.009107 |
+| 2 | IcsrParties | 4,938 | $0.002589 |
+| 3 | IcsrParties | 4,938 | $0.002587 |
+| 4 | **PqcCase** | **0** | $0.005457 |
+| 5 | IcsrParties again | 4,938 | $0.002588 |
+
+The cached prefix **includes the response schema**, not just the system prompt — structured
+output is translated into a tool definition that sits ahead of the system block, so changing
+the schema changes the prefix and misses the cache entirely. Call 5 shows the IcsrParties entry
+survives the interruption, so the entries are independent, not evicted.
+
+**Measured saving: $0.009107 → $0.002589, a 3.5× reduction** on an identical call.
+
+**Consequence for the batch runner:** work must be grouped **by prompt type**, not
+round-robined per document. Classify every message, then extract every set of parties, then
+every set of products. Processing document-by-document changes the schema on every call and
+throws the cache away completely — the difference between $0.0026 and $0.0091 per call, across
+several hundred calls in a full corpus run.
+
+**Affects:** `pipeline/` call ordering; `scripts/run_batch.py`; the cost section of the
+write-up, which can now quote a measured figure and the reason behind it.
