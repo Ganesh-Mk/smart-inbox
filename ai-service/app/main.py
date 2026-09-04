@@ -13,7 +13,7 @@ import uuid
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.routes import meta
+from app.routes import analyse, literature, meta, parse
 from app.settings import get_settings
 
 logging.basicConfig(
@@ -61,6 +61,9 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 
 
 app.include_router(meta.router)
+app.include_router(parse.router)
+app.include_router(analyse.router)
+app.include_router(literature.router)
 
 
 @app.on_event("startup")

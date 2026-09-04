@@ -1,0 +1,101 @@
+<header class="page-head">
+  <div>
+    <h1>Review queue</h1>
+    <p class="sub">Worst first — anything flagged, then lowest confidence, then oldest.</p>
+  </div>
+
+  @if (stats(); as s) {
+    <div class="stat-strip">
+      <div class="stat"><span class="n">{{ s.messages }}</span><span class="l">messages</span></div>
+      <div class="stat"><span class="n">{{ s.documents }}</span><span class="l">documents</span></div>
+      <div class="stat"><span class="n">{{ s.cases }}</span><span class="l">cases</span></div>
+      <div class="stat"
+           title="Fraction of asserted facts whose quote was actually found in the source. This is the number the whole traceability design exists to make true.">
+        <span class="n">{{ (s.verificationRate * 100) | number:'1.0-0' }}%</span>
+        <span class="l">evidence verified</span>
+      </div>
+      <div class="stat"><span class="n">\${{ s.totalCostUsd | number:'1.2-4' }}</span><span class="l">AI spend</span></div>
+      <div class="stat" [class.busy]="s.pendingJobs + s.runningJobs > 0">
+        <span class="n">{{ s.pendingJobs + s.runningJobs }}</span><span class="l">jobs running</span>
+      </div>
+    </div>
+  }
+</header>
+
+<div class="filters">
+  <input type="search" placeholder="Search subject or sender…"
+         [(ngModel)]="search" (keyup.enter)="load()" />
+  <select [(ngModel)]="category" (change)="load()">
+    <option value="">All categories</option>
+    <option value="ICSR">ICSR</option>
+    <option value="ICSR_INCOMPLETE">ICSR incomplete</option>
+    <option value="PQC">PQC</option>
+    <option value="MI">Medical information</option>
+    <option value="NOT_RELEVANT">Not relevant</option>
+  </select>
+  <label class="check">
+    <input type="checkbox" [(ngModel)]="flaggedOnly" (change)="load()" />
+    Needs attention only
+  </label>
+  <button (click)="load()">Refresh</button>
+  <span class="count">{{ total() }} message(s)</span>
+</div>
+
+@if (error()) {
+  <div class="error">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <div class="empty">Loading…</div>
+} @else if (rows().length === 0) {
+  <div class="empty">
+    Nothing here yet. Run <code>python scripts/seed_mailbox.py</code> and give the pipeline a moment.
+  </div>
+} @else {
+  <table class="queue">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>From</th>
+        <th>Subject</th>
+        <th>Categories</th>
+        <th title="Lowest confidence of any fact a reviewer would be asked to sign off">Min conf.</th>
+        <th>Flags</th>
+        <th>Docs</th>
+        <th>Received</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.messageId) {
+        <tr (click)="open(row)" [class.attention]="row.needsAttention === 'Y'">
+          <td><span [class]="statusClass(row.status)">{{ row.status.replace('_', ' ') | lowercase }}</span></td>
+          <td class="sender">
+            <div class="name">{{ row.senderName || row.senderEmail }}</div>
+            <div class="email">{{ row.senderEmail }}</div>
+          </td>
+          <td class="subject">{{ row.subject }}</td>
+          <td>
+            @for (c of categoriesOf(row); track c) {
+              <span [class]="categoryClass(c)">{{ c.replace('_', ' ') }}</span>
+            }
+            @if (categoriesOf(row).length === 0) {
+              <span class="pending">not yet classified</span>
+            }
+          </td>
+          <td>
+            <span [class]="confidenceClass(row.minFieldConfidence)">
+              {{ percent(row.minFieldConfidence) }}
+            </span>
+          </td>
+          <td>
+            @for (f of flags(row); track f.label) {
+              <span [class]="f.kind" [title]="f.title">{{ f.label }}</span>
+            }
+          </td>
+          <td class="num">{{ row.documentCount }}</td>
+          <td class="when">{{ row.receivedAt | date:'dd MMM HH:mm' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

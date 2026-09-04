@@ -1,0 +1,46 @@
+.page-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 24px; padding: 16px 20px 10px; flex-wrap: wrap;
+}
+.sub { margin: 0; color: var(--ink-soft); font-size: 12px; }
+
+.stat-strip { display: flex; gap: 18px; flex-wrap: wrap; }
+.stat {
+  background: #fff; border: 1px solid var(--line); border-radius: 6px;
+  padding: 7px 13px; min-width: 84px; text-align: center;
+}
+.stat.busy { border-color: #b7cde0; background: #f0f6fb; }
+.stat .n { display: block; font-size: 17px; font-weight: 700; color: var(--navy); }
+.stat .l {
+  display: block; font-size: 10.5px; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: .3px;
+}
+
+.filters {
+  display: flex; gap: 10px; align-items: center; padding: 0 20px 12px; flex-wrap: wrap;
+}
+.filters input[type=search] { width: 250px; }
+.filters .check { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+.filters .count { color: var(--ink-soft); font-size: 12px; margin-left: auto; }
+
+table.queue {
+  width: calc(100% - 40px); margin: 0 20px 30px; border-collapse: collapse;
+  background: #fff; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+}
+table.queue th {
+  text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .4px;
+  color: var(--ink-soft); padding: 8px 10px; background: #f0f4f7;
+  border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.queue td { padding: 8px 10px; border-bottom: 1px solid #eef2f5; vertical-align: top; }
+table.queue tr { cursor: pointer; }
+table.queue tbody tr:hover { background: #f6f9fb; }
+table.queue tr.attention { background: #fffaf3; }
+table.queue tr.attention:hover { background: #fff5e8; }
+
+.sender .name { font-weight: 600; }
+.sender .email { color: var(--ink-soft); font-size: 11px; }
+.subject { max-width: 340px; }
+.when { color: var(--ink-soft); white-space: nowrap; font-size: 11.5px; }
+.num { text-align: center; }
+.pending { color: var(--ink-soft); font-size: 11.5px; font-style: italic; }

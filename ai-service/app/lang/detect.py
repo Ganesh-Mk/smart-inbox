@@ -102,6 +102,47 @@ class PageLanguage:
         }
 
 
+# The model is asked for an ISO 639-1 code and frequently returns a language *name* instead —
+# "English", "German", sometimes "eng". Left unnormalised, `language != "en"` is true for
+# "English" and the pipeline runs a pointless English-to-English translation on every scanned
+# page, costing a real LLM call each time. Never trust free text from a model when a closed
+# vocabulary is available; normalise it.
+_LANGUAGE_ALIASES = {
+    "english": "en", "eng": "en", "en-gb": "en", "en-us": "en",
+    "german": "de", "deutsch": "de", "ger": "de", "deu": "de",
+    "french": "fr", "français": "fr", "francais": "fr", "fra": "fr", "fre": "fr",
+    "spanish": "es", "español": "es", "espanol": "es", "spa": "es",
+    "italian": "it", "italiano": "it", "ita": "it",
+    "dutch": "nl", "nederlands": "nl", "nld": "nl",
+    "portuguese": "pt", "português": "pt", "por": "pt",
+    "swedish": "sv", "svenska": "sv", "swe": "sv",
+    "danish": "da", "dansk": "da", "dan": "da",
+    "polish": "pl", "polski": "pl", "pol": "pl",
+    "japanese": "ja", "日本語": "ja", "jpn": "ja",
+    "chinese": "zh", "中文": "zh", "zho": "zh", "chi": "zh",
+    "unknown": "", "none": "", "n/a": "", "und": "",
+}
+
+
+def normalise_language(value: str | None) -> str | None:
+    """Fold a model-reported language into an ISO 639-1 code, or `None` when it says nothing."""
+    if not value:
+        return None
+    cleaned = value.strip().casefold()
+    if not cleaned:
+        return None
+    if len(cleaned) == 2 and cleaned.isalpha():
+        return cleaned
+    mapped = _LANGUAGE_ALIASES.get(cleaned)
+    if mapped == "":
+        return None
+    if mapped:
+        return mapped
+    # An unrecognised language: keep the first two letters rather than assert something wrong,
+    # but only when it looks like a language token at all.
+    return cleaned[:2] if cleaned.isalpha() else None
+
+
 def _is_prose_like(
     text: str,
     minimum_letter_ratio: float = 0.70,

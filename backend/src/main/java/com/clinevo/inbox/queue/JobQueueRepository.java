@@ -28,6 +28,10 @@ public class JobQueueRepository {
     return enqueue(type, subjectType, subjectId, 5, 0, null);
   }
 
+  public long enqueue(JobType type, SubjectType subjectType, long subjectId, String payloadJson) {
+    return enqueue(type, subjectType, subjectId, 5, 0, payloadJson);
+  }
+
   public long enqueue(
       JobType type,
       SubjectType subjectType,

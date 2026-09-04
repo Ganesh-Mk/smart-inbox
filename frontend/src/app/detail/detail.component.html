@@ -1,0 +1,380 @@
+@if (loading()) {
+  <div class="empty">Loading…</div>
+} @else if (message(); as m) {
+
+<header class="detail-head">
+  <button class="back" (click)="back()">← Queue</button>
+  <div class="head-main">
+    <h1>{{ m.SUBJECT }}</h1>
+    <div class="meta">
+      {{ m.SENDER_NAME || m.SENDER_EMAIL }} &lt;{{ m.SENDER_EMAIL }}&gt;
+      · {{ m.RECEIVED_AT | date:'dd MMM yyyy HH:mm' }}
+      · <span class="status">{{ m.STATUS?.replace('_',' ') | lowercase }}</span>
+    </div>
+    @if (m.NEEDS_ATTENTION === 'Y') {
+      <div class="attention">⚠ {{ m.ATTENTION_REASON }}</div>
+    }
+  </div>
+</header>
+
+@if (error()) { <div class="error">{{ error() }}</div> }
+
+<div class="panes">
+
+  <!-- ============ LEFT: the source, with the highlight overlay ============ -->
+  <section class="pane pane-source">
+    <div class="doc-tabs">
+      @for (d of m.documents; track d.ID) {
+        <button [class.active]="activeDocument()?.ID === d.ID" (click)="selectDocument(d)">
+          {{ d.SOURCE_KIND === 'EMAIL_BODY' ? 'Email body' : d.FILENAME }}
+          @if (d.PARSE_STATUS === 'PARSE_FAILED') { <span class="bad">unreadable</span> }
+          @if (d.DOC_RENDERING === 'MIXED') { <span class="tag">mixed</span> }
+        </button>
+      }
+    </div>
+
+    @if (activeDocument(); as doc) {
+      <div class="doc-meta">
+        {{ doc.DOC_RENDERING }} / {{ doc.DOC_GENRE }}
+        @if (doc.PRIMARY_LANGUAGE) { · {{ doc.PRIMARY_LANGUAGE }} }
+        · {{ doc.PAGE_COUNT }} page(s)
+        @if (doc.TRUNCATED === 'Y') { · <span class="bad">truncated</span> }
+      </div>
+
+      @if (doc.PARSE_STATUS === 'PARSE_FAILED') {
+        <div class="parse-failed">
+          <strong>This document could not be parsed.</strong>
+          <p>{{ doc.PARSE_ERROR }}</p>
+          <p class="note">
+            The message was still classified from its other sources and reached the queue
+            flagged, rather than disappearing.
+          </p>
+        </div>
+      } @else {
+        @if (doc.pages.length > 1) {
+          <div class="page-strip">
+            @for (p of doc.pages; track p.PAGE_NO) {
+              <button [class.active]="activePage() === p.PAGE_NO"
+                      (click)="activePage.set(p.PAGE_NO)">
+                {{ p.PAGE_NO }}
+                <span class="rend">{{ p.RENDERING === 'SCANNED' ? 'scan' : 'text' }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        <div class="page-view">
+          @if (pageImageUrl()) {
+            <div class="page-canvas">
+              <img [src]="pageImageUrl()" alt="Page {{ activePage() }}" />
+              @if (highlightStyle(); as style) {
+                <div class="hl" [style]="style"></div>
+              }
+            </div>
+          } @else if (currentPage(); as p) {
+            <pre class="page-text">{{ p.TEXT_ORIGINAL }}</pre>
+          }
+        </div>
+
+        @if (highlight(); as h) {
+          <div class="evidence-banner" [class.unverified]="!h.verified">
+            @if (h.verified) {
+              <strong>Verified evidence</strong> — this quote was found in the source:
+            } @else {
+              <strong>⚠ Cited but not found in source</strong> —
+              the model reported this quote, code could not locate it, and the field's
+              confidence was capped at 0.40:
+            }
+            <q>{{ h.quote }}</q>
+          </div>
+        }
+
+        @if (currentPage(); as p) {
+          @if (p.TEXT_ENGLISH) {
+            <details class="translation">
+              <summary>English translation (the original above stays the record of truth)</summary>
+              <pre>{{ p.TEXT_ENGLISH }}</pre>
+            </details>
+          }
+        }
+      }
+    }
+  </section>
+
+  <!-- ============ CENTRE: classification, summary, fields ============ -->
+  <section class="pane pane-main">
+
+    <div class="card">
+      <h2>Classification</h2>
+      @for (c of m.classifications; track c.ID) {
+        <div class="cls">
+          <div class="cls-head">
+            <span class="chip chip-{{ c.CATEGORY | lowercase }}">{{ c.CATEGORY.replace('_',' ') }}</span>
+            <span class="by">{{ c.DECIDED_BY === 'RULE' ? 'decided by rule' : 'model' }}</span>
+            <span class="pct">{{ (c.CONFIDENCE * 100) | number:'1.0-0' }}%</span>
+          </div>
+          <div class="conf-track"><div [class]="confidenceClass(c.CONFIDENCE)"
+                                       [style.width.%]="c.CONFIDENCE * 100"></div></div>
+          <p class="reason">{{ c.REASON }}</p>
+
+          @if (c.icsrValidity; as v) {
+            <div class="checklist">
+              <div class="cl-title">
+                ICSR minimum criteria — {{ v.ELEMENTS_PRESENT }}/4 present
+                <span class="hint">(the label is decided by this rule, not by the model)</span>
+              </div>
+              <ul>
+                <li [class.yes]="v.HAS_PATIENT === 'Y'">
+                  {{ v.HAS_PATIENT === 'Y' ? '✓' : '✗' }} Identifiable patient
+                  @if (v.PATIENT_EVIDENCE) { <q>{{ v.PATIENT_EVIDENCE }}</q> }
+                </li>
+                <li [class.yes]="v.HAS_REPORTER === 'Y'">
+                  {{ v.HAS_REPORTER === 'Y' ? '✓' : '✗' }} Identifiable reporter
+                  @if (v.REPORTER_EVIDENCE) { <q>{{ v.REPORTER_EVIDENCE }}</q> }
+                </li>
+                <li [class.yes]="v.HAS_PRODUCT === 'Y'">
+                  {{ v.HAS_PRODUCT === 'Y' ? '✓' : '✗' }} Suspect product
+                  @if (v.PRODUCT_EVIDENCE) { <q>{{ v.PRODUCT_EVIDENCE }}</q> }
+                </li>
+                <li [class.yes]="v.HAS_EVENT === 'Y'">
+                  {{ v.HAS_EVENT === 'Y' ? '✓' : '✗' }} Adverse event
+                  @if (v.EVENT_EVIDENCE) { <q>{{ v.EVENT_EVIDENCE }}</q> }
+                </li>
+              </ul>
+            </div>
+          }
+        </div>
+      }
+      @if (!m.classifications?.length) {
+        <p class="pending">Not yet classified — the pipeline is still working on this message.</p>
+      }
+    </div>
+
+    @for (doc of m.documents; track doc.ID) {
+      @if (doc.summary) {
+        <div class="card">
+          <h2>Summary — {{ doc.SOURCE_KIND === 'EMAIL_BODY' ? 'email body' : doc.FILENAME }}</h2>
+          <div class="rel rel-{{ doc.summary.RELEVANCE | lowercase }}">
+            {{ doc.summary.RELEVANCE.replace('_',' ') }} · {{ doc.summary.RELEVANCE_REASON }}
+          </div>
+          <p class="summary">{{ doc.summary.SUMMARY_TEXT }}</p>
+          <div class="sentences">{{ doc.summary.SENTENCE_COUNT }} sentences</div>
+        </div>
+      }
+    }
+
+    @for (caseRow of m.cases; track caseRow.ID) {
+      <div class="card">
+        <h2>
+          Extracted case — {{ caseRow.CASE_TYPE }}
+          @if (caseRow.IS_SERIOUS === 'Y') { <span class="serious">SERIOUS</span> }
+        </h2>
+
+        @if (conflictsIn(caseRow).length) {
+          <div class="conflict-box">
+            <strong>{{ conflictsIn(caseRow).length }} field(s) where the sources disagree.</strong>
+            Both values are kept with their own evidence — choose which is correct.
+          </div>
+        }
+
+        @for (g of fieldGroups(caseRow); track g.group) {
+          <details class="group" open>
+            <summary>{{ g.group | titlecase }} <span class="n">{{ g.fields.length }}</span></summary>
+            <table class="fields">
+              @for (f of g.fields; track f.ID) {
+                <tr [class.conflict]="f.STATUS === 'CONFLICT'"
+                    [class.overridden]="f.DECIDED_BY === 'REVIEWER'">
+                  <td class="label">{{ shortLabel(f.FIELD_PATH) }}</td>
+                  <td class="value">
+                    @if (editing?.fieldId === f.ID) {
+                      <input [(ngModel)]="editing!.value" class="edit" />
+                      <select [(ngModel)]="editing!.status">
+                        <option value="STATED">STATED</option>
+                        <option value="NOT_STATED">NOT_STATED</option>
+                        <option value="UNCERTAIN">UNCERTAIN</option>
+                      </select>
+                      <button class="mini" (click)="saveEdit()">Save</button>
+                      <button class="mini ghost" (click)="cancelEdit()">Cancel</button>
+                    } @else {
+                      <span class="v">{{ f.VALUE_TEXT || '—' }}</span>
+                      @if (f.UNIT) { <span class="unit">{{ f.UNIT }}</span> }
+                      @if (f.DECIDED_BY === 'REVIEWER') { <span class="by-human">reviewer</span> }
+                    }
+                  </td>
+                  <td><span [class]="statusClass(f.STATUS)">{{ f.STATUS.replace('_',' ') }}</span></td>
+                  <td class="conf">
+                    <div class="conf-track">
+                      <div [class]="confidenceClass(f.CONFIDENCE)"
+                           [style.width.%]="f.CONFIDENCE * 100"></div>
+                    </div>
+                    <span class="pct" [title]="f.ADJUST_REASON || 'no adjustment'">
+                      {{ (f.CONFIDENCE * 100) | number:'1.0-0' }}%
+                      @if (f.CONFIDENCE < f.CONFIDENCE_PRE_ADJUST) {
+                        <span class="capped"
+                              title="Model said {{ (f.CONFIDENCE_PRE_ADJUST*100) | number:'1.0-0' }}%. {{ f.ADJUST_REASON }}">
+                          ↓
+                        </span>
+                      }
+                    </span>
+                  </td>
+                  <td class="ev">
+                    @for (e of f.evidence; track e.ID) {
+                      <button class="chip-ev" [class.unver]="e.VERIFIED === 'N'"
+                              (click)="showEvidence(e)"
+                              [title]="e.VERIFIED === 'Y'
+                                ? (e.VERIFY_METHOD + ' match, ' + e.MATCH_SCORE + '% — click to highlight the source')
+                                : 'Cited but not found in the source. Confidence capped at 0.40.'">
+                        {{ e.VERIFIED === 'Y' ? '🔍 p' + (e.PAGE_NO ?? 0) : '⚠ unverified' }}
+                      </button>
+                    }
+                  </td>
+                  <td class="act">
+                    @if (editing?.fieldId !== f.ID) {
+                      <button class="mini ghost" (click)="startEdit(caseRow, f)">Edit</button>
+                    }
+                  </td>
+                </tr>
+              }
+            </table>
+          </details>
+        }
+      </div>
+    }
+
+    <div class="card actions">
+      <h2>Decision</h2>
+      <textarea [(ngModel)]="reviewNotes" rows="2"
+                placeholder="Reviewer notes (recorded in the audit trail)"></textarea>
+      <div class="btn-row">
+        <button class="primary" (click)="decide('ACCEPT')">Accept all</button>
+        <button (click)="decide('OVERRIDE')">Override</button>
+        <button class="danger" (click)="decide('REJECT')">Reject</button>
+        <button class="ghost" (click)="reprocess()">Re-process</button>
+      </div>
+      <p class="note">
+        Nothing is overwritten. An override inserts a new row and points the AI's original at it,
+        so the machine answer stays recoverable forever.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ RIGHT: tables, images, audit, AI calls ============ -->
+  <section class="pane pane-side">
+
+    @for (doc of m.documents; track doc.ID) {
+      @if (doc.tables?.length) {
+        <div class="card">
+          <h3>Tables — {{ doc.FILENAME || 'email body' }}</h3>
+          @for (t of doc.tables; track t.TABLE_INDEX) {
+            <div class="tbl">
+              <div class="tbl-head">
+                p{{ t.PAGE_NO }} · {{ t.N_ROWS }}×{{ t.N_COLS }} · {{ t.EXTRACTION_METHOD }}
+              </div>
+              <table>
+                <thead><tr>
+                  @for (h of parseJson(t.HEADERS_JSON); track $index) { <th>{{ h }}</th> }
+                </tr></thead>
+                <tbody>
+                  @for (row of parseJson(t.ROWS_JSON).slice(0, 8); track $index) {
+                    <tr>@for (cell of row; track $index) { <td>{{ cell }}</td> }</tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      }
+
+      @if (doc.images?.length) {
+        <div class="card">
+          <h3>Images — {{ doc.FILENAME }}</h3>
+          @for (img of doc.images; track img.IMAGE_INDEX) {
+            <div class="img-row">
+              <div class="img-cat">{{ img.CATEGORY }} · p{{ img.PAGE_NO }}</div>
+              <p>{{ img.DESCRIPTION }}</p>
+              <div class="img-flags">
+                @if (img.MENTIONS_DEFECT === 'Y') { <span class="flag flag-red">defect</span> }
+                @if (img.MENTIONS_INJURY === 'Y') { <span class="flag flag-red">injury</span> }
+                <span class="flag flag-amber">needs review</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    <div class="card">
+      <h3>Attachments</h3>
+      <table class="att">
+        @for (a of m.attachments; track a.FILENAME) {
+          <tr>
+            <td>{{ a.FILENAME }}</td>
+            <td class="mono">{{ a.SNIFFED_TYPE }}</td>
+            <td>
+              @if (a.PROCESSED === 'N') {
+                <span class="skip" title="Recorded, not content-processed">{{ a.SKIP_REASON }}</span>
+              } @else { <span class="ok">processed</span> }
+              @if (a.DECLARED_TYPE !== a.SNIFFED_TYPE) {
+                <span class="mismatch"
+                      title="Declared {{ a.DECLARED_TYPE }}, sniffed {{ a.SNIFFED_TYPE }}">
+                  type mismatch
+                </span>
+              }
+              @if (a.NESTING_LEVEL > 0) {
+                <span class="tag" title="Hoisted out of a forwarded message">forwarded</span>
+              }
+            </td>
+          </tr>
+        }
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>AI calls <span class="n">{{ aiCalls().length }}</span></h3>
+      <table class="calls">
+        @for (c of aiCalls(); track c.ID) {
+          <tr (click)="inspect(c)">
+            <td class="mono">{{ c.PURPOSE }}</td>
+            <td>{{ c.LATENCY_MS }}ms</td>
+            <td>\${{ c.COST_USD | number:'1.4-5' }}</td>
+            <td>@if (c.CACHED_TOKENS > 0) { <span class="tag">cached</span> }</td>
+          </tr>
+        }
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Audit trail</h3>
+      <ol class="audit">
+        @for (a of audit(); track a.ID) {
+          <li>
+            <span class="when">{{ a.OCCURRED_AT | date:'HH:mm:ss' }}</span>
+            <span class="what">{{ a.ACTION.replace('_',' ') | lowercase }}</span>
+            <span class="who">{{ a.ACTOR }}</span>
+          </li>
+        }
+      </ol>
+    </div>
+  </section>
+</div>
+
+@if (inspectedCall(); as call) {
+  <div class="modal" (click)="closeInspector()">
+    <div class="modal-body" (click)="$event.stopPropagation()">
+      <h3>{{ call.PURPOSE }} — {{ call.PROMPT_VERSION }}</h3>
+      <div class="call-meta">
+        {{ call.MODEL }} · {{ call.PROMPT_TOKENS }} in / {{ call.COMPLETION_TOKENS }} out
+        · {{ call.CACHED_TOKENS }} cached · \${{ call.COST_USD | number:'1.5-6' }}
+        · {{ call.LATENCY_MS }}ms
+        @if (call.REPAIRED === 'Y') { · <span class="tag">schema repaired</span> }
+      </div>
+      <h4>Request</h4>
+      <pre>{{ call.REQUEST_JSON }}</pre>
+      <h4>Response</h4>
+      <pre>{{ call.RESPONSE_JSON }}</pre>
+      <button (click)="closeInspector()">Close</button>
+    </div>
+  </div>
+}
+
+}

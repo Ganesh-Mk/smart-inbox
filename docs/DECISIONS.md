@@ -444,3 +444,57 @@ Worth keeping in mind generally: a health check that tests a different protocol 
 port fails loudly but tells you nothing true, and it trains people to ignore the endpoint.
 
 **Affects:** `application.yml`, new `MailboxHealthIndicator`.
+
+---
+
+### D-017 · `TO_CHAR` on a CLOB caps at 4,000 bytes and dead-lettered the pipeline · 4 Sep 2026
+
+The first full corpus run stalled at classification:
+
+    ORA-22835: Buffer too small for CLOB to CHAR conversion (actual: 4340, maximum: 4000)
+
+Reading a CLOB into a `Map<String,Object>` via `queryForList` needs a conversion, and
+`TO_CHAR(column)` is the obvious one. It converts to `VARCHAR2`, which caps at 4,000 bytes.
+Page text passes that on the first page of any real document.
+
+**This failing loudly was lucky.** Oracle threw rather than truncating; had it truncated
+silently, the model would have been handed the first 4,000 characters of every page and the
+missing text would have surfaced as unexplained extraction misses, months later, with nothing
+to point at. The same applies to the `LISTAGG(TO_CHAR(...))` used to assemble a document for
+summarisation.
+
+Fixed by not converting at all: `ClobSupport.clob` selects the column as itself and reads it
+with `ResultSet.getString`, which Oracle's driver materialises in full. Every affected read —
+classification, extraction, summarisation, the message detail API, the AI-call inspector — now
+goes through it, and a grep for `TO_CHAR` over CLOB columns returns nothing.
+
+**Affects:** `ClobSupport` (new), all four job handlers, `ReviewController`.
+
+---
+
+### D-018 · Two corrections the first full corpus run exposed · 4 Sep 2026
+
+Both were visible only once real data was on the screen.
+
+**1. Every quality complaint was also labelled `ICSR_INCOMPLETE`.** The E22 rule assigned it at
+two or more of the four minimum criteria. A PQC always names a reporter and a product, so it
+always scores exactly 2 of 4 — and all three PQC-only messages in the corpus came back
+`ICSR_INCOMPLETE, PQC`.
+
+The rule was wrong, not the model. **An adverse event is necessary, not one of four
+interchangeable boxes**: without one there is no safety case to be incomplete about. The rule is
+now `four present → ICSR`, `an adverse event plus at least one other → ICSR_INCOMPLETE`,
+otherwise no ICSR label. This matters more than it sounds: a flag that fires on almost every
+complaint teaches reviewers to ignore it, and then it fails on the case that mattered.
+
+**2. `min_field_confidence` was reporting 0.00 for well-extracted messages.** The queue sorts
+worst-first on this column, and seven messages showed 0.00 while every extracted fact in them
+sat between 0.85 and 0.95 — so the *best*-evidenced cases were being sorted to the top of the
+"needs attention" list.
+
+Cause: the view took the minimum over every asserting field, including `NARRATIVE`. The
+narrative is a paragraph of prose carrying the case-level confidence, not a discrete fact with
+its own quote. `V5__queue_view_confidence.sql` excludes it, so the column now means what its
+name says — the least confident *fact* awaiting sign-off.
+
+**Affects:** `pipeline/classify.py` and its tests; new Flyway migration `V5`.

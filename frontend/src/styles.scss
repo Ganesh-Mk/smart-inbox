@@ -1,39 +1,111 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
+/* Smart Inbox — a deliberately plain, dense reviewer UI.
+   Density matters more than decoration here: a reviewer works a queue all day and wants to see
+   as many rows, flags and confidences at once as will fit legibly. */
 
-html {
-  height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+:root {
+  --ink: #1f2933;
+  --ink-soft: #5a6b7a;
+  --line: #d8e0e7;
+  --bg: #f5f7f9;
+  --card: #ffffff;
+  --navy: #1f3b54;
+  --green: #1c7a4a;
+  --amber: #b5730f;
+  --red: #b3261e;
+  --blue: #2b5f8c;
 }
+
+* { box-sizing: border-box; }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
-  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font: 13px/1.45 "Segoe UI", -apple-system, system-ui, Arial, sans-serif;
 }
-/* You can add global styles to this file, and also import other style files */
+
+h1 { font-size: 18px; margin: 0 0 2px; }
+h2 { font-size: 14px; margin: 0 0 10px; color: var(--navy); }
+h3 { font-size: 12.5px; margin: 0 0 8px; color: var(--navy); text-transform: uppercase;
+     letter-spacing: .4px; }
+
+button {
+  font: inherit; cursor: pointer; border: 1px solid var(--line);
+  background: #fff; border-radius: 4px; padding: 5px 11px; color: var(--ink);
+}
+button:hover { background: #eef3f7; }
+button.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+button.primary:hover { background: #2b5074; }
+button.danger { background: #fff; color: var(--red); border-color: #e2b7b4; }
+button.ghost { background: transparent; color: var(--ink-soft); }
+button.mini { padding: 2px 7px; font-size: 11.5px; }
+
+input, select, textarea {
+  font: inherit; padding: 5px 8px; border: 1px solid var(--line);
+  border-radius: 4px; background: #fff; color: var(--ink);
+}
+textarea { width: 100%; resize: vertical; }
+
+code, pre, .mono { font-family: Consolas, "SF Mono", Menlo, monospace; font-size: 11.5px; }
+pre { white-space: pre-wrap; word-break: break-word; }
+
+.empty, .error {
+  padding: 28px; text-align: center; color: var(--ink-soft);
+}
+.error { color: var(--red); }
+
+/* ---------- chips and flags ---------- */
+.chip {
+  display: inline-block; padding: 1px 8px; margin: 1px 3px 1px 0;
+  border-radius: 10px; font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.chip-icsr, .chip-icsr { background: #dcefe3; color: var(--green); }
+.chip-icsr_incomplete, .chip-incomplete { background: #fbeed6; color: var(--amber); }
+.chip-pqc { background: #e2e9f5; color: var(--blue); }
+.chip-mi { background: #ede4f5; color: #6b3fa0; }
+.chip-not_relevant, .chip-none { background: #ebeef1; color: var(--ink-soft); }
+
+.flag {
+  display: inline-block; padding: 1px 7px; margin: 1px 3px 1px 0; border-radius: 3px;
+  font-size: 10.5px; font-weight: 600; cursor: help; white-space: nowrap;
+}
+.flag-amber { background: #fdf1dc; color: var(--amber); border: 1px solid #f0d9ac; }
+.flag-red { background: #fbe6e5; color: var(--red); border: 1px solid #eec4c1; }
+
+.tag {
+  display: inline-block; background: #e7edf2; color: var(--ink-soft);
+  padding: 0 6px; border-radius: 3px; font-size: 10.5px; margin-left: 4px;
+}
+
+.status { font-size: 11px; padding: 1px 7px; border-radius: 3px; white-space: nowrap; }
+.status-ready { background: #dcefe3; color: var(--green); }
+.status-done { background: #e7edf2; color: var(--ink-soft); }
+.status-working { background: #e5eef6; color: var(--blue); }
+.status-bad { background: #fbe6e5; color: var(--red); }
+
+/* ---------- confidence ---------- */
+.conf { font-weight: 600; }
+.conf-high { color: var(--green); }
+.conf-mid { color: var(--amber); }
+.conf-low { color: var(--red); }
+.conf-unknown { color: var(--ink-soft); }
+
+.conf-track {
+  width: 62px; height: 5px; background: #e7edf2; border-radius: 3px;
+  overflow: hidden; display: inline-block; vertical-align: middle;
+}
+.bar { height: 100%; display: block; }
+.bar-high { background: var(--green); }
+.bar-mid { background: var(--amber); }
+.bar-low { background: var(--red); }
+
+.st { font-size: 10.5px; padding: 1px 6px; border-radius: 3px; font-weight: 600; }
+.st-stated { background: #dcefe3; color: var(--green); }
+.st-none { background: #eef1f4; color: var(--ink-soft); }
+.st-uncertain { background: #fbeed6; color: var(--amber); }
+.st-conflict { background: #fbe6e5; color: var(--red); }
+
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+  padding: 14px 16px; margin-bottom: 12px;
+}

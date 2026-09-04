@@ -59,7 +59,12 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/actuator/health", "/actuator/info").permitAll()
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .requestMatchers("/", "/index.html", "/*.js", "/*.css", "/*.ico", "/assets/**").permitAll()
+            // The built Angular bundle. Filenames are content-hashed (main-BN4H6VEW.js), and
+            // the SPA router owns every non-/api path, so the whole static surface is public
+            // and the API behind it is not.
+            .requestMatchers("/", "/index.html", "/favicon.ico", "/*.js", "/*.css",
+                "/*.txt", "/*.json", "/assets/**", "/media/**").permitAll()
+            .requestMatchers("/queue", "/queue/**", "/messages/**").permitAll()
             .anyRequest().authenticated())
         .httpBasic(basic -> {});
     return http.build();
