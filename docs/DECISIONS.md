@@ -252,3 +252,47 @@ the one that caught bug 2.
 **Affects:** `ImapMailboxAdapter`; a new integration test; the write-up's "what I'd change for
 production" gains a concrete point about testing mail code against a real protocol rather than
 against saved messages.
+
+---
+
+### D-012 · Four layout and language corrections, all found by measuring the corpus · 4 Sep 2026
+
+Running the P3 modules over all 23 corpus PDFs and reading the output — rather than assuming
+the plan's algorithms were right — turned up four defects. Each is recorded with the number
+that exposed it, because in every case the plan's specified approach was plausible and wrong.
+
+**1. Columns cluster on the left edge, not the x-midpoint (E14).** Plan §10.2 specifies
+clustering block x-midpoints. Measured on page 1 of `article_A01.pdf`, the left edges are
+cleanly bimodal at **51 and 308**, while the midpoints scatter across **72, 82, 169, 199, 328,
+336, 357 and 426** — because a heading like "Discussion" is 56pt wide and the paragraph under
+it is 237pt. k-means on midpoints fits **three** clusters on a two-column page, splitting the
+left column into headings and body; reading order then emits every left heading, then every
+left paragraph, then the right column. That is worse than not clustering at all. Blocks in a
+column share a left edge exactly, because they are laid out in the same frame.
+
+**2. A form's field grid is not a set of columns.** A filled-in report form clusters into two
+x-groups exactly like a two-column article, but must be read *across* each row: "Report
+reference | Date of report", not every left cell followed by every right cell. Added a
+row-alignment test — in a grid, blocks outside column 0 almost always have a vertically
+aligned partner in column 0; in a genuine two-column article they do not. All nine corpus
+forms now report one column and read row-major; the four two-column articles are unaffected.
+
+**3. Language detection needed three guards, not one confidence threshold (E17).**
+
+| Observed | Cause | Guard |
+|---|---|---|
+| `HOSPITALISATION_OR_PROLONGATION` → French, 0.82 | a 31-character single token clears any length threshold | require ≥ 3 whitespace-separated words (underscores deliberately not split) |
+| a page of lab values → German, 1.00 | no block was individually judgeable, so the fallback joined them all and judged the concatenation | join only blocks that are individually prose |
+| a lab cell → passes a "mostly letters" test | "Alanine aminotransferase640U/L10 – 40H" is 76% letters because the analyte name dominates | a **digit ratio** test: prose is 1–2% digits, that cell is 18% |
+| `form_ja.pdf` → English | 163 Japanese characters lost to 223 characters of Latin furniture (product name, MAH address, footer) | weight CJK characters ×2.5, since they carry ~2–3× the content per code point |
+
+**4. The corpus's "non-English" PDFs were English documents wearing translated labels.**
+`form_de` and `form_fr` had translated field labels but an English narrative, so the
+content-weighted roll-up correctly reported them as English — and the corpus's claim to contain
+three non-English documents was not honest. The generator now writes German, French and
+Japanese *narratives*. `form_mixed` keeps English labels around a German narrative, which is
+the actual E17 case. All four now detect correctly: de, fr, ja, and de.
+
+**Affects:** `ai-service/app/pdf/layout.py`, `ai-service/app/lang/detect.py`,
+`testdata/generator/corpus_messages.py`; 31 Python tests, each written from an observed
+failure rather than from imagination.

@@ -1,5 +1,5 @@
 Message-ID:
- <178852183222.20308.15209775690314481744.lit-02-a02@smart-inbox.test>
+ <178852229663.1696.1628492026816150751.lit-02-a02@smart-inbox.test>
 From: Literature Monitoring Service <alerts@lit-monitor.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Literature alert: Angioedema and neutropenia in two patients
@@ -7,9 +7,9 @@ Subject: Literature alert: Angioedema and neutropenia in two patients
 Date: Tue, 15 Sep 2026 06:15:00 +0000
 X-Smart-Inbox-Corpus-Key: lit-02-a02
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8477602863046020596=="
+Content-Type: multipart/mixed; boundary="===============3391083740280844796=="
 
---===============8477602863046020596==
+--===============3391083740280844796==
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -23,7 +23,7 @@ DOI: 10.9999/afcm.2026.0088
 
 Full text attached for assessment.
 
---===============8477602863046020596==
+--===============3391083740280844796==
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="A02_2026.pdf"
@@ -46,9 +46,9 @@ cyA8PAovRm9udCAxIDAgUiAvUHJvY1NldCBbIC9QREYgL1RleHQgL0ltYWdlQiAvSW1hZ2VDIC9J
 bWFnZUkgXQo+PiAvUm90YXRlIDAgL1RyYW5zIDw8Cgo+PiAKICAvVHlwZSAvUGFnZQo+PgplbmRv
 YmoKNyAwIG9iago8PAovUGFnZU1vZGUgL1VzZU5vbmUgL1BhZ2VzIDkgMCBSIC9UeXBlIC9DYXRh
 bG9nCj4+CmVuZG9iago4IDAgb2JqCjw8Ci9BdXRob3IgKEkuIEhhbHZvcnNlbiwgQi4gT2tvbmpv
-LCBULiBWYXNxdWV6LUJ5cm5lKSAvQ3JlYXRpb25EYXRlIChEOjIwMjYwOTA0MTcwNzExKzA1JzAw
+LCBULiBWYXNxdWV6LUJ5cm5lKSAvQ3JlYXRpb25EYXRlIChEOjIwMjYwOTA0MTcxNDU2KzA1JzAw
 JykgL0NyZWF0b3IgKFwodW5zcGVjaWZpZWRcKSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIw
-MjYwOTA0MTcwNzExKzA1JzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBc
+MjYwOTA0MTcxNDU2KzA1JzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBc
 KG9wZW5zb3VyY2VcKSkgCiAgL1N1YmplY3QgKFNZTlRIRVRJQyBURVNUIERPQ1VNRU5UIFwyMDQg
 Z2VuZXJhdGVkIGZvciB0aGUgU21hcnQgSW5ib3ggcHJvdG90eXBlLiBObyByZWFsIHBhdGllbnQs
 IHJlcG9ydGVyLCBwcm9kdWN0IG9yIGV2ZW50IGlzIGRlc2NyaWJlZC4pIC9UaXRsZSAoQW5naW9l
@@ -148,9 +148,9 @@ ZWYKMCAxMgowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwNjEgMDAwMDAgbiAKMDAwMDAwMDEx
 MiAwMDAwMCBuIAowMDAwMDAwMjE5IDAwMDAwIG4gCjAwMDAwMDAzMzEgMDAwMDAgbiAKMDAwMDAw
 MDQ1MCAwMDAwMCBuIAowMDAwMDAwNjU0IDAwMDAwIG4gCjAwMDAwMDA4NTggMDAwMDAgbiAKMDAw
 MDAwMDkyNiAwMDAwMCBuIAowMDAwMDAxNDExIDAwMDAwIG4gCjAwMDAwMDE0NzYgMDAwMDAgbiAK
-MDAwMDAwNTQ4NyAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzw4NzdhYjNhNGNhZDE4ZjczNjlk
-MTJiYWYyZWU2NTgyNT48ODc3YWIzYTRjYWQxOGY3MzY5ZDEyYmFmMmVlNjU4MjU+XQolIFJlcG9y
+MDAwMDAwNTQ4NyAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzw1NTY3NWZlOWY2ODcwZTc2NTRl
+NzQzODlkZGQ1YjM2Nz48NTU2NzVmZTlmNjg3MGU3NjU0ZTc0Mzg5ZGRkNWIzNjc+XQolIFJlcG9y
 dExhYiBnZW5lcmF0ZWQgUERGIGRvY3VtZW50IC0tIGRpZ2VzdCAob3BlbnNvdXJjZSkKCi9JbmZv
 IDggMCBSCi9Sb290IDcgMCBSCi9TaXplIDEyCj4+CnN0YXJ0eHJlZgo2NTUzCiUlRU9GCg==
 
---===============8477602863046020596==--
+--===============3391083740280844796==--

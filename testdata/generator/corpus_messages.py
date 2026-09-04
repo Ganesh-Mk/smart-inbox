@@ -70,20 +70,22 @@ def build_pdfs(cases: dict[str, CaseSpec], articles: list[ArticleSpec],
         reference="AER-2026-00188-FU", report_date="21 May 2026", continuation_pages=1)
 
     # --- non-English forms (E16, E17) ---
+    # Labels AND narrative in the source language, so these are genuinely non-English
+    # documents rather than English ones wearing translated labels.
     out["form_de"] = build_form_pdf(
-        pdf_dir / "form_de.pdf", cases["C08"],
+        pdf_dir / "form_de.pdf", _with_narrative(cases["C08"], GERMAN_NARRATIVE),
         reference="AER-2026-00301", report_date="30. März 2026", language="de")
     out["form_fr"] = build_form_pdf(
-        pdf_dir / "form_fr.pdf", cases["C05"],
+        pdf_dir / "form_fr.pdf", _with_narrative(cases["C05"], FRENCH_NARRATIVE),
         reference="AER-2026-00312", report_date="24 juillet 2026", language="fr")
     out["form_ja"] = build_form_pdf(
-        pdf_dir / "form_ja.pdf", cases["C04"],
+        pdf_dir / "form_ja.pdf", _with_narrative(cases["C04"], JAPANESE_NARRATIVE),
         reference="AER-2026-00325", report_date="2026年6月24日", language="ja",
         font_name=_japanese_font())
     # E17: English labels wrapped around German free text — the case that defeats
     # document-level language detection and forces block-level detection.
     out["form_mixed"] = build_form_pdf(
-        pdf_dir / "form_mixed.pdf", _germanised(cases["C08"]),
+        pdf_dir / "form_mixed.pdf", _with_narrative(cases["C08"], GERMAN_NARRATIVE),
         reference="AER-2026-00318", report_date="30 March 2026",
         language="en", labels_language="en")
 
@@ -170,19 +172,47 @@ def _japanese_font() -> str | None:
         return None
 
 
-def _germanised(case: CaseSpec) -> CaseSpec:
-    """Same case, German free text — for the mixed-language document (E17)."""
+GERMAN_NARRATIVE = (
+    "Ein 34-jähriger Mann, der Domitrelle 2 mg zweimal täglich einnahm, stellte sich acht "
+    "Wochen nach Therapiebeginn mit Fieber und Mundschleimhautulzerationen vor. Die "
+    "Neutrophilenzahl betrug 0,3 x 10^9/L. Er wurde mit Granulozyten-Kolonie-stimulierendem "
+    "Faktor behandelt und die Zahl erholt sich. Domitrelle wurde dauerhaft abgesetzt. Der "
+    "Patient hatte keine bekannten Arzneimittelallergien und nahm keine weiteren Arzneimittel "
+    "ein. Eine erneute Exposition ist nicht geplant."
+)
+
+FRENCH_NARRATIVE = (
+    "Une femme de 29 ans, enceinte de 22 semaines, prenait Domitrelle 2 mg le soir depuis le "
+    "début de l'année 2026 pour un trouble anxieux généralisé. Au mois de juillet, elle a "
+    "présenté une éruption érythémateuse sur les zones exposées au soleil après seulement dix "
+    "minutes à l'extérieur. La grossesse se poursuit normalement et aucune anomalie fœtale "
+    "n'a été détectée à l'échographie. Le traitement a été interrompu."
+)
+
+JAPANESE_NARRATIVE = (
+    "生後6週の女児に対し、胸部感染症の治療としてNuvexoral経口懸濁液125 mgを1日2回投与した。"
+    "投与開始から2日以内に、1日10回を超える嘔吐と強い悪心が出現し、哺乳が困難となった。"
+    "本剤の投与を中止し、経口補水療法を行ったところ、約36時間で回復した。"
+    "併用薬はなく、既往歴に特記すべき事項はない。再投与は行っていない。"
+)
+
+
+def _with_narrative(case: CaseSpec, narrative: str) -> CaseSpec:
+    """Same case, narrative rewritten in another language.
+
+    Translating only the field *labels* would not produce a non-English document — it would
+    produce an English document with translated furniture, and the language roll-up (weighted
+    by character count) would correctly report it as English. The narrative is the bulk of the
+    text and the part that carries the clinical content, so it is the part that has to be in
+    the source language for E16 to mean anything.
+
+    Passing a German narrative with English labels is what builds the *mixed* document (E17).
+    """
     import copy
 
-    mixed = copy.deepcopy(case)
-    mixed.narrative = (
-        "Ein 34-jähriger Mann, der Domitrelle 2 mg zweimal täglich einnahm, stellte sich acht "
-        "Wochen nach Therapiebeginn mit Fieber und Mundschleimhautulzerationen vor. Die "
-        "Neutrophilenzahl betrug 0,3 x 10^9/L. Er wurde mit Granulozyten-Kolonie-stimulierendem "
-        "Faktor behandelt und die Zahl erholt sich. Domitrelle wurde dauerhaft abgesetzt. Der "
-        "Patient hatte keine bekannten Arzneimittelallergien."
-    )
-    return mixed
+    variant = copy.deepcopy(case)
+    variant.narrative = narrative
+    return variant
 
 
 def _fake_docx(path: Path) -> Path:

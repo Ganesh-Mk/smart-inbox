@@ -149,7 +149,14 @@ def segment_page(
         is_heading = kind is not None and (
             looks_like_heading(block, body_font_size) or len(block.text.strip()) <= 40)
 
-        if not is_heading and genre == "FORM" and FORM_SECTION_PATTERN.match(block.text.strip()):
+        # A form's lettered sections ("A. Administrative information") are set as headings and
+        # look like them. Its field labels ("1. Product name", "2. Product name") match the
+        # same pattern but are small body text — so the typographic test is required here, not
+        # optional. Without it a two-drug form segments into 28 sections instead of 8, and the
+        # reviewer's section list becomes unusable.
+        if (not is_heading and genre == "FORM"
+                and FORM_SECTION_PATTERN.match(block.text.strip())
+                and looks_like_heading(block, body_font_size)):
             kind, is_heading = "FORM_FIELDS", True
 
         if is_heading and block_start > current_start:

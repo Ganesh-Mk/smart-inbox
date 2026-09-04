@@ -151,10 +151,26 @@ def cluster_columns(
 ) -> tuple[int, dict[int, int]]:
     """Work out how many text columns the page has, and which column each block is in.
 
-    A 1-D k-means over block x-midpoints for k in {1, 2, 3}, accepting the largest k whose
-    clusters are genuinely separated. The separation check is what stops a single-column form
-    with an indented block being reported as two columns — an over-eager column detector does
-    more damage than none, because it reorders text that was already correct.
+    A 1-D k-means over block **left edges** for k in {1, 2, 3}, accepting the largest k whose
+    clusters are genuinely separated.
+
+    Left edge, not x-midpoint. The plan specified the midpoint, and measuring it on a real
+    two-column article showed why that is wrong: a column's blocks share a left edge exactly
+    (they are laid out in the same frame) but their midpoints depend on how wide each block
+    happens to be. On page 1 of `article_A01.pdf` the left edges are cleanly bimodal at 51 and
+    308, while the midpoints scatter across 72, 82, 169, 199, 328, 336, 357 and 426 — because a
+    heading like "Discussion" is 56pt wide and the paragraph beneath it is 237pt. k-means on
+    those midpoints fits **three** clusters on a two-column page, splitting the left column
+    into headings and body. Reading order then emits every left-column heading, then every
+    left-column paragraph, then the right column — which is worse than not clustering at all.
+    See DECISIONS D-012.
+
+    Two kinds of block are excluded from the fit and assigned to column 0, because they belong
+    to no column and would drag a centroid toward the middle:
+
+    * full-width blocks — a title, or an abstract spanning the page;
+    * centred blocks — an author list or a journal line, which is narrow but sits on the page
+      centreline rather than on a column edge.
 
     Returns `(column_count, {block_index: column})`.
     """
@@ -163,48 +179,91 @@ def cluster_columns(
     if len(text_blocks) < 4:
         return 1, {i: 0 for i, _ in text_blocks}
 
-    mids = [((b[0] + b[2]) / 2) for _, b in text_blocks]
-    widths = [(b[2] - b[0]) for _, b in text_blocks]
-
-    # A block spanning most of the page (a title, a full-width abstract) is not evidence of a
-    # column and must not drag a centroid toward the middle. Exclude them from the fit, then
-    # assign them afterwards.
+    page_mid = page_width / 2
     full_width_cut = page_width * 0.65
-    narrow = [(i, m) for (i, _), m, w in zip(text_blocks, mids, widths) if w < full_width_cut]
-    if len(narrow) < 4:
+    centred_tolerance = page_width * 0.04
+
+    def spans_page(b) -> bool:
+        return (b[2] - b[0]) >= full_width_cut
+
+    def is_centred(b) -> bool:
+        return abs(((b[0] + b[2]) / 2) - page_mid) < centred_tolerance
+
+    banner = {i for i, b in text_blocks if spans_page(b) or is_centred(b)}
+    column_candidates = [(i, b[0]) for i, b in text_blocks if i not in banner]
+
+    if len(column_candidates) < 4:
         return 1, {i: 0 for i, _ in text_blocks}
 
-    narrow_mids = [m for _, m in narrow]
-    best_k, best_centroids = 1, [sum(narrow_mids) / len(narrow_mids)]
+    lefts = [x for _, x in column_candidates]
+    best_k, best_centroids = 1, [sum(lefts) / len(lefts)]
 
     for k in range(2, settings.max_columns + 1):
-        if len(narrow_mids) < k * 2:
+        if len(lefts) < k * 2:
             break
-        centroids = _kmeans_1d(narrow_mids, k)
+        centroids = _kmeans_1d(lefts, k)
         if centroids is None:
             continue
         centroids = sorted(centroids)
         gaps = [centroids[j + 1] - centroids[j] for j in range(len(centroids) - 1)]
-        min_gap = min(gaps) if gaps else 0.0
-        if min_gap < page_width * settings.column_separation_ratio:
+        if min(gaps, default=0.0) < page_width * settings.column_separation_ratio:
             break  # the clusters are not actually separated; k-1 was the honest answer
-        # Every cluster must hold a meaningful share of the blocks, or we are fitting noise.
+        # Every cluster must be non-empty. The separation check above is the meaningful test —
+        # requiring a *share* of the blocks is too strict: a short article can leave its right
+        # column holding a single trailing reference, and calling that page single-column puts
+        # that reference in the middle of the left column when the blocks are sorted by y.
         counts = [0] * k
-        for m in narrow_mids:
-            counts[_nearest(centroids, m)] += 1
-        if min(counts) < max(2, len(narrow_mids) // (k * 4)):
+        for x in lefts:
+            counts[_nearest(centroids, x)] += 1
+        if min(counts) < 1:
             break
         best_k, best_centroids = k, centroids
 
-    assignment = {i: _nearest(best_centroids, (b[0] + b[2]) / 2) for i, b in text_blocks}
+    assignment = {i: _nearest(best_centroids, b[0]) for i, b in text_blocks}
 
-    # Full-width blocks belong to the first column so they sort before the body, which is
-    # where a title or an abstract actually reads.
-    for (i, b), w in zip(text_blocks, widths):
-        if w >= full_width_cut:
-            assignment[i] = 0
+    # Banner blocks read before the body, so they belong at the head of column 0.
+    for index in banner:
+        assignment[index] = 0
+
+    if best_k > 1 and _is_row_aligned_grid(text_blocks, assignment, banner):
+        # Not columns at all — a grid. See _is_row_aligned_grid for why this matters.
+        return 1, {i: 0 for i, _ in text_blocks}
 
     return best_k, assignment
+
+
+def _is_row_aligned_grid(
+    text_blocks: Sequence[tuple[int, tuple]],
+    assignment: dict[int, int],
+    banner: set[int],
+) -> bool:
+    """True when the "columns" are the columns of a table, not independent text flows.
+
+    This distinction decides reading order, and getting it wrong damages the most common
+    document in the corpus. A filled-in report form is a grid: "Report reference | Date of
+    report" on one row, "Type of report | Serious?" on the next. Its blocks cluster into two
+    x-groups exactly like a two-column article does — but it must be read **across** each row,
+    not down each column. Reading it column-major separates every field in the right-hand
+    column from the row it belongs to.
+
+    The test is direct: in a grid, a block in a right-hand column almost always has a
+    vertically-aligned partner in column 0. In a genuine two-column article the columns are
+    independent flows and such pairings are incidental.
+    """
+    left_tops = [b[1] for i, b in text_blocks
+                 if i not in banner and assignment.get(i, 0) == 0]
+    others = [b for i, b in text_blocks
+              if i not in banner and assignment.get(i, 0) > 0]
+    # With only one or two blocks outside column 0 there is nothing to generalise from: a
+    # single trailing reference that happens to sit level with a left-column paragraph would
+    # otherwise be read as a 100%-aligned grid and collapse a real two-column page.
+    if len(others) < 3 or not left_tops:
+        return False
+
+    paired = sum(
+        1 for b in others
+        if any(abs(b[1] - top) < 6.0 for top in left_tops))
+    return paired / len(others) > 0.6
 
 
 def _kmeans_1d(values: Sequence[float], k: int, iterations: int = 40) -> list[float] | None:
