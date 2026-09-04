@@ -276,7 +276,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.api.overrideField(caseId, fieldId, value, status, this.reviewNotes).subscribe({
       next: () => {
         this.editing = null;
-        this.load(this.message().ID);
+        this.load(this.message().id);
       },
       error: (err) => this.error.set(err?.error?.message ?? 'Override failed'),
     });
@@ -289,14 +289,14 @@ export class DetailComponent implements OnInit, OnDestroy {
   decide(decision: 'ACCEPT' | 'OVERRIDE' | 'REJECT'): void {
     const m = this.message();
     const categories = (m.classifications ?? []).map((c: any) => c.CATEGORY);
-    this.api.review(m.ID, decision, categories, this.reviewNotes).subscribe({
-      next: () => this.load(m.ID),
+    this.api.review(m.id, decision, categories, this.reviewNotes).subscribe({
+      next: () => this.load(m.id),
       error: (err) => this.error.set(err?.error?.message ?? 'Could not record the decision'),
     });
   }
 
   reprocess(): void {
-    this.api.reprocess(this.message().ID).subscribe({ next: () => this.back() });
+    this.api.reprocess(this.message().id).subscribe({ next: () => this.back() });
   }
 
   inspect(call: any): void {

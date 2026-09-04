@@ -651,3 +651,44 @@ incomplete ICSR is still an ICSR — so it is a product call, not a bug to fix i
 
 **Affects:** `styles.scss`, `index.html`, `app.ts`, `theme.service.ts`, `src/app/ui/*`,
 both screen components.
+
+---
+
+### D-022 · Every reviewer action was posting to `/messages/undefined/review` · 4 Sep 2026
+
+Clicking **Accept** produced:
+
+```
+Method parameter 'id': Failed to convert value of type 'java.lang.String'
+to required type 'long'; For input string: "undefined"
+```
+
+The detail response mixes two casings. The **top level is camelCase** (`id`, `subject`,
+`status`, `senderName`, `receivedAt`, `needsAttention`, `attentionReason`); every **nested**
+collection is raw `UPPER_SNAKE` column names (`classifications[].CATEGORY`, `documents[].ID`,
+`fields[].FIELD_PATH`). The template read the top level as `m.SUBJECT`, `m.STATUS`, `m.ID` — all
+`undefined`.
+
+So `decide()`, `reprocess()` and the reload after a field override all sent the literal string
+`undefined` as the message id, and the header rendered an empty subject, no status badge and no
+attention bar. Accept, Override, Reject and Re-process were **all** non-functional.
+
+This predates the UI rebuild — `m.ID` is in the original component too, so no reviewer decision
+has ever been recordable through the UI. It survived because the failure is silent in the two
+places you look: the header just renders blank, and the POST error only appears after a click.
+
+**Verified by driving a real browser, not by reading the diff.** After the fix, clicking Accept
+on message 446: `POST /api/messages/446/review → HTTP 200`, the header badge flips
+`ready for review → reviewed`, `status` in the database becomes `REVIEWED`, and the audit trail
+gains a `REVIEW_ACCEPT · reviewer` row (7 → 8). The header now shows subject, sender and the
+amber attention bar.
+
+**The lesson worth keeping:** the previous session's verification exercised tabs, filters,
+navigation and the highlight overlay — every *read* path — and reported the UI as verified. Not
+one *write* path was clicked. Read-only checks cannot see this class of bug at all.
+
+**The underlying wart** is the mixed casing in the response. The right fix is one DTO with one
+convention rather than raw column maps, but that changes the API surface and every nested
+reference in the UI; it is recorded here as the real cause rather than smuggled into a UI commit.
+
+**Affects:** `frontend/src/app/detail/detail.component.{html,ts}`.
