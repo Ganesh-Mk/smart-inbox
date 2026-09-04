@@ -503,12 +503,27 @@ name says — the least confident *fact* awaiting sign-off.
 
 ### D-019 · The full stack does not fit in 8 GB; a read-only mode is the fix · 4 Sep 2026
 
-The backend was killed twice by the OS for low memory while serving the demo. Measured at the
-time: **0.7 GB free of 7.7 GB**, with Oracle alone holding 1.68 GB of its 2 GB cap.
+The backend was killed **three times** by the OS for low memory while serving the demo, the
+third time in the reduced configuration described below — so the lean mode helps but is not on
+its own a fix.
 
-Four processes compete on this machine — Oracle (~1.7 GB), GreenMail (~115 MB), the FastAPI AI
-service (~200 MB) and the JVM — plus Windows and a browser. Restarting into the same
-configuration would simply be killed again, so the fix is configuration, not a retry.
+My first diagnosis blamed the application stack and was wrong. Measured properly afterwards:
+
+| | |
+|---|---|
+| Total RAM | 7.7 GB |
+| Available | **0.5 GB** |
+| Sum of all working sets | 5.7 GB across **314 processes** |
+| Committed | 18.1 GB against a 24.7 GB limit — heavy paging |
+
+The whole Docker VM (`vmmemWSL`, holding Oracle and GreenMail) was **778 MB**, and the JVM
+~320 MB. The bulk was elsewhere: three VS Code instances (~700 MB), other editors and agents
+(~670 MB), Defender, browsers. **The machine is oversubscribed by its normal working set, and
+this project is a minority contributor.**
+
+That matters for what the fix is. Shrinking the JVM further buys almost nothing; the honest
+statement is that running the full stack alongside a working IDE session needs more headroom
+than this machine has, and a reviewer on a 16 GB machine will not notice any of it.
 
 **Viewing processed results needs neither GreenMail nor the AI service.** The mail is already
 ingested and the corpus already processed; both live in Oracle. So there is a legitimate

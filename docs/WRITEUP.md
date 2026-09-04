@@ -303,11 +303,14 @@ Stated plainly, because a system that hides these is harder to trust.
    model read an identifiable patient into thin description.
 6. **HTTP Basic with two in-memory users.** Deliberate: its job is to make the reviewer's
    identity real in the audit trail, not to be a security boundary.
-7. **The full stack does not fit comfortably in 8 GB.** Oracle Free wants 2 GB on its own, and
-   with GreenMail, the AI service and the JVM alongside it the OS killed the backend twice
-   while I was demonstrating it. There is a documented read-only mode that serves the entire
-   reviewer UI on a third of the footprint, but the constraint is real and a reviewer cloning
-   this onto a laptop will meet it. In production these are separate hosts.
+7. **The full stack wants more headroom than an 8 GB development machine has spare.** Oracle
+   Free alone holds ~1.7 GB, and on my machine the OS killed the backend three times while I
+   was demonstrating it. Measured, the whole Docker VM was 778 MB and the JVM 320 MB against
+   0.5 GB available — so the stack was a *minority* of a 5.7 GB working set spread over 314
+   processes, and shrinking it further buys little. The honest statement is that this runs
+   comfortably on 16 GB, or on 8 GB with the IDE closed, and there is a documented read-only
+   mode for browsing results on a third of the footprint. In production these are separate
+   hosts and the question does not arise.
 8. **The corpus is synthetic and my own.** It is deliberately adversarial, but a corpus written
    by the same person who wrote the extractor will always flatter it somewhat.
 
