@@ -1,101 +1,161 @@
-<header class="page-head">
-  <div>
-    <h1>Review queue</h1>
-    <p class="sub">Worst first — anything flagged, then lowest confidence, then oldest.</p>
-  </div>
+<div class="screen">
 
-  @if (stats(); as s) {
-    <div class="stat-strip">
-      <div class="stat"><span class="n">{{ s.messages }}</span><span class="l">messages</span></div>
-      <div class="stat"><span class="n">{{ s.documents }}</span><span class="l">documents</span></div>
-      <div class="stat"><span class="n">{{ s.cases }}</span><span class="l">cases</span></div>
-      <div class="stat"
-           title="Fraction of asserted facts whose quote was actually found in the source. This is the number the whole traceability design exists to make true.">
-        <span class="n">{{ (s.verificationRate * 100) | number:'1.0-0' }}%</span>
-        <span class="l">evidence verified</span>
-      </div>
-      <div class="stat"><span class="n">\${{ s.totalCostUsd | number:'1.2-4' }}</span><span class="l">AI spend</span></div>
-      <div class="stat" [class.busy]="s.pendingJobs + s.runningJobs > 0">
-        <span class="n">{{ s.pendingJobs + s.runningJobs }}</span><span class="l">jobs running</span>
-      </div>
+  <!-- ===================== header: title + KPI strip ===================== -->
+  <header class="page-head">
+    <div class="titles">
+      <h1>Review queue</h1>
+      <p class="sub">Worst first — anything flagged, then lowest confidence, then oldest.</p>
     </div>
-  }
-</header>
 
-<div class="filters">
-  <input type="search" placeholder="Search subject or sender…"
-         [(ngModel)]="search" (keyup.enter)="load()" />
-  <select [(ngModel)]="category" (change)="load()">
-    <option value="">All categories</option>
-    <option value="ICSR">ICSR</option>
-    <option value="ICSR_INCOMPLETE">ICSR incomplete</option>
-    <option value="PQC">PQC</option>
-    <option value="MI">Medical information</option>
-    <option value="NOT_RELEVANT">Not relevant</option>
-  </select>
-  <label class="check">
-    <input type="checkbox" [(ngModel)]="flaggedOnly" (change)="load()" />
-    Needs attention only
-  </label>
-  <button (click)="load()">Refresh</button>
-  <span class="count">{{ total() }} message(s)</span>
-</div>
+    @if (stats(); as s) {
+      <div class="kpis">
+        <ui-stat label="messages" [value]="s.messages" />
+        <ui-stat label="documents" [value]="s.documents" />
+        <ui-stat label="cases" [value]="s.cases" />
+        <ui-stat label="evidence verified" [value]="(s.verificationRate * 100).toFixed(1)" suffix="%"
+                 [tone]="s.verificationRate >= 0.95 ? 'ok' : 'warn'"
+                 hint="Fraction of asserted facts whose quote was actually found in the source. This is the number the whole traceability design exists to make true." />
+        <ui-stat label="AI spend" [value]="'$' + s.totalCostUsd.toFixed(2)"
+                 hint="Total spend across every model call for this corpus." />
+        <ui-stat label="cache hit" [value]="(s.cacheHitRate * 100).toFixed(0)" suffix="%"
+                 hint="Prompt-cache hit rate. Batching by prompt type is what makes this high." />
+        @if (s.deadJobs > 0) {
+          <ui-stat label="dead jobs" [value]="s.deadJobs" tone="bad"
+                   hint="Pipeline stages that failed repeatedly and were dead-lettered." />
+        }
+        @if (s.pendingJobs + s.runningJobs > 0) {
+          <ui-stat label="jobs running" [value]="s.pendingJobs + s.runningJobs" tone="brand" />
+        }
+      </div>
+    }
+  </header>
 
-@if (error()) {
-  <div class="error">{{ error() }}</div>
-}
+  <!-- ===================== toolbar ===================== -->
+  <div class="toolbar">
+    <div class="search">
+      <ui-icon name="search" [size]="14" />
+      <input type="search" placeholder="Search subject or sender…"
+             [(ngModel)]="search" (keyup.enter)="load()" aria-label="Search the queue" />
+    </div>
 
-@if (loading()) {
-  <div class="empty">Loading…</div>
-} @else if (rows().length === 0) {
-  <div class="empty">
-    Nothing here yet. Run <code>python scripts/seed_mailbox.py</code> and give the pipeline a moment.
+    <select [(ngModel)]="category" (change)="load()" aria-label="Filter by category">
+      <option value="">All categories</option>
+      <option value="ICSR">ICSR</option>
+      <option value="ICSR_INCOMPLETE">ICSR incomplete</option>
+      <option value="PQC">PQC</option>
+      <option value="MI">Medical information</option>
+      <option value="NOT_RELEVANT">Not relevant</option>
+    </select>
+
+    <select [ngModel]="sort()" (ngModelChange)="sort.set($event)" aria-label="Sort order">
+      <option value="default">Sort: worst first</option>
+      <option value="confidence">Sort: lowest confidence</option>
+      <option value="received">Sort: newest</option>
+      <option value="sender">Sort: sender</option>
+    </select>
+
+    <label class="check">
+      <input type="checkbox" [(ngModel)]="flaggedOnly" (change)="load()" />
+      Needs attention
+      @if (attentionCount() > 0) { <ui-badge tone="warn" size="sm">{{ attentionCount() }}</ui-badge> }
+    </label>
+
+    @if (hasFilters) {
+      <button class="btn btn--ghost btn--sm" (click)="resetFilters()">Clear</button>
+    }
+
+    <span class="spacer"></span>
+
+    <span class="count">{{ total() }} message{{ total() === 1 ? '' : 's' }}</span>
+    <button class="btn btn--icon" (click)="load()" title="Refresh" aria-label="Refresh">
+      <ui-icon name="refresh" />
+    </button>
   </div>
-} @else {
-  <table class="queue">
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>From</th>
-        <th>Subject</th>
-        <th>Categories</th>
-        <th title="Lowest confidence of any fact a reviewer would be asked to sign off">Min conf.</th>
-        <th>Flags</th>
-        <th>Docs</th>
-        <th>Received</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (row of rows(); track row.messageId) {
-        <tr (click)="open(row)" [class.attention]="row.needsAttention === 'Y'">
-          <td><span [class]="statusClass(row.status)">{{ row.status.replace('_', ' ') | lowercase }}</span></td>
-          <td class="sender">
-            <div class="name">{{ row.senderName || row.senderEmail }}</div>
-            <div class="email">{{ row.senderEmail }}</div>
-          </td>
-          <td class="subject">{{ row.subject }}</td>
-          <td>
-            @for (c of categoriesOf(row); track c) {
-              <span [class]="categoryClass(c)">{{ c.replace('_', ' ') }}</span>
-            }
-            @if (categoriesOf(row).length === 0) {
-              <span class="pending">not yet classified</span>
-            }
-          </td>
-          <td>
-            <span [class]="confidenceClass(row.minFieldConfidence)">
-              {{ percent(row.minFieldConfidence) }}
-            </span>
-          </td>
-          <td>
-            @for (f of flags(row); track f.label) {
-              <span [class]="f.kind" [title]="f.title">{{ f.label }}</span>
-            }
-          </td>
-          <td class="num">{{ row.documentCount }}</td>
-          <td class="when">{{ row.receivedAt | date:'dd MMM HH:mm' }}</td>
-        </tr>
-      }
-    </tbody>
-  </table>
-}
+
+  <!-- ===================== table ===================== -->
+  <div class="grid-wrap">
+    @if (error()) {
+      <ui-empty kind="error" heading="Could not load the queue" padded>{{ error() }}</ui-empty>
+    } @else if (loading()) {
+      <ui-empty kind="loading" heading="Loading the queue…" [message]="false" padded />
+    } @else if (view().length === 0) {
+      <ui-empty heading="Nothing in the queue" icon="inbox" padded>
+        @if (hasFilters) {
+          No message matches these filters.
+        } @else {
+          Run <code>python scripts/seed_mailbox.py</code> and give the pipeline a moment.
+        }
+      </ui-empty>
+    } @else {
+      <table class="table table--hover queue">
+        <thead>
+          <tr>
+            <th class="c-status">Status</th>
+            <th class="c-from">From</th>
+            <th class="c-subject">Subject</th>
+            <th class="c-cats">Categories</th>
+            <th class="c-conf" title="Lowest confidence of any fact a reviewer would be asked to sign off">
+              Min confidence
+            </th>
+            <th class="c-flags">Attention</th>
+            <th class="c-docs">Docs</th>
+            <th class="c-when">Received</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of view(); track row.messageId) {
+            <tr (click)="open(row)" [class.attention]="row.needsAttention === 'Y'"
+                tabindex="0" (keyup.enter)="open(row)">
+              <td class="c-status">
+                <ui-badge [tone]="statusTone(row.status)" size="sm">
+                  {{ humanise(row.status) | lowercase }}
+                </ui-badge>
+              </td>
+
+              <td class="c-from">
+                <div class="sender">
+                  <span class="avatar" [style.--hue]="avatarHue(row)">{{ initials(row) }}</span>
+                  <span class="who">
+                    <span class="name truncate">{{ row.senderName || row.senderEmail }}</span>
+                    <span class="email truncate">{{ row.senderEmail }}</span>
+                  </span>
+                </div>
+              </td>
+
+              <td class="c-subject">
+                <span class="subject truncate">{{ row.subject }}</span>
+              </td>
+
+              <td class="c-cats">
+                <div class="row row--wrap">
+                  @for (c of categoriesOf(row); track c) {
+                    <ui-badge [tone]="categoryTone(c)" size="sm">{{ humanise(c) }}</ui-badge>
+                  }
+                  @if (categoriesOf(row).length === 0) {
+                    <span class="dim">not yet classified</span>
+                  }
+                </div>
+              </td>
+
+              <td class="c-conf">
+                <ui-meter [value]="row.minFieldConfidence" />
+              </td>
+
+              <td class="c-flags">
+                <div class="row row--wrap">
+                  @for (f of flags(row); track f.label) {
+                    <ui-badge [tone]="f.tone" size="sm" [attr.title]="f.title">{{ f.label }}</ui-badge>
+                  }
+                  @if (flags(row).length === 0) { <span class="dim">—</span> }
+                </div>
+              </td>
+
+              <td class="c-docs tnum">{{ row.documentCount }}</td>
+              <td class="c-when dim">{{ row.receivedAt | date:'dd MMM HH:mm' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

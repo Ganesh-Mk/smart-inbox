@@ -2,17 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Frontend</title>
+    <title>Smart Inbox — pharmacovigilance triage</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description"
+          content="AI first-pass triage for a pharmacovigilance shared mailbox, with verified evidence for every extracted fact." />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <!--
+      No webfont and no icon font on purpose. The demo has to run offline, and a Material Icons
+      stylesheet that fails to load leaves ligature text ("search_off") rendered mid-screen. Type
+      comes from the system stack; icons are inline SVG in ui-icon.
+    -->
   </head>
   <body>
     <app-root></app-root>

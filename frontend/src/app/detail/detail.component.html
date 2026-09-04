@@ -1,382 +1,545 @@
 @if (loading()) {
-  <div class="empty">Loading…</div>
+  <ui-empty kind="loading" heading="Loading message…" [message]="false" padded />
 } @else if (message(); as m) {
 
-<header class="detail-head">
-  <button class="back" (click)="back()">← Queue</button>
-  <div class="head-main">
-    <h1>{{ m.SUBJECT }}</h1>
-    <div class="meta">
-      {{ m.SENDER_NAME || m.SENDER_EMAIL }} &lt;{{ m.SENDER_EMAIL }}&gt;
-      · {{ m.RECEIVED_AT | date:'dd MMM yyyy HH:mm' }}
-      · <span class="status">{{ m.STATUS?.replace('_',' ') | lowercase }}</span>
-    </div>
-    @if (m.NEEDS_ATTENTION === 'Y') {
-      <div class="attention">⚠ {{ m.ATTENTION_REASON }}</div>
-    }
-  </div>
-</header>
+<div class="screen">
 
-@if (error()) { <div class="error">{{ error() }}</div> }
+  <!-- ===================== header ===================== -->
+  <header class="msg-head">
+    <button class="btn btn--ghost btn--icon" (click)="back()" title="Back to queue"
+            aria-label="Back to queue">
+      <ui-icon name="back" />
+    </button>
 
-<div class="panes">
-
-  <!-- ============ LEFT: the source, with the highlight overlay ============ -->
-  <section class="pane pane-source">
-    <div class="doc-tabs">
-      @for (d of m.documents; track d.ID) {
-        <button [class.active]="activeDocument()?.ID === d.ID" (click)="selectDocument(d)">
-          {{ d.SOURCE_KIND === 'EMAIL_BODY' ? 'Email body' : d.FILENAME }}
-          @if (d.PARSE_STATUS === 'PARSE_FAILED') { <span class="bad">unreadable</span> }
-          @if (d.DOC_RENDERING === 'MIXED') { <span class="tag">mixed</span> }
-        </button>
-      }
+    <div class="head-main">
+      <div class="line-1">
+        <h1 class="truncate">{{ m.SUBJECT }}</h1>
+        <ui-badge [tone]="statusTone(m.STATUS)" size="sm">{{ humanise(m.STATUS) | lowercase }}</ui-badge>
+        @for (f of headerFlags(); track f.label) {
+          <ui-badge [tone]="f.tone" size="sm" [attr.title]="f.title">{{ f.label }}</ui-badge>
+        }
+      </div>
+      <div class="line-2">
+        <span class="from">{{ m.SENDER_NAME || m.SENDER_EMAIL }}</span>
+        <span class="dim">&lt;{{ m.SENDER_EMAIL }}&gt;</span>
+        <span class="sep">·</span>
+        <span class="dim">{{ m.RECEIVED_AT | date:'dd MMM yyyy, HH:mm' }}</span>
+        <span class="sep">·</span>
+        <span class="dim">{{ documents().length }} source{{ documents().length === 1 ? '' : 's' }}</span>
+      </div>
     </div>
 
-    @if (activeDocument(); as doc) {
-      <div class="doc-meta">
-        {{ doc.DOC_RENDERING }} / {{ doc.DOC_GENRE }}
-        @if (doc.PRIMARY_LANGUAGE) { · {{ doc.PRIMARY_LANGUAGE }} }
-        · {{ doc.PAGE_COUNT }} page(s)
-        @if (doc.TRUNCATED === 'Y') { · <span class="bad">truncated</span> }
+    <div class="head-actions">
+      <button class="btn btn--primary" (click)="decide('ACCEPT')">
+        <ui-icon name="check" [size]="14" /> Accept
+      </button>
+      <button class="btn" (click)="decide('OVERRIDE')">Override</button>
+      <button class="btn btn--danger" (click)="decide('REJECT')">Reject</button>
+      <button class="btn btn--ghost btn--icon" (click)="reprocess()" title="Re-process this message"
+              aria-label="Re-process">
+        <ui-icon name="refresh" />
+      </button>
+    </div>
+  </header>
+
+  @if (m.NEEDS_ATTENTION === 'Y' && m.ATTENTION_REASON) {
+    <div class="attention-bar">
+      <ui-icon name="alert" [size]="15" />
+      <span>{{ m.ATTENTION_REASON }}</span>
+    </div>
+  }
+  @if (error()) {
+    <div class="attention-bar bad">
+      <ui-icon name="alert" [size]="15" /><span>{{ error() }}</span>
+    </div>
+  }
+
+  <!-- ===================== body: source | tabbed detail ===================== -->
+  <div class="panes">
+
+    <!-- ---------- LEFT: the source, with the highlight overlay ---------- -->
+    <section class="pane pane-source">
+      <div class="source-head">
+        <div class="doc-switch">
+          @for (d of documents(); track d.ID) {
+            <button class="doc" [class.active]="activeDocument()?.ID === d.ID"
+                    (click)="selectDocument(d)" [title]="documentLabel(d)">
+              <ui-icon [name]="d.SOURCE_KIND === 'EMAIL_BODY' ? 'inbox' : 'file'" [size]="13" />
+              <span class="truncate">{{ documentLabel(d) }}</span>
+              @if (d.PARSE_STATUS === 'PARSE_FAILED') {
+                <ui-badge tone="bad" size="sm">unreadable</ui-badge>
+              }
+            </button>
+          }
+        </div>
       </div>
 
-      @if (doc.PARSE_STATUS === 'PARSE_FAILED') {
-        <div class="parse-failed">
-          <strong>This document could not be parsed.</strong>
-          <p>{{ doc.PARSE_ERROR }}</p>
-          <p class="note">
-            The message was still classified from its other sources and reached the queue
-            flagged, rather than disappearing.
-          </p>
+      @if (activeDocument(); as doc) {
+        <div class="doc-meta">
+          <ui-badge size="sm" [tone]="doc.DOC_RENDERING === 'SCANNED' ? 'warn' : 'neutral'">
+            {{ humanise(doc.DOC_RENDERING) | lowercase }}
+          </ui-badge>
+          @if (doc.DOC_GENRE) { <span class="dim">{{ humanise(doc.DOC_GENRE) | lowercase }}</span> }
+          @if (doc.PRIMARY_LANGUAGE) { <span class="dim">· {{ doc.PRIMARY_LANGUAGE }}</span> }
+          <span class="dim">· {{ doc.PAGE_COUNT }} page{{ doc.PAGE_COUNT === 1 ? '' : 's' }}</span>
+          @if (doc.TRUNCATED === 'Y') { <ui-badge tone="warn" size="sm">truncated</ui-badge> }
+
+          <span class="spacer"></span>
+
+          @if (doc.pages?.length > 1) {
+            <div class="pager">
+              @for (p of doc.pages; track p.PAGE_NO) {
+                <button class="pg" [class.active]="activePage() === p.PAGE_NO"
+                        (click)="activePage.set(p.PAGE_NO)"
+                        [title]="p.RENDERING === 'SCANNED' ? 'Scanned page — read by vision' : 'Digital text page'">
+                  {{ p.PAGE_NO }}
+                  @if (p.RENDERING === 'SCANNED') { <span class="dotmark"></span> }
+                </button>
+              }
+            </div>
+          }
         </div>
-      } @else {
-        @if (doc.pages.length > 1) {
-          <div class="page-strip">
-            @for (p of doc.pages; track p.PAGE_NO) {
-              <button [class.active]="activePage() === p.PAGE_NO"
-                      (click)="activePage.set(p.PAGE_NO)">
-                {{ p.PAGE_NO }}
-                <span class="rend">{{ p.RENDERING === 'SCANNED' ? 'scan' : 'text' }}</span>
-              </button>
+
+        @if (doc.PARSE_STATUS === 'PARSE_FAILED') {
+          <div class="source-body">
+            <div class="parse-failed">
+              <ui-icon name="alert" [size]="20" />
+              <strong>This document could not be parsed.</strong>
+              <p class="reason">{{ doc.PARSE_ERROR }}</p>
+              <p class="note">
+                The message was still classified from its other sources and reached the queue
+                flagged, rather than disappearing.
+              </p>
+            </div>
+          </div>
+        } @else {
+          <div class="source-body">
+            @if (hasPageImage()) {
+              <div class="page-canvas">
+                @if (pageImageSrc(); as src) {
+                  <img [src]="src" alt="Page {{ activePage() }}" />
+                } @else {
+                  <div class="img-loading"><span class="spinner"></span></div>
+                }
+                @if (highlightStyle(); as style) {
+                  <div class="hl" [style]="style"></div>
+                }
+              </div>
+            } @else if (currentPage(); as p) {
+              <pre class="page-text">{{ p.TEXT_ORIGINAL }}</pre>
+            }
+
+            @if (currentPage(); as p) {
+              @if (p.TEXT_ENGLISH) {
+                <details class="translation">
+                  <summary>English translation — the original above stays the record of truth</summary>
+                  <pre>{{ p.TEXT_ENGLISH }}</pre>
+                </details>
+              }
             }
           </div>
         }
-
-        <div class="page-view">
-          @if (hasPageImage()) {
-            <div class="page-canvas">
-              @if (pageImageSrc(); as src) {
-                <img [src]="src" alt="Page {{ activePage() }}" />
-              }
-              @if (highlightStyle(); as style) {
-                <div class="hl" [style]="style"></div>
-              }
-            </div>
-          } @else if (currentPage(); as p) {
-            <pre class="page-text">{{ p.TEXT_ORIGINAL }}</pre>
-          }
-        </div>
 
         @if (highlight(); as h) {
-          <div class="evidence-banner" [class.unverified]="!h.verified">
-            @if (h.verified) {
-              <strong>Verified evidence</strong> — this quote was found in the source:
-            } @else {
-              <strong>⚠ Cited but not found in source</strong> —
-              the model reported this quote, code could not locate it, and the field's
-              confidence was capped at 0.40:
-            }
-            <q>{{ h.quote }}</q>
+          <div class="evidence-bar" [class.unverified]="!h.verified">
+            <ui-icon [name]="h.verified ? 'zoom' : 'alert'" [size]="15" />
+            <div class="ev-text">
+              <div class="ev-title">
+                {{ h.verified ? 'Verified evidence' : 'Cited but not found in source' }}
+                <span class="ev-sub">
+                  {{ h.verified
+                       ? '— this quote was located in the source'
+                       : '— the model reported this quote, code could not locate it, and the confidence was capped at 0.40' }}
+                </span>
+              </div>
+              <q>{{ h.quote }}</q>
+            </div>
+            <button class="btn btn--ghost btn--icon btn--sm" (click)="clearHighlight()"
+                    aria-label="Clear highlight"><ui-icon name="close" [size]="14" /></button>
           </div>
-        }
-
-        @if (currentPage(); as p) {
-          @if (p.TEXT_ENGLISH) {
-            <details class="translation">
-              <summary>English translation (the original above stays the record of truth)</summary>
-              <pre>{{ p.TEXT_ENGLISH }}</pre>
-            </details>
-          }
         }
       }
-    }
-  </section>
+    </section>
 
-  <!-- ============ CENTRE: classification, summary, fields ============ -->
-  <section class="pane pane-main">
+    <!-- ---------- RIGHT: tabbed detail ---------- -->
+    <section class="pane pane-detail">
+      <ui-tabs [tabs]="tabs()" [(active)]="activeTab" />
 
-    <div class="card">
-      <h2>Classification</h2>
-      @for (c of m.classifications; track c.ID) {
-        <div class="cls">
-          <div class="cls-head">
-            <span class="chip chip-{{ c.CATEGORY | lowercase }}">{{ c.CATEGORY.replace('_',' ') }}</span>
-            <span class="by">{{ c.DECIDED_BY === 'RULE' ? 'decided by rule' : 'model' }}</span>
-            <span class="pct">{{ (c.CONFIDENCE * 100) | number:'1.0-0' }}%</span>
-          </div>
-          <div class="conf-track"><div [class]="confidenceClass(c.CONFIDENCE)"
-                                       [style.width.%]="c.CONFIDENCE * 100"></div></div>
-          <p class="reason">{{ c.REASON }}</p>
+      <div class="tab-body">
+        @switch (activeTab()) {
 
-          @if (c.icsrValidity; as v) {
-            <div class="checklist">
-              <div class="cl-title">
-                ICSR minimum criteria — {{ v.ELEMENTS_PRESENT }}/4 present
-                <span class="hint">(the label is decided by this rule, not by the model)</span>
-              </div>
-              <ul>
-                <li [class.yes]="v.HAS_PATIENT === 'Y'">
-                  {{ v.HAS_PATIENT === 'Y' ? '✓' : '✗' }} Identifiable patient
-                  @if (v.PATIENT_EVIDENCE) { <q>{{ v.PATIENT_EVIDENCE }}</q> }
-                </li>
-                <li [class.yes]="v.HAS_REPORTER === 'Y'">
-                  {{ v.HAS_REPORTER === 'Y' ? '✓' : '✗' }} Identifiable reporter
-                  @if (v.REPORTER_EVIDENCE) { <q>{{ v.REPORTER_EVIDENCE }}</q> }
-                </li>
-                <li [class.yes]="v.HAS_PRODUCT === 'Y'">
-                  {{ v.HAS_PRODUCT === 'Y' ? '✓' : '✗' }} Suspect product
-                  @if (v.PRODUCT_EVIDENCE) { <q>{{ v.PRODUCT_EVIDENCE }}</q> }
-                </li>
-                <li [class.yes]="v.HAS_EVENT === 'Y'">
-                  {{ v.HAS_EVENT === 'Y' ? '✓' : '✗' }} Adverse event
-                  @if (v.EVENT_EVIDENCE) { <q>{{ v.EVENT_EVIDENCE }}</q> }
-                </li>
-              </ul>
+          <!-- ======================= OVERVIEW ======================= -->
+          @case ('overview') {
+            <div class="stack">
+
+              <ui-card heading="Classification">
+                @for (c of m.classifications; track c.ID) {
+                  <div class="cls">
+                    <div class="cls-head">
+                      <ui-badge [tone]="categoryTone(c.CATEGORY)">{{ humanise(c.CATEGORY) }}</ui-badge>
+                      <ui-badge size="sm" [tone]="c.DECIDED_BY === 'RULE' ? 'brand' : 'neutral'">
+                        {{ c.DECIDED_BY === 'RULE' ? 'decided by rule' : 'model' }}
+                      </ui-badge>
+                      <span class="spacer"></span>
+                      <ui-meter class="cls-meter" [value]="c.CONFIDENCE" />
+                    </div>
+                    <p class="reason">{{ c.REASON }}</p>
+
+                    @if (c.icsrValidity; as v) {
+                      <div class="checklist">
+                        <div class="cl-head">
+                          <strong>ICSR minimum criteria — {{ v.ELEMENTS_PRESENT }}/4 present</strong>
+                          <span class="dim">the label is decided by this rule, not by the model</span>
+                        </div>
+                        <ul>
+                          <li [class.yes]="v.HAS_PATIENT === 'Y'">
+                            <ui-icon [name]="v.HAS_PATIENT === 'Y' ? 'check' : 'close'" [size]="13" />
+                            <span class="cl-label">Identifiable patient</span>
+                            @if (v.PATIENT_EVIDENCE) { <q>{{ v.PATIENT_EVIDENCE }}</q> }
+                          </li>
+                          <li [class.yes]="v.HAS_REPORTER === 'Y'">
+                            <ui-icon [name]="v.HAS_REPORTER === 'Y' ? 'check' : 'close'" [size]="13" />
+                            <span class="cl-label">Identifiable reporter</span>
+                            @if (v.REPORTER_EVIDENCE) { <q>{{ v.REPORTER_EVIDENCE }}</q> }
+                          </li>
+                          <li [class.yes]="v.HAS_PRODUCT === 'Y'">
+                            <ui-icon [name]="v.HAS_PRODUCT === 'Y' ? 'check' : 'close'" [size]="13" />
+                            <span class="cl-label">Suspect product</span>
+                            @if (v.PRODUCT_EVIDENCE) { <q>{{ v.PRODUCT_EVIDENCE }}</q> }
+                          </li>
+                          <li [class.yes]="v.HAS_EVENT === 'Y'">
+                            <ui-icon [name]="v.HAS_EVENT === 'Y' ? 'check' : 'close'" [size]="13" />
+                            <span class="cl-label">Adverse event</span>
+                            @if (v.EVENT_EVIDENCE) { <q>{{ v.EVENT_EVIDENCE }}</q> }
+                          </li>
+                        </ul>
+                      </div>
+                    }
+                  </div>
+                }
+                @if (!m.classifications?.length) {
+                  <ui-empty heading="Not yet classified" icon="clock">
+                    The pipeline is still working on this message.
+                  </ui-empty>
+                }
+              </ui-card>
+
+              @for (doc of documents(); track doc.ID) {
+                @if (doc.summary) {
+                  <ui-card [heading]="'Summary — ' + documentLabel(doc)">
+                    <div card-actions>
+                      <ui-badge size="sm" [tone]="relevanceTone(doc.summary.RELEVANCE)">
+                        {{ humanise(doc.summary.RELEVANCE) | lowercase }}
+                      </ui-badge>
+                    </div>
+                    <p class="rel-reason">{{ doc.summary.RELEVANCE_REASON }}</p>
+                    <p class="summary">{{ doc.summary.SUMMARY_TEXT }}</p>
+                    <p class="dim sentences">{{ doc.summary.SENTENCE_COUNT }} sentences</p>
+                  </ui-card>
+                }
+              }
+
+              <ui-card heading="Reviewer decision"
+                       subheading="Nothing is overwritten — an override inserts a new row and points the AI's original at it.">
+                <textarea [(ngModel)]="reviewNotes" rows="2"
+                          placeholder="Reviewer notes (recorded in the audit trail)"></textarea>
+                <div class="row decide-row">
+                  <button class="btn btn--primary" (click)="decide('ACCEPT')">
+                    <ui-icon name="check" [size]="14" /> Accept all
+                  </button>
+                  <button class="btn" (click)="decide('OVERRIDE')">Override</button>
+                  <button class="btn btn--danger" (click)="decide('REJECT')">Reject</button>
+                  <span class="spacer"></span>
+                  <button class="btn btn--ghost btn--sm" (click)="reprocess()">Re-process</button>
+                </div>
+              </ui-card>
             </div>
           }
-        </div>
-      }
-      @if (!m.classifications?.length) {
-        <p class="pending">Not yet classified — the pipeline is still working on this message.</p>
-      }
-    </div>
 
-    @for (doc of m.documents; track doc.ID) {
-      @if (doc.summary) {
-        <div class="card">
-          <h2>Summary — {{ doc.SOURCE_KIND === 'EMAIL_BODY' ? 'email body' : doc.FILENAME }}</h2>
-          <div class="rel rel-{{ doc.summary.RELEVANCE | lowercase }}">
-            {{ doc.summary.RELEVANCE.replace('_',' ') }} · {{ doc.summary.RELEVANCE_REASON }}
-          </div>
-          <p class="summary">{{ doc.summary.SUMMARY_TEXT }}</p>
-          <div class="sentences">{{ doc.summary.SENTENCE_COUNT }} sentences</div>
-        </div>
-      }
-    }
-
-    @for (caseRow of m.cases; track caseRow.ID) {
-      <div class="card">
-        <h2>
-          Extracted case — {{ caseRow.CASE_TYPE }}
-          @if (caseRow.IS_SERIOUS === 'Y') { <span class="serious">SERIOUS</span> }
-        </h2>
-
-        @if (conflictsIn(caseRow).length) {
-          <div class="conflict-box">
-            <strong>{{ conflictsIn(caseRow).length }} field(s) where the sources disagree.</strong>
-            Both values are kept with their own evidence — choose which is correct.
-          </div>
-        }
-
-        @for (g of fieldGroups(caseRow); track g.group) {
-          <details class="group" open>
-            <summary>{{ g.group | titlecase }} <span class="n">{{ g.fields.length }}</span></summary>
-            <table class="fields">
-              @for (f of g.fields; track f.ID) {
-                <tr [class.conflict]="f.STATUS === 'CONFLICT'"
-                    [class.overridden]="f.DECIDED_BY === 'REVIEWER'">
-                  <td class="label">{{ shortLabel(f.FIELD_PATH) }}</td>
-                  <td class="value">
-                    @if (editing?.fieldId === f.ID) {
-                      <input [(ngModel)]="editing!.value" class="edit" />
-                      <select [(ngModel)]="editing!.status">
-                        <option value="STATED">STATED</option>
-                        <option value="NOT_STATED">NOT_STATED</option>
-                        <option value="UNCERTAIN">UNCERTAIN</option>
-                      </select>
-                      <button class="mini" (click)="saveEdit()">Save</button>
-                      <button class="mini ghost" (click)="cancelEdit()">Cancel</button>
-                    } @else {
-                      <span class="v">{{ f.VALUE_TEXT || '—' }}</span>
-                      @if (f.UNIT) { <span class="unit">{{ f.UNIT }}</span> }
-                      @if (f.DECIDED_BY === 'REVIEWER') { <span class="by-human">reviewer</span> }
-                    }
-                  </td>
-                  <td><span [class]="statusClass(f.STATUS)">{{ f.STATUS.replace('_',' ') }}</span></td>
-                  <td class="conf">
-                    <div class="conf-track">
-                      <div [class]="confidenceClass(f.CONFIDENCE)"
-                           [style.width.%]="f.CONFIDENCE * 100"></div>
-                    </div>
-                    <span class="pct" [title]="f.ADJUST_REASON || 'no adjustment'">
-                      {{ (f.CONFIDENCE * 100) | number:'1.0-0' }}%
-                      @if (f.CONFIDENCE < f.CONFIDENCE_PRE_ADJUST) {
-                        <span class="capped"
-                              title="Model said {{ (f.CONFIDENCE_PRE_ADJUST*100) | number:'1.0-0' }}%. {{ f.ADJUST_REASON }}">
-                          ↓
-                        </span>
-                      }
-                    </span>
-                  </td>
-                  <td class="ev">
-                    @for (e of f.evidence; track e.ID) {
-                      <button class="chip-ev" [class.unver]="e.VERIFIED === 'N'"
-                              (click)="showEvidence(e)"
-                              [title]="e.VERIFIED === 'Y'
-                                ? (e.VERIFY_METHOD + ' match, ' + e.MATCH_SCORE + '% — click to highlight the source')
-                                : 'Cited but not found in the source. Confidence capped at 0.40.'">
-                        {{ e.VERIFIED === 'Y' ? '🔍 p' + (e.PAGE_NO ?? 0) : '⚠ unverified' }}
-                      </button>
-                    }
-                  </td>
-                  <td class="act">
-                    @if (editing?.fieldId !== f.ID) {
-                      <button class="mini ghost" (click)="startEdit(caseRow, f)">Edit</button>
-                    }
-                  </td>
-                </tr>
+          <!-- ======================= EXTRACTED DATA ======================= -->
+          @case ('case') {
+            <div class="stack">
+              @if (cases().length === 0) {
+                <ui-empty heading="No case extracted" icon="table">
+                  Nothing here needed structured extraction — a not-relevant message correctly
+                  produces no case record.
+                </ui-empty>
               }
-            </table>
-          </details>
-        }
-      </div>
-    }
 
-    <div class="card actions">
-      <h2>Decision</h2>
-      <textarea [(ngModel)]="reviewNotes" rows="2"
-                placeholder="Reviewer notes (recorded in the audit trail)"></textarea>
-      <div class="btn-row">
-        <button class="primary" (click)="decide('ACCEPT')">Accept all</button>
-        <button (click)="decide('OVERRIDE')">Override</button>
-        <button class="danger" (click)="decide('REJECT')">Reject</button>
-        <button class="ghost" (click)="reprocess()">Re-process</button>
-      </div>
-      <p class="note">
-        Nothing is overwritten. An override inserts a new row and points the AI's original at it,
-        so the machine answer stays recoverable forever.
-      </p>
-    </div>
-  </section>
+              @for (caseRow of cases(); track caseRow.ID) {
+                <ui-card [heading]="'Case ' + (caseRow.CASE_INDEX + 1) + ' — ' + humanise(caseRow.CASE_TYPE)"
+                         [subheading]="caseRow.PATIENT_DESCRIPTOR || ''" flush>
+                  <div card-actions>
+                    @if (caseRow.IS_SERIOUS === 'Y') {
+                      <ui-badge tone="bad" solid>SERIOUS</ui-badge>
+                    }
+                    <ui-meter class="case-meter" [value]="caseRow.CONFIDENCE" />
+                  </div>
 
-  <!-- ============ RIGHT: tables, images, audit, AI calls ============ -->
-  <section class="pane pane-side">
+                  @if (conflictsIn(caseRow).length) {
+                    <div class="conflict-bar">
+                      <ui-icon name="alert" [size]="15" />
+                      <span>
+                        <strong>{{ conflictsIn(caseRow).length }} field(s) where the sources disagree.</strong>
+                        Both values are kept with their own evidence — choose which is correct.
+                      </span>
+                    </div>
+                  }
 
-    @for (doc of m.documents; track doc.ID) {
-      @if (doc.tables?.length) {
-        <div class="card">
-          <h3>Tables — {{ doc.FILENAME || 'email body' }}</h3>
-          @for (t of doc.tables; track t.TABLE_INDEX) {
-            <div class="tbl">
-              <div class="tbl-head">
-                p{{ t.PAGE_NO }} · {{ t.N_ROWS }}×{{ t.N_COLS }} · {{ t.EXTRACTION_METHOD }}
-              </div>
-              <table>
-                <thead><tr>
-                  @for (h of parseJson(t.HEADERS_JSON); track $index) { <th>{{ h }}</th> }
-                </tr></thead>
+                  @for (g of fieldGroups(caseRow); track g.group) {
+                    <div class="group">
+                      <div class="group-head">
+                        <span class="g-name">{{ sentenceCase(g.group) }}</span>
+                        <span class="g-count">{{ g.fields.length }}</span>
+                      </div>
+
+                      <table class="table fields">
+                        <tbody>
+                          @for (f of g.fields; track f.ID) {
+                            <tr [class.is-conflict]="f.STATUS === 'CONFLICT'"
+                                [class.is-override]="f.DECIDED_BY === 'REVIEWER'">
+                              <td class="f-label">{{ shortLabel(f.FIELD_PATH) }}</td>
+
+                              <td class="f-value">
+                                @if (editing?.fieldId === f.ID) {
+                                  <div class="row edit-row">
+                                    <input [(ngModel)]="editing!.value" class="edit-input" />
+                                    <select [(ngModel)]="editing!.status">
+                                      <option value="STATED">STATED</option>
+                                      <option value="NOT_STATED">NOT_STATED</option>
+                                      <option value="UNCERTAIN">UNCERTAIN</option>
+                                    </select>
+                                    <button class="btn btn--primary btn--sm" (click)="saveEdit()">Save</button>
+                                    <button class="btn btn--ghost btn--sm" (click)="cancelEdit()">Cancel</button>
+                                  </div>
+                                } @else {
+                                  <span class="v" [class.none]="!f.VALUE_TEXT">{{ f.VALUE_TEXT || '—' }}</span>
+                                  @if (f.UNIT) { <span class="unit">{{ f.UNIT }}</span> }
+                                  @if (f.DECIDED_BY === 'REVIEWER') {
+                                    <ui-badge tone="brand" size="sm">reviewer</ui-badge>
+                                  }
+                                }
+                              </td>
+
+                              <td class="f-status">
+                                <ui-badge [tone]="fieldStatusTone(f.STATUS)" size="sm">
+                                  {{ humanise(f.STATUS) | lowercase }}
+                                </ui-badge>
+                              </td>
+
+                              <td class="f-conf">
+                                <ui-meter [value]="f.CONFIDENCE" [preAdjust]="f.CONFIDENCE_PRE_ADJUST"
+                                          [reason]="f.ADJUST_REASON" />
+                              </td>
+
+                              <td class="f-ev">
+                                @for (e of f.evidence; track e.ID) {
+                                  <button class="ev-chip" [class.unver]="e.VERIFIED === 'N'"
+                                          (click)="showEvidence(e)"
+                                          [title]="e.VERIFIED === 'Y'
+                                            ? (e.VERIFY_METHOD + ' match at ' + e.MATCH_SCORE + '% — click to highlight the source')
+                                            : 'Cited but not found in the source. Confidence capped at 0.40.'">
+                                    <ui-icon [name]="e.VERIFIED === 'Y' ? 'zoom' : 'alert'" [size]="12" />
+                                    {{ e.VERIFIED === 'Y' ? 'p' + (e.PAGE_NO ?? 0) : 'unverified' }}
+                                  </button>
+                                }
+                                @if (!f.evidence?.length) { <span class="dim">—</span> }
+                              </td>
+
+                              <td class="f-act">
+                                @if (editing?.fieldId !== f.ID) {
+                                  <button class="btn btn--ghost btn--icon btn--sm"
+                                          (click)="startEdit(caseRow, f)" title="Override this field"
+                                          aria-label="Override this field">
+                                    <ui-icon name="edit" [size]="13" />
+                                  </button>
+                                }
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+
+                  @if (caseRow.NARRATIVE) {
+                    <div class="group">
+                      <div class="group-head"><span class="g-name">Narrative</span></div>
+                      <p class="narrative">{{ caseRow.NARRATIVE }}</p>
+                    </div>
+                  }
+                </ui-card>
+              }
+            </div>
+          }
+
+          <!-- ======================= SOURCES ======================= -->
+          @case ('sources') {
+            <div class="stack">
+              <ui-card heading="Attachments" flush>
+                <table class="table">
+                  <thead>
+                    <tr><th>File</th><th>Type</th><th>Handling</th></tr>
+                  </thead>
+                  <tbody>
+                    @for (a of m.attachments; track a.FILENAME) {
+                      <tr>
+                        <td class="truncate">{{ a.FILENAME }}</td>
+                        <td class="mono dim">{{ a.SNIFFED_TYPE }}</td>
+                        <td>
+                          <div class="row row--wrap">
+                            @if (a.PROCESSED === 'N') {
+                              <ui-badge tone="neutral" size="sm"
+                                        [attr.title]="'Recorded, not content-processed'">
+                                {{ humanise(a.SKIP_REASON) | lowercase }}
+                              </ui-badge>
+                            } @else {
+                              <ui-badge tone="ok" size="sm">processed</ui-badge>
+                            }
+                            @if (a.DECLARED_TYPE !== a.SNIFFED_TYPE) {
+                              <ui-badge tone="warn" size="sm"
+                                        [attr.title]="'Declared ' + a.DECLARED_TYPE + ', sniffed ' + a.SNIFFED_TYPE">
+                                type mismatch
+                              </ui-badge>
+                            }
+                            @if (a.NESTING_LEVEL > 0) {
+                              <ui-badge tone="info" size="sm"
+                                        [attr.title]="'Hoisted out of a forwarded message'">forwarded</ui-badge>
+                            }
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                    @if (!m.attachments?.length) {
+                      <tr><td colspan="3" class="dim pad">No attachments — this message was body-only.</td></tr>
+                    }
+                  </tbody>
+                </table>
+              </ui-card>
+
+              @for (doc of documents(); track doc.ID) {
+                @if (doc.tables?.length) {
+                  <ui-card [heading]="'Tables — ' + documentLabel(doc)">
+                    @for (t of doc.tables; track t.TABLE_INDEX) {
+                      <div class="artefact">
+                        <div class="artefact-head">
+                          <ui-badge size="sm">p{{ t.PAGE_NO }}</ui-badge>
+                          <span class="dim">{{ t.N_ROWS }}×{{ t.N_COLS }}</span>
+                          <span class="dim">· {{ humanise(t.EXTRACTION_METHOD) | lowercase }}</span>
+                        </div>
+                        <div class="tbl-scroll">
+                          <table class="table mini">
+                            <thead><tr>
+                              @for (h of parseJson(t.HEADERS_JSON); track $index) { <th>{{ h }}</th> }
+                            </tr></thead>
+                            <tbody>
+                              @for (row of parseJson(t.ROWS_JSON).slice(0, 8); track $index) {
+                                <tr>@for (cell of row; track $index) { <td>{{ cell }}</td> }</tr>
+                              }
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    }
+                  </ui-card>
+                }
+
+                @if (doc.images?.length) {
+                  <ui-card [heading]="'Images — ' + documentLabel(doc)">
+                    @for (img of doc.images; track img.IMAGE_INDEX) {
+                      <div class="artefact">
+                        <div class="artefact-head">
+                          <ui-badge size="sm" tone="violet">{{ humanise(img.CATEGORY) | lowercase }}</ui-badge>
+                          <span class="dim">p{{ img.PAGE_NO }}</span>
+                          <span class="spacer"></span>
+                          @if (img.MENTIONS_DEFECT === 'Y') { <ui-badge tone="bad" size="sm">defect</ui-badge> }
+                          @if (img.MENTIONS_INJURY === 'Y') { <ui-badge tone="bad" size="sm">injury</ui-badge> }
+                        </div>
+                        <p class="img-desc">{{ img.DESCRIPTION }}</p>
+                      </div>
+                    }
+                  </ui-card>
+                }
+              }
+            </div>
+          }
+
+          <!-- ======================= AI CALLS ======================= -->
+          @case ('ai') {
+            <ui-card heading="Model calls"
+                     [subheading]="aiCalls().length + ' call(s) · $' + totalCost().toFixed(4) + ' · click any row for the exact request and response'"
+                     flush>
+              <table class="table table--hover">
+                <thead>
+                  <tr>
+                    <th>Purpose</th><th>Prompt</th><th class="num">Tokens</th>
+                    <th class="num">Latency</th><th class="num">Cost</th><th>Cache</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  @for (row of parseJson(t.ROWS_JSON).slice(0, 8); track $index) {
-                    <tr>@for (cell of row; track $index) { <td>{{ cell }}</td> }</tr>
+                  @for (c of aiCalls(); track c.ID) {
+                    <tr (click)="inspect(c)">
+                      <td class="mono">{{ c.PURPOSE }}</td>
+                      <td class="dim">{{ c.PROMPT_VERSION }}</td>
+                      <td class="num tnum">{{ c.PROMPT_TOKENS }} / {{ c.COMPLETION_TOKENS }}</td>
+                      <td class="num tnum">{{ c.LATENCY_MS }} ms</td>
+                      <td class="num tnum">${{ c.COST_USD | number:'1.4-5' }}</td>
+                      <td>
+                        @if (c.CACHED_TOKENS > 0) {
+                          <ui-badge tone="ok" size="sm">cached</ui-badge>
+                        } @else { <span class="dim">—</span> }
+                      </td>
+                    </tr>
+                  }
+                  @if (!aiCalls().length) {
+                    <tr><td colspan="6" class="dim pad">No model calls recorded for this message.</td></tr>
                   }
                 </tbody>
               </table>
-            </div>
+            </ui-card>
           }
-        </div>
-      }
 
-      @if (doc.images?.length) {
-        <div class="card">
-          <h3>Images — {{ doc.FILENAME }}</h3>
-          @for (img of doc.images; track img.IMAGE_INDEX) {
-            <div class="img-row">
-              <div class="img-cat">{{ img.CATEGORY }} · p{{ img.PAGE_NO }}</div>
-              <p>{{ img.DESCRIPTION }}</p>
-              <div class="img-flags">
-                @if (img.MENTIONS_DEFECT === 'Y') { <span class="flag flag-red">defect</span> }
-                @if (img.MENTIONS_INJURY === 'Y') { <span class="flag flag-red">injury</span> }
-                <span class="flag flag-amber">needs review</span>
-              </div>
-            </div>
+          <!-- ======================= AUDIT ======================= -->
+          @case ('audit') {
+            <ui-card heading="Audit trail"
+                     subheading="Append-only. Every AI decision and every reviewer action, in order.">
+              <ol class="timeline">
+                @for (a of audit(); track a.ID) {
+                  <li>
+                    <span class="dot" [class]="'t-' + auditTone(a.ACTION)"></span>
+                    <span class="t-when tnum">{{ a.OCCURRED_AT | date:'HH:mm:ss' }}</span>
+                    <span class="t-what">{{ humanise(a.ACTION) | lowercase }}</span>
+                    <span class="t-who dim">{{ a.ACTOR }}</span>
+                  </li>
+                }
+                @if (!audit().length) {
+                  <li class="dim">No audit rows yet.</li>
+                }
+              </ol>
+            </ui-card>
           }
-        </div>
-      }
-    }
-
-    <div class="card">
-      <h3>Attachments</h3>
-      <table class="att">
-        @for (a of m.attachments; track a.FILENAME) {
-          <tr>
-            <td>{{ a.FILENAME }}</td>
-            <td class="mono">{{ a.SNIFFED_TYPE }}</td>
-            <td>
-              @if (a.PROCESSED === 'N') {
-                <span class="skip" title="Recorded, not content-processed">{{ a.SKIP_REASON }}</span>
-              } @else { <span class="ok">processed</span> }
-              @if (a.DECLARED_TYPE !== a.SNIFFED_TYPE) {
-                <span class="mismatch"
-                      title="Declared {{ a.DECLARED_TYPE }}, sniffed {{ a.SNIFFED_TYPE }}">
-                  type mismatch
-                </span>
-              }
-              @if (a.NESTING_LEVEL > 0) {
-                <span class="tag" title="Hoisted out of a forwarded message">forwarded</span>
-              }
-            </td>
-          </tr>
         }
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>AI calls <span class="n">{{ aiCalls().length }}</span></h3>
-      <table class="calls">
-        @for (c of aiCalls(); track c.ID) {
-          <tr (click)="inspect(c)">
-            <td class="mono">{{ c.PURPOSE }}</td>
-            <td>{{ c.LATENCY_MS }}ms</td>
-            <td>\${{ c.COST_USD | number:'1.4-5' }}</td>
-            <td>@if (c.CACHED_TOKENS > 0) { <span class="tag">cached</span> }</td>
-          </tr>
-        }
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>Audit trail</h3>
-      <ol class="audit">
-        @for (a of audit(); track a.ID) {
-          <li>
-            <span class="when">{{ a.OCCURRED_AT | date:'HH:mm:ss' }}</span>
-            <span class="what">{{ a.ACTION.replace('_',' ') | lowercase }}</span>
-            <span class="who">{{ a.ACTOR }}</span>
-          </li>
-        }
-      </ol>
-    </div>
-  </section>
+      </div>
+    </section>
+  </div>
 </div>
 
+<!-- ===================== AI call inspector ===================== -->
 @if (inspectedCall(); as call) {
-  <div class="modal" (click)="closeInspector()">
-    <div class="modal-body" (click)="$event.stopPropagation()">
-      <h3>{{ call.PURPOSE }} — {{ call.PROMPT_VERSION }}</h3>
-      <div class="call-meta">
-        {{ call.MODEL }} · {{ call.PROMPT_TOKENS }} in / {{ call.COMPLETION_TOKENS }} out
-        · {{ call.CACHED_TOKENS }} cached · \${{ call.COST_USD | number:'1.5-6' }}
-        · {{ call.LATENCY_MS }}ms
-        @if (call.REPAIRED === 'Y') { · <span class="tag">schema repaired</span> }
+  <ui-modal [heading]="call.PURPOSE + ' — ' + call.PROMPT_VERSION"
+            [subheading]="call.MODEL + ' · ' + call.PROMPT_TOKENS + ' in / ' + call.COMPLETION_TOKENS + ' out · ' + call.CACHED_TOKENS + ' cached · ' + call.LATENCY_MS + ' ms'"
+            (closed)="closeInspector()">
+    @if (call.REPAIRED === 'Y') {
+      <div class="attention-bar">
+        <ui-icon name="alert" [size]="15" />
+        <span>The first response did not satisfy the schema and was repaired on a second pass.</span>
       </div>
-      <h4>Request</h4>
-      <pre>{{ call.REQUEST_JSON }}</pre>
-      <h4>Response</h4>
-      <pre>{{ call.RESPONSE_JSON }}</pre>
-      <button (click)="closeInspector()">Close</button>
-    </div>
-  </div>
+    }
+    <h3 class="io-title">Request</h3>
+    <pre class="io">{{ prettyJson(call.REQUEST_JSON) }}</pre>
+    <h3 class="io-title">Response</h3>
+    <pre class="io">{{ prettyJson(call.RESPONSE_JSON) }}</pre>
+  </ui-modal>
 }
 
 }

@@ -591,3 +591,63 @@ removed the old file from the working tree; only Maven's output directory was st
 `target/classes/static` before packaging is enough.
 
 **Affects:** `frontend/src/app/api.service.ts`, `detail.component.{ts,html}`.
+
+---
+
+### D-021 · The reviewer UI rebuilt on a token-based design system · 4 Sep 2026
+
+The first UI was written to be dense and was never designed. It worked, but it read as a
+prototype: one flat colour list, hard-coded hexes scattered through two components, and a detail
+screen that stacked classification, summaries, every extracted field, tables, images, AI calls
+and the audit trail into one column. Reaching the decision buttons meant scrolling past three
+screens of tables.
+
+**What changed**
+
+*A design system, not a stylesheet.* `styles.scss` now defines tokens only — surfaces, lines,
+text, semantic tones, elevation, radii, type. Nothing below it names a colour. Dark mode is a
+second token block and cost no component work, which is the test of whether the layer is real.
+
+*Eight reusable primitives* in `src/app/ui/`: `ui-tabs`, `ui-card`, `ui-badge`, `ui-meter`,
+`ui-stat`, `ui-empty`, `ui-modal`, `ui-icon`, plus `domain.ts` — the shared mapping from a domain
+value to a UI meaning. Both screens route category, status and confidence through that one file,
+so a label cannot be green on the queue and amber on the detail screen.
+
+*The detail screen is tabbed:* Overview · Extracted data · Sources · AI calls · Audit, beside a
+source pane that never scrolls away. A reviewer asks one question at a time, and the answer to
+"why does it say that?" is always a place in a document, so the document stays on screen.
+
+**Decisions worth recording**
+
+- **Tabs own only the strip, not the panels.** The parent switches with `@switch`. Content
+  projection would keep every panel instantiated, and these panels are heavy — a 4 MB page render,
+  long tables — so they genuinely want destroying when hidden.
+- **`ui-meter` visualises the confidence chain, not just the number.** When code lowered the
+  model's own figure the bar is striped and a ghost tick marks where the model had claimed to be.
+  The adjustment was previously a `↓` in a tooltip; it is the most interesting thing on the row.
+- **The webfonts are gone.** `index.html` pulled Roboto and Material Icons from Google. The demo
+  has to run offline, and an icon font that fails to load renders ligature text ("search_off")
+  mid-screen. Type is the system stack; icons are inline SVG.
+- **Boolean attributes need `transform: booleanAttribute`.** A bare `padded` passes `""` to a
+  signal input, which is a type error against `boolean`. Caught at build time.
+- **Fixed a rendering bug carried over from the old templates:** cost cells were written
+  `\${{ ... }}`, and a backslash is not an HTML escape, so the UI displayed `\$1.47`.
+
+**Verified in a real browser, not by compiling.** Driven over the DevTools protocol against the
+running backend: queue renders 38 rows with live KPIs; all five tabs return content
+(4 cards / 20 field rows / 13 AI calls / audit); filtering and row navigation work; the theme
+toggle flips `data-theme` and the body background with it; **zero console errors or exceptions**.
+The highlight overlay was measured on `messages/426` — a 56×15 px box at 50.8%/27.6% inside the
+1654×2339 page render, quoting "58-year-old".
+
+A note on method: `--dump-dom` reported the detail screen as completely empty and I briefly
+believed the route was broken. It snapshots before the lazy chunk and its XHRs resolve. The
+DevTools-protocol probe showed the screen rendering correctly all along — the tool was wrong,
+not the application.
+
+**Open, deliberately not changed:** the category filter is `categories LIKE ?`, so selecting
+`ICSR` also returns the 22 `ICSR_INCOMPLETE` rows (32 of 38). That may well be intended — an
+incomplete ICSR is still an ICSR — so it is a product call, not a bug to fix inside a UI task.
+
+**Affects:** `styles.scss`, `index.html`, `app.ts`, `theme.service.ts`, `src/app/ui/*`,
+both screen components.

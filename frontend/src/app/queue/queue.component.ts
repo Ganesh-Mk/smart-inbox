@@ -1,24 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService, Overview, QueueRow } from '../api.service';
+import {
+  UI, Flag, Tone, attentionFlags, categoryTone, humanise, percent, statusTone,
+} from '../ui';
+
+type SortKey = 'default' | 'confidence' | 'received' | 'sender';
 
 /**
  * The review queue.
  *
- * Sorted worst-first — anything needing attention, then lowest confidence, then oldest —
- * because that is the order a reviewer's day actually has. The flag chips are the point of the
- * screen: a reviewer should be able to see *why* a message wants them without opening it.
+ * Sorted worst-first — anything flagged, then lowest confidence, then oldest — because that is
+ * the order a reviewer's day actually has. The flag badges are the point of the screen: a
+ * reviewer should see *why* a message wants them without opening it.
  */
 @Component({
   selector: 'app-queue',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ...UI],
   templateUrl: './queue.component.html',
   styleUrl: './queue.component.scss',
 })
-export class QueueComponent implements OnInit {
+export class QueueComponent implements OnInit, OnDestroy {
   private readonly api = inject(ApiService);
   private readonly router = inject(Router);
 
@@ -27,15 +32,41 @@ export class QueueComponent implements OnInit {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly total = signal(0);
+  readonly sort = signal<SortKey>('default');
 
   search = '';
   category = '';
   flaggedOnly = false;
 
+  private poll?: ReturnType<typeof setInterval>;
+
+  /** Client-side re-sort. The server's order is the meaningful default; these are for scanning. */
+  readonly view = computed(() => {
+    const list = [...this.rows()];
+    switch (this.sort()) {
+      case 'confidence':
+        return list.sort((a, b) => (a.minFieldConfidence ?? 2) - (b.minFieldConfidence ?? 2));
+      case 'received':
+        return list.sort((a, b) => +new Date(b.receivedAt) - +new Date(a.receivedAt));
+      case 'sender':
+        return list.sort((a, b) =>
+          (a.senderName || a.senderEmail).localeCompare(b.senderName || b.senderEmail));
+      default:
+        return list;
+    }
+  });
+
+  readonly attentionCount = computed(() =>
+    this.rows().filter((r) => r.needsAttention === 'Y').length);
+
   ngOnInit(): void {
     this.load();
     // The pipeline runs in the background, so the queue fills while you watch it.
-    setInterval(() => this.load(true), 5000);
+    this.poll = setInterval(() => this.load(true), 5000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.poll);
   }
 
   load(quiet = false): void {
@@ -60,6 +91,16 @@ export class QueueComponent implements OnInit {
     this.api.overview().subscribe({ next: (s) => this.stats.set(s) });
   }
 
+  resetFilters(): void {
+    this.search = ''; this.category = ''; this.flaggedOnly = false;
+    this.sort.set('default');
+    this.load();
+  }
+
+  get hasFilters(): boolean {
+    return !!this.search || !!this.category || this.flaggedOnly;
+  }
+
   open(row: QueueRow): void {
     this.router.navigate(['/messages', row.messageId]);
   }
@@ -68,68 +109,32 @@ export class QueueComponent implements OnInit {
     return row.categories ? row.categories.split(',').filter(Boolean) : [];
   }
 
-  /** Colour by what the label means clinically, not by rank. */
-  categoryClass(category: string): string {
-    switch (category) {
-      case 'ICSR': return 'chip chip-icsr';
-      case 'ICSR_INCOMPLETE': return 'chip chip-incomplete';
-      case 'PQC': return 'chip chip-pqc';
-      case 'MI': return 'chip chip-mi';
-      default: return 'chip chip-none';
-    }
+  flags(row: QueueRow): Flag[] { return attentionFlags(row); }
+
+  // Re-exported so the template can reach the shared vocabulary.
+  readonly categoryTone = categoryTone;
+  readonly statusTone = statusTone;
+  readonly humanise = humanise;
+  readonly percent = percent;
+
+  initials(row: QueueRow): string {
+    const source = (row.senderName || row.senderEmail || '?').trim();
+    const parts = source.split(/[\s.@_-]+/).filter(Boolean);
+    return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?';
   }
 
-  confidenceClass(value: number | null): string {
-    if (value === null || value === undefined) return 'conf conf-unknown';
-    if (value >= 0.7) return 'conf conf-high';
-    if (value >= 0.4) return 'conf conf-mid';
-    return 'conf conf-low';
+  /** A stable hue per sender, so the same person keeps the same avatar across sessions. */
+  avatarHue(row: QueueRow): number {
+    const key = row.senderEmail || row.senderName || '';
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) % 360;
+    return hash;
   }
 
-  percent(value: number | null): string {
-    return value === null || value === undefined ? '—' : `${Math.round(value * 100)}%`;
-  }
-
-  /** Every reason this row is asking for a human, in the order a reviewer cares about them. */
-  flags(row: QueueRow): { label: string; kind: string; title: string }[] {
-    const out: { label: string; kind: string; title: string }[] = [];
-    if (row.unverifiedEvidence > 0) {
-      out.push({
-        label: `${row.unverifiedEvidence} unverified`,
-        kind: 'flag flag-amber',
-        title: 'The model cited a source, but the quote could not be found in it. '
-             + 'Confidence has been capped at 0.40.',
-      });
-    }
-    if (row.conflictCount > 0) {
-      out.push({
-        label: `${row.conflictCount} conflict`,
-        kind: 'flag flag-red',
-        title: 'Two sources disagree on this fact. Both values are kept for you to choose between.',
-      });
-    }
-    if (row.failedDocumentCount > 0) {
-      out.push({
-        label: `${row.failedDocumentCount} unreadable`,
-        kind: 'flag flag-red',
-        title: 'A document could not be parsed. The message was classified without it.',
-      });
-    }
-    if (row.truncatedDocs > 0) {
-      out.push({ label: 'truncated', kind: 'flag flag-amber',
-        title: 'A document exceeded the page cap; only the first pages were processed.' });
-    }
-    if (row.deadJobs > 0) {
-      out.push({ label: 'dead job', kind: 'flag flag-red',
-        title: 'A pipeline stage failed repeatedly and was dead-lettered.' });
-    }
-    return out;
-  }
-
-  statusClass(status: string): string {
-    if (status === 'READY_FOR_REVIEW') return 'status status-ready';
-    if (status === 'REVIEWED') return 'status status-done';
-    if (status === 'FAILED' || status === 'NEEDS_ATTENTION') return 'status status-bad';
-    return 'status status-working';
+  confidenceTone(value: number | null): Tone {
+    if (value === null || value === undefined) return 'neutral';
+    if (value >= 0.7) return 'ok';
+    if (value >= 0.4) return 'warn';
+    return 'bad';
   }
 }
