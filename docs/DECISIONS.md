@@ -1,4 +1,4 @@
-# FirstPass — Decision Log
+# Smart Inbox — Decision Log
 
 Decisions made **during** implementation, with the evidence behind them. The plan (`docs/PROJECT_PLAN.md`)
 holds design decisions made up front; this file records what we learn as we build, including anything that
@@ -8,17 +8,18 @@ Each entry: what was decided, why, and what it affects.
 
 ---
 
-### D-001 · Project name: **FirstPass** · 4 Sep 2026
+### D-001 · Project name: **Smart Inbox** · 4 Sep 2026
 
-The brief says the job is to "automate this first pass". *First-pass metabolism* is also a pharmacology
-term — what the liver does to a drug before it reaches systemic circulation. The double meaning lands with
-a pharma audience and describes the product literally.
+The user chose **Smart Inbox**, matching the assignment's own title ("Smart Inbox Assistant for a
+Healthcare Company") and the GitHub repository `Ganesh-Mk/smart-inbox`. Naming the deliverable after the
+thing the brief asked for is the least surprising choice for the reviewers.
 
-Rejected: **Argus** — Oracle Argus Safety is *the* incumbent pharmacovigilance case-management product, so
-the name would read as derivative and cause confusion in exactly the room we are presenting to.
-Also rejected: *Vigil* (fine but generic), *Sentinel*, *Triage*.
+Briefly considered and dropped: *FirstPass* (a pun on "first-pass metabolism" — clever, but it obscures
+what the repo is when a reviewer scans a list of submissions) and **Argus** — rejected outright because
+Oracle Argus Safety is *the* incumbent pharmacovigilance case-management product, so the name would read
+as derivative in exactly the room we are presenting to.
 
-**Affects:** repo directory `firstpass/`, DB user `FIRSTPASS`, Java package `com.clinevo.firstpass`,
+**Affects:** repo directory `smart-inbox/`, DB user `SMARTINBOX`, Java package `com.clinevo.smartinbox`,
 Angular app name, README title.
 
 ---
@@ -29,7 +30,7 @@ Angular app name, README title.
 Oracle image (~4.6 GB) plus container layers plus Windows headroom.
 
 Moved with `robocopy /MOVE /J` (70 s, 22.6 GB verified), then set `DataFolder` in
-`%APPDATA%\Docker\settings-store.json`. Original settings backed up to `settings-store.json.bak-firstpass`.
+`%APPDATA%\Docker\settings-store.json`. Original settings backed up to `settings-store.json.bak-smartinbox`.
 
 Result: **C: 8.5 → 31.1 GB free**, D: 48.6 GB free. Also set `MemoryMiB=4096`, `Cpus=6`, `SwapMiB=1024` so
 Docker cannot starve the 8 GB host while the JVM, Python and Angular are also running.
@@ -76,9 +77,9 @@ it is still zero, caching is not working and the cost claim in the write-up must
 
 ---
 
-### D-005 · Repo root is `firstpass/`; the assignment PDF is **not** committed · 4 Sep 2026
+### D-005 · Repo root is `smart-inbox/`; the assignment PDF is **not** committed · 4 Sep 2026
 
-Repo lives at `D:\Prep\Clinevo_Technologies\firstpass\`. `Clinevo_Assignment.pdf` stays in the parent
+Repo lives at `D:\Prep\Clinevo_Technologies\smart-inbox\`. `Clinevo_Assignment.pdf` stays in the parent
 directory and is never added to git — it is marked *"Confidential. Provided solely for candidate
 evaluation"* and *"do not share externally"*, and the submitted repo may be forwarded internally.
 
@@ -107,7 +108,7 @@ relocation risks breaking a working daemon against a 7-day deadline, for no bene
 
 **Loose end for the user to decide later:** the original 22.51 GB `docker_data.vhdx` containing their
 pre-existing images is intact and orphaned at `D:\DockerData\wsl\disk\docker_data.vhdx`. It is not in
-use. It can be restored, or deleted to reclaim 22.5 GB of D:. Not FirstPass's call — leave it until asked.
+use. It can be restored, or deleted to reclaim 22.5 GB of D:. Not Smart Inbox's call — leave it until asked.
 
 **Lesson worth keeping:** never write a config file consumed by a Go/Rust/C program with PowerShell's
 `-Encoding utf8` on Windows PowerShell 5.1 — it adds a BOM. Use `utf8NoBOM` (PS 7+) or write bytes from Python.

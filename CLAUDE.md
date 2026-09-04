@@ -1,4 +1,4 @@
-# FirstPass — Smart Inbox Assistant
+# Smart Inbox — Clinevo Assignment
 
 > Clinevo Technologies live assignment. **Read this file first, every session.**
 
@@ -9,8 +9,8 @@ PDF attachments over IMAP, works out what each message is about, extracts the ke
 confidence score and a **verified** pointer back to the exact source, and hands it to a human
 reviewer to accept or override.
 
-**Name:** *FirstPass* — it is literally the automated first pass over the mailbox, and "first-pass"
-is a pharmacology term (first-pass metabolism), which a pharma audience will catch.
+**Name:** *Smart Inbox* — matches the assignment's own title ("Smart Inbox Assistant") and the GitHub
+repo `Ganesh-Mk/smart-inbox`. Java package `com.clinevo.smartinbox`, DB user `SMARTINBOX`.
 
 **Deadline:** 11 September 2026. Started 4 September 2026.
 

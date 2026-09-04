@@ -1,4 +1,4 @@
-# FirstPass — Phase Tracker
+# Smart Inbox — Phase Tracker
 
 **Live progress document. Update after every work session.**
 Spec: `docs/PROJECT_PLAN.md` · Decisions: `docs/DECISIONS.md` · Context: `CLAUDE.md`
@@ -37,7 +37,7 @@ The core rubric (85%) is P0–P5 and must never be sacrificed.
 - [x] Smoke-test the OpenRouter key — structured JSON output confirmed, cost reported per call
 - [x] Move Docker data C: → `D:\DockerData\wsl` (freed 22.5 GB; C: 8.5 → 31.1 GB)
 - [x] Set Docker `MemoryMiB=4096`, `Cpus=6`, `SwapMiB=1024`
-- [x] Create repo root `firstpass/`, `CLAUDE.md`, `docs/PHASES.md`, `docs/DECISIONS.md`
+- [x] Create repo root `smart-inbox/`, `CLAUDE.md`, `docs/PHASES.md`, `docs/DECISIONS.md`
 - [x] Docker daemon healthy (28.3.3, 6 CPU / 4 GB cap). Relocation partially reverted — see DECISIONS D-006. Old images orphaned but preserved on D:
 - [x] `git init`, `.gitignore` (`.env` confirmed ignored), `.env` + `.env.example`
 - [ ] Pull `gvenzl/oracle-free:23-slim-faststart` and `greenmail/standalone`
