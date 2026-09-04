@@ -55,7 +55,11 @@ GreenMail (Docker) provides the real IMAP test mailbox.
 - Java 24.0.2 · Node 22.18.0 · Python 3.12.7 · Docker 28.3.3
 - **Maven and Angular CLI are NOT installed** — use `./mvnw` and `npx`
 - **Tesseract and poppler are NOT installed and are NOT needed** — by design
-- 8 GB RAM, 8 cores. Cap Oracle SGA ~1.2 GB, JVM `-Xmx512m`. Do not run everything at once carelessly.
+- 8 GB RAM, 8 cores. **The full stack does not fit** — Oracle alone holds ~1.7 GB and the OS
+  killed the backend twice at 0.7 GB free (DECISIONS D-019). To *view* processed results, stop
+  GreenMail and the AI service and run the backend read-only:
+  `-Xmx320m --inbox.mail.poll-enabled=false --inbox.queue.worker-threads=0`.
+  The full pipeline needs everything up and ~2 GB headroom.
 - Docker data lives on C: (`AppData\Local\Docker\wsl`); C: has ~29.5 GB free after reclaiming 22.5 GB
 - An orphaned 22.5 GB `docker_data.vhdx` holding the user's *old* images sits unused at
   `D:\DockerData\wsl\disk\` — awaiting their decision to restore or delete (see DECISIONS D-006)

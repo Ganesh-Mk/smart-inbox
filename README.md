@@ -67,6 +67,21 @@ Open **http://localhost:8080** and log in as `reviewer` / `reviewer`.
 The mail poller picks the corpus up within ten seconds and the queue fills as the pipeline
 works through it. A full corpus run takes roughly 8–10 minutes on four workers.
 
+### Running it on a small machine
+
+The four processes together want about 2 GB more than an 8 GB laptop has spare — Oracle Free
+alone holds ~1.7 GB. To *browse* results that are already processed, GreenMail and the AI
+service are not needed:
+
+```bash
+docker compose stop greenmail
+# stop the AI service too, then:
+cd backend && java -Xmx320m -jar target/smart-inbox-backend-1.0.0.jar     --inbox.mail.poll-enabled=false --inbox.queue.worker-threads=0
+```
+
+The whole reviewer UI works in this mode; only ingesting new mail and running new AI calls
+need the full stack.
+
 ### Verifying it worked
 
 ```bash

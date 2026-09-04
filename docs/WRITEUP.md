@@ -303,7 +303,12 @@ Stated plainly, because a system that hides these is harder to trust.
    model read an identifiable patient into thin description.
 6. **HTTP Basic with two in-memory users.** Deliberate: its job is to make the reviewer's
    identity real in the audit trail, not to be a security boundary.
-7. **The corpus is synthetic and my own.** It is deliberately adversarial, but a corpus written
+7. **The full stack does not fit comfortably in 8 GB.** Oracle Free wants 2 GB on its own, and
+   with GreenMail, the AI service and the JVM alongside it the OS killed the backend twice
+   while I was demonstrating it. There is a documented read-only mode that serves the entire
+   reviewer UI on a third of the footprint, but the constraint is real and a reviewer cloning
+   this onto a laptop will meet it. In production these are separate hosts.
+8. **The corpus is synthetic and my own.** It is deliberately adversarial, but a corpus written
    by the same person who wrote the extractor will always flatter it somewhat.
 
 ---

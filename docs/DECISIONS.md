@@ -498,3 +498,39 @@ its own quote. `V5__queue_view_confidence.sql` excludes it, so the column now me
 name says — the least confident *fact* awaiting sign-off.
 
 **Affects:** `pipeline/classify.py` and its tests; new Flyway migration `V5`.
+
+---
+
+### D-019 · The full stack does not fit in 8 GB; a read-only mode is the fix · 4 Sep 2026
+
+The backend was killed twice by the OS for low memory while serving the demo. Measured at the
+time: **0.7 GB free of 7.7 GB**, with Oracle alone holding 1.68 GB of its 2 GB cap.
+
+Four processes compete on this machine — Oracle (~1.7 GB), GreenMail (~115 MB), the FastAPI AI
+service (~200 MB) and the JVM — plus Windows and a browser. Restarting into the same
+configuration would simply be killed again, so the fix is configuration, not a retry.
+
+**Viewing processed results needs neither GreenMail nor the AI service.** The mail is already
+ingested and the corpus already processed; both live in Oracle. So there is a legitimate
+read-only configuration that serves the entire reviewer UI — queue, detail, evidence
+highlighting, audit trail, AI-call inspector — on roughly a third of the footprint:
+
+```bash
+docker compose stop greenmail          # mail already ingested
+# stop the AI service                  # corpus already processed
+java -Xmx320m -XX:MaxMetaspaceSize=160m -jar target/smart-inbox-backend-1.0.0.jar \
+     --inbox.mail.poll-enabled=false --inbox.queue.worker-threads=0
+```
+
+Verified: `/` and `/queue` serve, all 38 messages present, verification rate unchanged at 98.7%.
+
+The full pipeline (ingesting new mail, running new AI calls) needs everything running and about
+2 GB of headroom.
+
+**Worth saying in the write-up rather than treating as a laptop annoyance:** Oracle Database
+Free wants 2 GB on its own, and a four-process stack on one developer machine is a real
+deployment constraint. In production these are separate hosts and the question does not arise —
+but it is the kind of thing that only surfaces when everything actually runs at once, and a
+reviewer cloning this repo onto a 8 GB laptop will meet it.
+
+**Affects:** README should mention the read-only mode; `CLAUDE.md` environment facts.
