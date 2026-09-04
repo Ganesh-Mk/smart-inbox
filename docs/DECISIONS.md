@@ -833,3 +833,11 @@ reassurance. The suite was passing *because* it wiped the database first.
 
 **Affects:** `IngestionIntegrationTest`, `V6__rejected_status.sql`, `SpaErrorController`,
 `ReviewController`, `domain.ts`, `detail.component.{ts,html,scss}`.
+
+**Follow-up, same day:** the queue tests had a quieter version of the same fault. They cleared
+their synthetic rows (`subject_id >= 900000`) in `@BeforeEach` but not afterwards, so those rows
+sat in the shared queue between runs and the running application counted them — the reviewer UI
+reported jobs pending and running against documents that never existed, and with the worker pool
+disabled they could never drain. That is precisely the "JOBS RUNNING only ever climbs" symptom in
+the report, which I had attributed entirely to the extension clicking Re-process. Both tests now
+clean up on the way out as well; after a run the queue holds 0 synthetic jobs.

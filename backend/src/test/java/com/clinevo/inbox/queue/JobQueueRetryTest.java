@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.clinevo.inbox.OracleIntegrationTest;
 import java.sql.Timestamp;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,13 @@ class JobQueueRetryTest {
 
   @BeforeEach
   void clearTestJobs() {
+    jdbc.update("DELETE FROM job WHERE subject_id >= ? AND subject_id < ?",
+        TEST_SUBJECT_BASE, TEST_SUBJECT_BASE + 1000);
+  }
+
+  /** Clear them again on the way out, so the running application does not count leftovers. */
+  @AfterEach
+  void removeTestJobs() {
     jdbc.update("DELETE FROM job WHERE subject_id >= ? AND subject_id < ?",
         TEST_SUBJECT_BASE, TEST_SUBJECT_BASE + 1000);
   }

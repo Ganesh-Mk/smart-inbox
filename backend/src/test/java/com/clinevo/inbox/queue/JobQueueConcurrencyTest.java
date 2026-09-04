@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,18 @@ class JobQueueConcurrencyTest {
 
   @BeforeEach
   void clearTestJobs() {
+    jdbc.update("DELETE FROM job WHERE subject_id >= ?", TEST_SUBJECT_BASE);
+  }
+
+  /**
+   * Clear the synthetic jobs again on the way out.
+   *
+   * <p>Clearing only on entry left them in the shared queue between runs, where the running
+   * application counted them: the reviewer UI reported jobs pending and running that referred to
+   * documents which never existed, and with the worker pool disabled they could never drain.
+   */
+  @AfterEach
+  void removeTestJobs() {
     jdbc.update("DELETE FROM job WHERE subject_id >= ?", TEST_SUBJECT_BASE);
   }
 
