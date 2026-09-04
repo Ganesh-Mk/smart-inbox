@@ -78,7 +78,7 @@ barrier onto twenty jobs claim each exactly once — measured, not asserted.
 ## 3. The judgement calls
 
 The full set is in [`PROJECT_PLAN.md`](PROJECT_PLAN.md) §3 (40 numbered edge cases) and
-[`DECISIONS.md`](DECISIONS.md) (18 decisions made while building, with evidence). The ones that
+[`DECISIONS.md`](DECISIONS.md) (19 decisions made while building, with evidence). The ones that
 mattered most:
 
 ### Flavour is a property of a *page*, not a document

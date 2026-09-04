@@ -74,9 +74,10 @@ alone holds ~1.7 GB. To *browse* results that are already processed, GreenMail a
 service are not needed:
 
 ```bash
-docker compose stop greenmail
-# stop the AI service too, then:
-cd backend && java -Xmx320m -jar target/smart-inbox-backend-1.0.0.jar     --inbox.mail.poll-enabled=false --inbox.queue.worker-threads=0
+docker compose stop greenmail        # mail is already ingested
+# stop the AI service too (the corpus is already processed), then:
+cd backend
+java -Xmx320m -jar target/smart-inbox-backend-1.0.0.jar --inbox.mail.poll-enabled=false --inbox.queue.worker-threads=0
 ```
 
 The whole reviewer UI works in this mode; only ingesting new mail and running new AI calls
