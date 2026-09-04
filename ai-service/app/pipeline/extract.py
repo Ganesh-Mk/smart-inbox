@@ -327,11 +327,18 @@ def flatten_icsr(
     for index, product in enumerate(case.products):
         prefix = f"product[{index}]"
         out.append(_field_from_fact(product.name, "PRODUCT", f"{prefix}.name", pages, settings, index))
+        # Verified like every other assertion. This used to inherit the product *name's*
+        # confidence and carry no evidence at all, so a role the model had guessed displayed at
+        # whatever the name scored — the one place in the system where a fact was asserted with
+        # no way to check it (E27).
+        role_adj, role_orig, role_why, role_ev = _verify_and_adjust(
+            product.product_role_quote, 0, product.product_role_confidence,
+            "STATED", pages, settings)
         out.append(ExtractedField(
             field_group="PRODUCT", field_path=f"{prefix}.role", field_index=index,
             value_text=product.product_role.value, value_json=None, unit=None, raw_text=None,
-            status="STATED", confidence=product.name.confidence,
-            confidence_pre_adjust=product.name.confidence, adjust_reason="", evidence=[]))
+            status="STATED", confidence=role_adj,
+            confidence_pre_adjust=role_orig, adjust_reason=role_why, evidence=role_ev))
         out.append(_field_from_fact(
             product.dose_amount, "PRODUCT", f"{prefix}.dose.amount", pages, settings, index))
         out.append(_field_from_fact(
@@ -341,12 +348,14 @@ def flatten_icsr(
         out.append(_field_from_fact(product.batch, "PRODUCT", f"{prefix}.batch", pages, settings, index))
         out.append(_field_from_date(
             product.start_date, "PRODUCT", f"{prefix}.start_date", pages, settings, index))
+        route_status = "STATED" if product.route.value != "UNKNOWN" else "NOT_STATED"
+        route_adj, route_orig, route_why, route_ev = _verify_and_adjust(
+            product.route_quote, 0, product.route_confidence, route_status, pages, settings)
         out.append(ExtractedField(
             field_group="PRODUCT", field_path=f"{prefix}.route", field_index=index,
             value_text=product.route.value, value_json=None, unit=None, raw_text=None,
-            status="STATED" if product.route.value != "UNKNOWN" else "NOT_STATED",
-            confidence=product.name.confidence if product.route.value != "UNKNOWN" else 0.0,
-            confidence_pre_adjust=product.name.confidence, adjust_reason="", evidence=[]))
+            status=route_status, confidence=route_adj,
+            confidence_pre_adjust=route_orig, adjust_reason=route_why, evidence=route_ev))
 
     for index, reaction in enumerate(case.reactions):
         prefix = f"reaction[{index}]"

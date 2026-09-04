@@ -277,14 +277,28 @@ class ReporterBlock(BaseModel):
 
 
 class ProductBlock(BaseModel):
-    """E31: cases routinely involve several products."""
+    """E31: cases routinely involve several products.
+
+    `product_role` and `route` are enums rather than `Fact`s, because their value is a fixed
+    choice rather than free text. They still carry their own quote and confidence, following the
+    same shape as `ReporterBlock.role` and `ReactionBlock.outcome`: an enum is still an assertion
+    about the source, and every assertion has to be checkable (E27). Without them these two were
+    the only extracted values in the system that nothing verified — role silently inherited the
+    product *name's* confidence, so a route the model had invented displayed at 95%.
+    """
 
     name: Fact
     product_role: ProductRole
+    product_role_confidence: float = Field(ge=0.0, le=1.0)
+    product_role_quote: str = Field(
+        description="Words from the source showing this role, or an empty string if not stated.")
     dose_amount: Fact
     dose_unit: Fact
     frequency: Fact
     route: Route
+    route_confidence: float = Field(ge=0.0, le=1.0)
+    route_quote: str = Field(
+        description="Words from the source naming the route, or an empty string if not stated.")
     batch: Fact
     start_date: PartialDate
     end_date: PartialDate

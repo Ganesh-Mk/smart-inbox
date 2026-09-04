@@ -937,3 +937,61 @@ about contrast.
 **Affects:** `classify.py`, `ClassifyMessageHandler`, `V7__override_supersedes.sql`,
 `scripts/backfill_icsr_validity.py`, `detail.component.{ts,html,scss}`,
 `queue.component.{ts,html,scss}`, `styles.scss`.
+
+---
+
+### D-026 · Product role and route are now verified like every other fact · 5 Sep 2026
+
+D-025 named these two as the last values in the system that nothing checked, and stopped at
+making the gap visible. This closes it.
+
+`product_role` and `route` were bare enums on `ProductBlock`, so the model was never asked where
+it got them. `role` then took the product **name's** confidence, and `route` did the same: a route
+the model had inferred from what is usual for that medicine displayed at 95% beside a name that
+had earned it. Against a system whose stated principle is that every extracted fact carries a
+verified quote, three field types were exempt.
+
+**Why it was not done sooner, and why that reasoning was wrong.** Adding fields risks D-013's
+silent-drop cliff: a `response_format` schema over ~4 KB is discarded by OpenRouter with no error
+at all. I treated that as a reason to leave it. Measuring first would have taken a minute:
+
+```
+P2b_extract_products   2,316 B   headroom 1,684
+```
+
+There was never a shortage of room. The fix costs **+400 B** — 2,716 B, still 1,284 B under the
+cliff and below the 3,500 B warn threshold.
+
+**The shape was already in the codebase.** `ReporterBlock.role` and `ReactionBlock.outcome` are
+enums with `_confidence` and `_quote` alongside them. Product simply never got the same treatment,
+which is what made it look like a design decision rather than an omission.
+
+**Verified against the live model, not just the type system.** A dropped schema is invisible from
+inside the process, so the only proof is a real call:
+
+```
+prompt_version  P2b_extract_products@v2
+prompt_tokens   5,350          (a dropped schema collapses this to ~14)
+repaired        False
+role   SUSPECT 0.95  quote 'Suspect medicine: Velmoradine'
+route  ORAL    0.95  quote 'taken by mouth'
+```
+
+Both quotes are verbatim from the source, so both verify. Cost of that check: $0.003.
+
+**Prompt v2, not an edit to v1.** Prompts resolve to their highest version and every call records
+which one it used, so v1 remains the exact text that produced the existing corpus. v2 asks for the
+two quotes, says an empty quote is preferable to an invented one, and states that a quote which
+cannot be found caps the field at 0.40 — the incentive stated plainly rather than left implicit.
+
+**There were no tests for product extraction at all.** That is why this survived a full build and
+two external test passes. `tests/test_product_fields.py` covers the verified path, the capped path,
+abstention, and specifically that role's confidence is no longer equal to the name's — the exact
+shape of the old defect, so a regression fails rather than merely looking odd.
+
+One of those tests initially passed for the wrong reason: `Evidence.verified` is a `'Y'`/`'N'`
+flag, and `assert evidence[0].verified` is true for both values. Only the negative case exposed
+it. Both assertions now compare explicitly.
+
+**Affects:** `schemas.py`, `extract.py`, `prompts/P2b_extract_products/v2.md`,
+`tests/test_product_fields.py`.
