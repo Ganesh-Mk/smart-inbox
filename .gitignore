@@ -1,0 +1,40 @@
+# secrets
+.env
+*.pem
+*.key
+
+# assignment source (confidential — do not commit)
+Clinevo_Assignment.pdf
+
+# runtime data
+data/
+logs/
+*.log
+
+# java
+backend/target/
+.mvn/wrapper/maven-wrapper.jar
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+ai-service/.cache/
+
+# node / angular
+node_modules/
+frontend/dist/
+frontend/.angular/
+
+# ide / os
+.idea/
+.vscode/
+*.iml
+Thumbs.db
+.DS_Store
+
+# generated corpus renders (keep source corpus, drop derived images)
+testdata/corpus/**/renders/
