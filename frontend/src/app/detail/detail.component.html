@@ -30,11 +30,17 @@
     </div>
 
     <div class="head-actions">
-      <button class="btn btn--primary" (click)="decide('ACCEPT')">
+      <button class="btn btn--primary" (click)="startDecision('ACCEPT')"
+              [disabled]="!canDecide() || submitting()"
+              [title]="decideBlockedReason() || 'Accept the AI result as it stands'">
         <ui-icon name="check" [size]="14" /> Accept
       </button>
-      <button class="btn" (click)="decide('OVERRIDE')">Override</button>
-      <button class="btn btn--danger" (click)="decide('REJECT')">Reject</button>
+      <button class="btn" (click)="startDecision('OVERRIDE')"
+              [disabled]="!canDecide() || submitting()"
+              [title]="decideBlockedReason() || 'Choose the correct categories yourself'">Override</button>
+      <button class="btn btn--danger" (click)="startDecision('REJECT')"
+              [disabled]="!canDecide() || submitting()"
+              [title]="decideBlockedReason() || 'Reject this message'">Reject</button>
       <button class="btn btn--ghost btn--icon" (click)="reprocess()" title="Re-process this message"
               aria-label="Re-process">
         <ui-icon name="refresh" />
@@ -177,8 +183,8 @@
                   <div class="cls">
                     <div class="cls-head">
                       <ui-badge [tone]="categoryTone(c.CATEGORY)">{{ humanise(c.CATEGORY) }}</ui-badge>
-                      <ui-badge size="sm" [tone]="c.DECIDED_BY === 'RULE' ? 'brand' : 'neutral'">
-                        {{ c.DECIDED_BY === 'RULE' ? 'decided by rule' : 'model' }}
+                      <ui-badge size="sm" [tone]="decidedByTone(c.DECIDED_BY)">
+                        {{ decidedByLabel(c) }}
                       </ui-badge>
                       <span class="spacer"></span>
                       <ui-meter class="cls-meter" [value]="c.CONFIDENCE" />
@@ -241,14 +247,23 @@
 
               <ui-card heading="Reviewer decision"
                        subheading="Nothing is overwritten — an override inserts a new row and points the AI's original at it.">
-                <textarea [(ngModel)]="reviewNotes" rows="2"
+                @if (!canDecide()) {
+                  <div class="decide-blocked">
+                    <ui-icon name="clock" [size]="15" />
+                    <span>{{ decideBlockedReason() }}</span>
+                  </div>
+                }
+                <textarea [(ngModel)]="reviewNotes" rows="2" [disabled]="!canDecide()"
                           placeholder="Reviewer notes (recorded in the audit trail)"></textarea>
                 <div class="row decide-row">
-                  <button class="btn btn--primary" (click)="decide('ACCEPT')">
+                  <button class="btn btn--primary" (click)="startDecision('ACCEPT')"
+                          [disabled]="!canDecide() || submitting()">
                     <ui-icon name="check" [size]="14" /> Accept all
                   </button>
-                  <button class="btn" (click)="decide('OVERRIDE')">Override</button>
-                  <button class="btn btn--danger" (click)="decide('REJECT')">Reject</button>
+                  <button class="btn" (click)="startDecision('OVERRIDE')"
+                          [disabled]="!canDecide() || submitting()">Override…</button>
+                  <button class="btn btn--danger" (click)="startDecision('REJECT')"
+                          [disabled]="!canDecide() || submitting()">Reject…</button>
                   <span class="spacer"></span>
                   <button class="btn btn--ghost btn--sm" (click)="reprocess()">Re-process</button>
                 </div>
@@ -511,6 +526,9 @@
                     <span class="t-what">{{ humanise(a.ACTION) | lowercase }}</span>
                     <span class="t-who dim">{{ a.ACTOR }}</span>
                   </li>
+                  @if (auditNote(a); as note) {
+                    <li class="t-note"><q>{{ note }}</q></li>
+                  }
                 }
                 @if (!audit().length) {
                   <li class="dim">No audit rows yet.</li>
@@ -542,4 +560,60 @@
   </ui-modal>
 }
 
+<!-- ===================== decision dialog ===================== -->
+@if (pendingDecision(); as decision) {
+  <ui-modal [heading]="decision === 'OVERRIDE' ? 'Override the classification' : 'Reject this message'"
+            subheading="The audit trail is append-only — this cannot be undone."
+            [width]="520" (closed)="cancelDecision()">
+    @if (decision === 'OVERRIDE') {
+      <p class="dialog-lead">
+        Choose the categories that are actually correct. Your choice supersedes the AI's labels;
+        the originals stay in the record and point at yours.
+      </p>
+      <div class="cat-picker">
+        @for (c of ALL_CATEGORIES; track c) {
+          <label class="cat-option" [class.on]="overrideCategories().includes(c)">
+            <input type="checkbox" [checked]="overrideCategories().includes(c)"
+                   (change)="toggleOverrideCategory(c)" />
+            <ui-badge [tone]="categoryTone(c)" size="sm">{{ humanise(c) }}</ui-badge>
+          </label>
+        }
+      </div>
+      @if (overrideCategories().length === 0) {
+        <p class="dialog-warn">Select at least one category.</p>
+      }
+    } @else {
+      <p class="dialog-lead">
+        This records a rejection against the message and sets its status to <strong>rejected</strong>.
+        The AI's result is kept in full — nothing is deleted.
+      </p>
+    }
+
+    <label class="dialog-label" for="decision-note">Reviewer note (recorded in the audit trail)</label>
+    <textarea id="decision-note" [(ngModel)]="reviewNotes" rows="2"
+              placeholder="Why?"></textarea>
+
+    <div class="row dialog-actions">
+      <span class="spacer"></span>
+      <button class="btn btn--ghost" (click)="cancelDecision()">Cancel</button>
+      <button class="btn"
+              [class.btn--danger]="decision === 'REJECT'"
+              [class.btn--primary]="decision === 'OVERRIDE'"
+              [disabled]="submitting() || (decision === 'OVERRIDE' && overrideCategories().length === 0)"
+              (click)="confirmDecision()">
+        {{ decision === 'OVERRIDE' ? 'Save override' : 'Reject message' }}
+      </button>
+    </div>
+  </ui-modal>
+}
+
+} @else {
+  <!-- Neither loading nor loaded: an unknown id, or the request failed. This branch used to be
+       missing entirely, so those cases rendered a blank white page with no way back. -->
+  <div class="load-failed">
+    <ui-empty kind="error" heading="This message could not be loaded" padded>
+      {{ error() || 'No message exists with that id.' }}
+    </ui-empty>
+    <button class="btn" (click)="back()"><ui-icon name="back" [size]="14" /> Back to the queue</button>
+  </div>
 }

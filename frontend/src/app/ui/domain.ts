@@ -22,10 +22,23 @@ export function statusTone(status: string): Tone {
   switch (status) {
     case 'READY_FOR_REVIEW': return 'ok';
     case 'REVIEWED': return 'neutral';
+    // A rejection is an outcome, not a failure — but it must not look like an acceptance either.
+    case 'REJECTED': return 'warn';
     case 'FAILED':
     case 'NEEDS_ATTENTION': return 'bad';
     default: return 'info';
   }
+}
+
+/**
+ * Whether a message is far enough through the pipeline for a reviewer to sign it off.
+ *
+ * A message still being parsed or classified has no extracted data and no label yet, so
+ * accepting it would mean signing off nothing at all while the pipeline is still writing to it.
+ */
+export function isDecidable(status: string | null | undefined): boolean {
+  return status === 'READY_FOR_REVIEW' || status === 'REVIEWED'
+      || status === 'REJECTED' || status === 'NEEDS_ATTENTION';
 }
 
 /** Field-level extraction status. `NOT_STATED` is a correct answer and must never read as a failure. */

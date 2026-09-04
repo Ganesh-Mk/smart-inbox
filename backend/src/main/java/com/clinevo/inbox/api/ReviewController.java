@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -181,7 +183,8 @@ public class ReviewController {
           row.put("NEEDS_ATTENTION", rs.getString("needs_attention"));
           row.put("ATTENTION_REASON", rs.getString("attention_reason"));
           return row;
-        }, id).stream().findFirst().orElseThrow();
+        }, id).stream().findFirst().orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND, "No message with id " + id));
 
     List<Map<String, Object>> documents = jdbc.queryForList(
         "SELECT id, source_kind, filename, page_count, doc_rendering, doc_genre,"
@@ -399,7 +402,8 @@ public class ReviewController {
           row.put("REPAIRED", rs.getString("repaired"));
           row.put("CREATED_AT", rs.getTimestamp("created_at"));
           return row;
-        }, id).stream().findFirst().orElseThrow();
+        }, id).stream().findFirst().orElseThrow(() -> new ResponseStatusException(
+            HttpStatus.NOT_FOUND, "No AI call with id " + id));
   }
 
   @GetMapping("/messages/{id}/ai-calls")

@@ -750,3 +750,86 @@ the browser accumulated from unrelated software. `curl` cannot see either one, a
 test suite. Only a real browser session found them.
 
 **Affects:** `SecurityConfig.java`, `application.yml`.
+
+---
+
+### D-024 · The test suite destroyed the demo corpus, and six defects a browser found · 5 Sep 2026
+
+An external agent was asked to click through the whole application and report. It opened with
+"the backend died ~5 minutes in and came back with an empty database". Measured: 1 message,
+2 documents, 0 cases — where there had been 38 / 59 / 35. `aiCalls` survived at 414.
+
+**That was not a crash. It was `./mvnw test`.**
+
+```java
+@BeforeEach
+void clean() {
+  jdbc.update("DELETE FROM job WHERE subject_type = 'DOCUMENT' AND subject_id < 900000");
+  jdbc.update("DELETE FROM inbox_message");   // ← no predicate
+}
+```
+
+`IngestionIntegrationTest` emptied the table the running application serves from, cascading
+through documents, cases, extracted fields and evidence, then left its own last fixture behind as
+the single surviving row. AI_CALL_LOG has no foreign key to the message, which is why the spend
+and cache figures stayed pinned at their pre-wipe values — the "stats from a dataset that no
+longer exists" the report flagged as a UI bug was the audit log correctly outliving what it
+described.
+
+The README says the Java tests run against the real Oracle *on purpose*. It never said they would
+destroy whatever was in it. Anyone cloning this repo, seeding the corpus and running the suite
+would have found the reviewer UI empty, with nothing on screen to explain why.
+
+**The fix, in three parts**
+
+1. Cleanup deletes only rows a test can prove it inserted — and only when the ingest was not a
+   duplicate, because a duplicate returns the id of a row that was *already there*.
+2. Fixtures get a per-run `Message-ID`. That is the primary dedupe key, so each run works on its
+   own copy of a corpus email instead of colliding with the seeded one. (No `saveChanges()`
+   afterwards — `MimeMessage.updateHeaders()` regenerates the Message-ID and would undo it.)
+3. `wholeCorpusIngests` genuinely cannot share a database: it asserts global counts and needs to
+   start from empty. It is now opt-in behind `-Dinbox.test.exclusive-db=true` and says so in its
+   skip reason.
+
+Verified: 45 tests pass, 1 skipped, and the corpus is untouched afterwards — 38 messages,
+35 cases, 98.7% verified, before and after.
+
+**Recovery.** GreenMail restarted, corpus re-seeded, pipeline re-run: 38/38 ready, 35 cases,
+529/536 evidence verified (98.7%), 0 dead jobs — statistically identical to the original run.
+The disk parse cache earned its place here: the re-run cost **$1.11** against the original
+$1.47, because the expensive vision transcription of scanned pages was served from cache.
+
+**Six real defects the same report found**, none of which any server-side check would have caught:
+
+- **Decisions were possible on a message still being processed.** Accept/Override/Reject were
+  live while the pipeline was mid-flight, so a case could be signed off with no classification
+  and no extracted fields. Now gated on `isDecidable(status)` with the reason shown.
+- **Reject left the status reading `REVIEWED`.** `apply_override` set that for every decision, so
+  a rejected message was indistinguishable from an accepted one. V6 adds `REJECTED` and sets it.
+  Existing rows keep the status they were given — the audit is append-only and a migration must
+  not restate history it did not witness.
+- **Override recorded that an override happened without asking what it was an override *to***.
+  It re-sent the AI's own categories. There is now a dialog to choose the correct ones.
+- **The reviewer note went nowhere.** The box said "recorded in the audit trail"; the note reached
+  REVIEW_DECISION but the audit row's `after_json` carried only the category list. V6 records
+  decision, categories, status and notes; the trail renders the note under its row; and the box
+  clears after submitting instead of inviting a second send.
+- **An unknown message id rendered a blank white page.** The error markup was nested *inside* the
+  success branch of the template, so a failed load had no branch at all. `/api/messages/{id}` also
+  answered **500** for a missing row via a bare `orElseThrow()`; it is now a 404.
+- **Unknown routes leaked Spring's Whitelabel error page** — my own regression from D-023, where
+  unknown paths stopped being 401 and started being an unhandled 404. `SpaErrorController` now
+  forwards extension-less 404s to the SPA and returns JSON for `/api`. A missing `.js` still 404s:
+  answering a missing asset with an HTML page and a 200 turns a clear failure into a confusing one.
+
+And one my own verification of the fix turned up: a classification the reviewer had just set was
+labelled **"model"**, because the template read `RULE ? 'decided by rule' : 'model'`. In an audit
+trail whose purpose is recording who decided what, that is exactly backwards.
+
+**The lesson.** D-022 already noted that the previous session tested only read paths. This round
+repeats it one level up: I ran a destructive test suite against the live demo, during someone
+else's test session, without checking what it deleted — and then reported "45 tests pass" as
+reassurance. The suite was passing *because* it wiped the database first.
+
+**Affects:** `IngestionIntegrationTest`, `V6__rejected_status.sql`, `SpaErrorController`,
+`ReviewController`, `domain.ts`, `detail.component.{ts,html,scss}`.

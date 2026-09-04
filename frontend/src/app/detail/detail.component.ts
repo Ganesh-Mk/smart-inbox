@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import {
   UI, TabItem, Tone, attentionFlags, categoryTone, fieldStatusTone, humanise, percent,
-  sentenceCase, statusTone,
+  sentenceCase, statusTone, isDecidable,
 } from '../ui';
 
 interface Highlight {
@@ -286,13 +286,90 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   // ---- decisions -------------------------------------------------------------------------------
 
-  decide(decision: 'ACCEPT' | 'OVERRIDE' | 'REJECT'): void {
+  /** All categories a reviewer may assign, for the override dialog. */
+  readonly ALL_CATEGORIES = ['ICSR', 'ICSR_INCOMPLETE', 'PQC', 'MI', 'NOT_RELEVANT'];
+
+  readonly pendingDecision = signal<'OVERRIDE' | 'REJECT' | null>(null);
+  readonly overrideCategories = signal<string[]>([]);
+  readonly submitting = signal(false);
+
+  /**
+   * Whether the decision buttons should be live.
+   *
+   * A message still being parsed or classified has no label and no extracted fields yet, so
+   * accepting it signs off nothing while the pipeline is still writing to the same rows.
+   */
+  readonly canDecide = computed(() => isDecidable(this.message()?.status));
+
+  readonly decideBlockedReason = computed(() =>
+    this.canDecide() ? '' :
+      `This message is still being processed (${humanise(this.message()?.status).toLowerCase()}). `
+      + 'There is nothing to sign off until the pipeline finishes.');
+
+  /**
+   * Accept applies immediately; Override and Reject open a dialog first.
+   *
+   * Override previously re-sent the AI's own categories, so it recorded that an override
+   * happened without ever asking what it was an override *to* — the reviewer had no way to state
+   * the corrected label. Reject is confirmed because the audit is append-only: there is no undo.
+   */
+  startDecision(decision: 'ACCEPT' | 'OVERRIDE' | 'REJECT'): void {
+    if (!this.canDecide()) return;
+    if (decision === 'ACCEPT') {
+      this.submit('ACCEPT', this.currentCategories());
+      return;
+    }
+    this.overrideCategories.set(this.currentCategories());
+    this.pendingDecision.set(decision);
+  }
+
+  currentCategories(): string[] {
+    return (this.message()?.classifications ?? []).map((c: any) => c.CATEGORY);
+  }
+
+  toggleOverrideCategory(category: string): void {
+    this.overrideCategories.update((list) =>
+      list.includes(category) ? list.filter((c) => c !== category) : [...list, category]);
+  }
+
+  confirmDecision(): void {
+    const decision = this.pendingDecision();
+    if (!decision) return;
+    const categories = decision === 'OVERRIDE' ? this.overrideCategories() : this.currentCategories();
+    this.submit(decision, categories);
+  }
+
+  cancelDecision(): void {
+    this.pendingDecision.set(null);
+  }
+
+  private submit(decision: 'ACCEPT' | 'OVERRIDE' | 'REJECT', categories: string[]): void {
     const m = this.message();
-    const categories = (m.classifications ?? []).map((c: any) => c.CATEGORY);
+    this.submitting.set(true);
     this.api.review(m.id, decision, categories, this.reviewNotes).subscribe({
-      next: () => this.load(m.id),
-      error: (err) => this.error.set(err?.error?.message ?? 'Could not record the decision'),
+      next: () => {
+        this.submitting.set(false);
+        this.pendingDecision.set(null);
+        // The note has been recorded; leaving it in the box invites sending it twice.
+        this.reviewNotes = '';
+        this.load(m.id);
+      },
+      error: (err) => {
+        this.submitting.set(false);
+        this.error.set(err?.error?.message ?? 'Could not record the decision');
+      },
     });
+  }
+
+  /** The reviewer note stored on an audit row, so the trail shows what was actually typed. */
+  auditNote(row: any): string | null {
+    try {
+      const after = row?.AFTER_JSON ? JSON.parse(row.AFTER_JSON) : null;
+      const note = after?.notes ?? after?.note;
+      return note && String(note).trim() ? String(note) : null;
+    } catch {
+      return null;
+    }
   }
 
   reprocess(): void {
@@ -314,6 +391,29 @@ export class DetailComponent implements OnInit, OnDestroy {
   prettyJson(raw: string | null): string {
     if (!raw) return '';
     try { return JSON.stringify(JSON.parse(raw), null, 2); } catch { return raw; }
+  }
+
+  /**
+   * Who decided this label.
+   *
+   * The template used to read `RULE ? 'decided by rule' : 'model'`, so a classification a human
+   * had just set was attributed to the model — which is exactly backwards in an audit trail
+   * whose whole purpose is saying who decided what.
+   */
+  decidedByLabel(classification: any): string {
+    switch (classification?.DECIDED_BY) {
+      case 'RULE': return 'decided by rule';
+      case 'REVIEWER':
+        return classification.DECIDED_BY_USER
+          ? `set by ${classification.DECIDED_BY_USER}` : 'set by reviewer';
+      default: return 'model';
+    }
+  }
+
+  decidedByTone(decidedBy: string): Tone {
+    if (decidedBy === 'RULE') return 'brand';
+    if (decidedBy === 'REVIEWER') return 'violet';
+    return 'neutral';
   }
 
   relevanceTone(relevance: string): Tone {

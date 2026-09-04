@@ -8,12 +8,15 @@ import jakarta.mail.internet.MimeMessage;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.UUID;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -33,26 +36,76 @@ class IngestionIntegrationTest {
   @Autowired JdbcTemplate jdbc;
   @Autowired BlobStore blobs;
 
-  @BeforeEach
-  void clean() {
-    // JOB deliberately has no foreign key to DOCUMENT — the queue is a standalone table so it
-    // can outlive the row it refers to and still be inspected. That means deleting documents
-    // leaves orphaned job rows behind, which would inflate the counts below, so they are
-    // cleared explicitly. Queue-test jobs use subject ids from 900000 up and are left alone.
-    jdbc.update("DELETE FROM job WHERE subject_type = 'DOCUMENT' AND subject_id < 900000");
-    jdbc.update("DELETE FROM inbox_message");
+  /** Messages this class ingested, so cleanup can remove exactly those and nothing else. */
+  private final List<Long> createdMessageIds = new ArrayList<>();
+
+  /**
+   * Remove only what this class created.
+   *
+   * <p>This used to be `DELETE FROM inbox_message` with no predicate, which emptied the table
+   * the running application serves from — the demo corpus, its documents, cases, extracted
+   * fields and evidence, all cascaded away — and left the fixture from the last test behind as
+   * the only row. Anyone who cloned the repo, seeded the corpus and then ran `mvnw test` would
+   * find the reviewer UI empty afterwards, with nothing to say why. A test that shares a
+   * database with a running system may only delete rows it can prove it inserted.
+   *
+   * <p>JOB deliberately has no foreign key to DOCUMENT — the queue is a standalone table so it
+   * can outlive the row it refers to and still be inspected. Its rows are therefore removed
+   * explicitly, scoped to the documents of the messages this class ingested.
+   */
+  @AfterEach
+  void removeOwnFixtures() {
+    for (Long messageId : createdMessageIds) {
+      jdbc.update(
+          "DELETE FROM job WHERE subject_type = 'DOCUMENT' AND subject_id IN "
+              + "(SELECT id FROM document WHERE message_id = ?)", messageId);
+      jdbc.update("DELETE FROM inbox_message WHERE id = ?", messageId);
+    }
+    createdMessageIds.clear();
   }
+
+  /**
+   * Ingest a corpus fixture and remember it, so {@link #removeOwnFixtures()} can undo it.
+   *
+   * <p>Only a row this call actually inserted is recorded. These fixtures are real corpus
+   * emails, so if the demo corpus is already loaded the ingest is recognised as a duplicate
+   * (E2) and returns the id of the row that was *already there* — deleting that on the way out
+   * would destroy the very data the test was trying not to touch.
+   */
+  private IngestService.IngestResult ingestFixture(String key) throws Exception {
+    IngestService.IngestResult result = ingest.ingest(load(key));
+    if (!result.duplicate()) {
+      createdMessageIds.add(result.messageId());
+    }
+    return result;
+  }
+
+  /**
+   * A per-run identity for fixture emails.
+   *
+   * <p>These fixtures are files from the real corpus, so on a machine where the corpus has been
+   * seeded they are already in the database and every ingest comes back as a duplicate (E2) —
+   * which is correct behaviour, but leaves these tests asserting on rows they did not create.
+   * Rewriting the {@code Message-ID}, which is the primary dedupe key, gives each run its own
+   * copy: never colliding with the seeded corpus, and removable afterwards without touching it.
+   */
+  private static final String RUN_ID = UUID.randomUUID().toString().substring(0, 8);
 
   private MimeMessage load(String key) throws Exception {
     try (InputStream in = Files.newInputStream(EMAILS.resolve(key + ".eml"))) {
-      return new MimeMessage(Session.getInstance(new Properties()), in);
+      MimeMessage message = new MimeMessage(Session.getInstance(new Properties()), in);
+      // Deliberately no saveChanges() afterwards: MimeMessage.updateHeaders() regenerates the
+      // Message-ID, which would undo this and make the second pass of the idempotency test look
+      // like a different email.
+      message.setHeader("Message-ID", "<" + key + "." + RUN_ID + "@ingest-test.invalid>");
+      return message;
     }
   }
 
   @Test
   @DisplayName("E11: an email with no attachment still produces an EMAIL_BODY document")
   void bodyOnlyMessageStillGetsADocument() throws Exception {
-    var result = ingest.ingest(load("icsr-01-complete-body"));
+    var result = ingestFixture("icsr-01-complete-body");
 
     assertThat(result.duplicate()).isFalse();
     assertThat(result.documentCount()).isEqualTo(1);
@@ -72,16 +125,21 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("E2: ingesting the same message twice creates exactly one row")
   void reIngestingIsIdempotent() throws Exception {
-    var first = ingest.ingest(load("icsr-02-serious-with-form"));
-    var second = ingest.ingest(load("icsr-02-serious-with-form"));
+    var first = ingestFixture("icsr-02-serious-with-form");
+    var second = ingestFixture("icsr-02-serious-with-form");
 
     assertThat(first.duplicate()).isFalse();
     assertThat(second.duplicate()).as("the second pass must be recognised as a duplicate").isTrue();
     assertThat(second.messageId()).isEqualTo(first.messageId());
 
+    // Counted by this message's own dedupe key, not across the whole table. E2 is a claim about
+    // *this* email arriving twice; asserting on a global COUNT(*) only held while the test owned
+    // the database exclusively, and made an unscoped DELETE look necessary.
+    String dedupeKey = jdbc.queryForObject(
+        "SELECT dedupe_key FROM inbox_message WHERE id = ?", String.class, first.messageId());
     Integer messages = jdbc.queryForObject(
-        "SELECT COUNT(*) FROM inbox_message", Integer.class);
-    assertThat(messages).isEqualTo(1);
+        "SELECT COUNT(*) FROM inbox_message WHERE dedupe_key = ?", Integer.class, dedupeKey);
+    assertThat(messages).as("the same email must occupy exactly one row").isEqualTo(1);
 
     Integer documents = jdbc.queryForObject(
         "SELECT COUNT(*) FROM document WHERE message_id = ?", Integer.class, first.messageId());
@@ -91,7 +149,7 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("E4: a PDF sent as application/octet-stream is stored with both types recorded")
   void recordsDeclaredAndSniffedTypeSeparately() throws Exception {
-    var result = ingest.ingest(load("adv-05-mislabelled-octet-stream"));
+    var result = ingestFixture("adv-05-mislabelled-octet-stream");
 
     Map<String, Object> attachment = jdbc.queryForMap(
         "SELECT filename, declared_type, sniffed_type, processed, skip_reason"
@@ -113,7 +171,7 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("E6: .docx and .zip are logged with a skip reason and produce no document")
   void unsupportedTypesAreLoggedNotDropped() throws Exception {
-    var result = ingest.ingest(load("adv-04-unsupported-types"));
+    var result = ingestFixture("adv-04-unsupported-types");
 
     List<Map<String, Object>> attachments = jdbc.queryForList(
         "SELECT filename, sniffed_type, processed, skip_reason FROM message_attachment"
@@ -133,7 +191,7 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("E9: the same PDF under two names is stored once and costs one parse")
   void duplicateAttachmentSharesOneBlob() throws Exception {
-    var result = ingest.ingest(load("adv-01-duplicate-pdf"));
+    var result = ingestFixture("adv-01-duplicate-pdf");
 
     List<Map<String, Object>> attachments = jdbc.queryForList(
         "SELECT filename, sha256, blob_path FROM message_attachment WHERE message_id = ?"
@@ -161,7 +219,7 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("E5: a forwarded case is hoisted with its nesting level recorded")
   void forwardedAttachmentsAreHoisted() throws Exception {
-    var result = ingest.ingest(load("adv-02-forwarded-rfc822"));
+    var result = ingestFixture("adv-02-forwarded-rfc822");
 
     Map<String, Object> attachment = jdbc.queryForMap(
         "SELECT filename, sniffed_type, nesting_level, processed FROM message_attachment"
@@ -184,7 +242,7 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("E10: the quoted-history offset is stored so the UI can dim it")
   void quotedOffsetIsRecorded() throws Exception {
-    var result = ingest.ingest(load("adv-08-quoted-reply-chain"));
+    var result = ingestFixture("adv-08-quoted-reply-chain");
 
     Integer offset = jdbc.queryForObject(
         "SELECT quoted_offset FROM inbox_message WHERE id = ?", Integer.class, result.messageId());
@@ -200,7 +258,7 @@ class IngestionIntegrationTest {
   @Test
   @DisplayName("every ingested document is enqueued for parsing — nothing is processed inline")
   void enqueuesOneParseJobPerDocument() throws Exception {
-    var result = ingest.ingest(load("icsr-08-scanned-form"));
+    var result = ingestFixture("icsr-08-scanned-form");
 
     assertThat(result.documentCount()).isEqualTo(3);   // body + scan + digital form
 
@@ -217,7 +275,18 @@ class IngestionIntegrationTest {
 
   @Test
   @DisplayName("the whole corpus ingests: 38 messages, no duplicates, expected document counts")
+  @EnabledIfSystemProperty(
+      named = "inbox.test.exclusive-db", matches = "true",
+      disabledReason = "empties the database; run only against a scratch schema — "
+          + "./mvnw test -Dinbox.test.exclusive-db=true")
   void wholeCorpusIngests() throws Exception {
+    // This test cannot share a database. It asserts global counts, and re-ingesting a corpus
+    // that is already present would report every message as a duplicate, so it needs to start
+    // from empty. That is why it is opt-in: running it wipes whatever the reviewer UI is
+    // currently serving, and no one should discover that by running `mvnw test`.
+    jdbc.update("DELETE FROM job WHERE subject_type = 'DOCUMENT' AND subject_id < 900000");
+    jdbc.update("DELETE FROM inbox_message");
+
     List<Path> files;
     try (var stream = Files.list(EMAILS)) {
       files = stream.filter(p -> p.toString().endsWith(".eml")).sorted().toList();
