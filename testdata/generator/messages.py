@@ -16,7 +16,7 @@ import mimetypes
 from dataclasses import dataclass, field
 from datetime import datetime
 from email.message import EmailMessage
-from email.utils import format_datetime, make_msgid
+from email.utils import format_datetime
 from pathlib import Path
 from typing import Any
 
@@ -87,7 +87,12 @@ def _attach(message: EmailMessage, spec: AttachmentSpec) -> None:
 def build_eml(spec: MessageSpec, *, domain: str = "smart-inbox.test") -> EmailMessage:
     """Render one MessageSpec into a real MIME message."""
     message = EmailMessage()
-    message["Message-ID"] = make_msgid(idstring=spec.key, domain=domain)
+    # Deterministic, derived from the corpus key. `make_msgid` embeds a timestamp and a random
+    # number, so every rebuild of the corpus produced different Message-IDs — which broke the
+    # reproducibility the fixed seed is supposed to give, made every regeneration a large git
+    # diff, and, worst of all, defeated E2: re-seeding after a rebuild created a second copy of
+    # every case in the database instead of being recognised as the same message.
+    message["Message-ID"] = f"<{spec.key}@{domain}>"
     message["From"] = f"{spec.sender_name} <{spec.sender_email}>"
     message["To"] = f"Drug Safety <{SAFETY_MAILBOX}>"
     message["Subject"] = spec.subject
@@ -109,7 +114,22 @@ def build_eml(spec: MessageSpec, *, domain: str = "smart-inbox.test") -> EmailMe
         inner = build_eml(spec.forwarded, domain=domain)
         message.add_attachment(inner, filename=f"{spec.forwarded.key}.eml")
 
+    _freeze_boundaries(message, spec.key)
     return message
+
+
+def _freeze_boundaries(message: EmailMessage, key: str) -> None:
+    """Replace the random MIME boundaries with deterministic ones.
+
+    `EmailMessage` invents a fresh boundary string for every multipart part on every build.
+    That alone makes the corpus different bytes each time it is generated, which defeats the
+    point of a fixed seed and turns every regeneration into a large, meaningless diff.
+    """
+    counter = 0
+    for part in message.walk():
+        if part.is_multipart():
+            part.set_boundary(f"=-=-smartinbox-{key}-{counter}-=-=")
+            counter += 1
 
 
 HTML_TEMPLATE = """\

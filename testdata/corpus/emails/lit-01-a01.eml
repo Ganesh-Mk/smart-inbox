@@ -1,5 +1,4 @@
-Message-ID:
- <178852229662.1696.2879740335027364254.lit-01-a01@smart-inbox.test>
+Message-ID: <lit-01-a01@smart-inbox.test>
 From: Literature Monitoring Service <alerts@lit-monitor.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Literature alert: Cholestatic hepatitis following short-course
@@ -7,9 +6,9 @@ Subject: Literature alert: Cholestatic hepatitis following short-course
 Date: Mon, 14 Sep 2026 06:15:00 +0000
 X-Smart-Inbox-Corpus-Key: lit-01-a01
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4271115842920537072=="
+Content-Type: multipart/mixed; boundary="=-=-smartinbox-lit-01-a01-0-=-="
 
---===============4271115842920537072==
+--=-=-smartinbox-lit-01-a01-0-=-=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -22,7 +21,7 @@ DOI: 10.9999/jsp.2026.0142
 
 Full text attached for assessment.
 
---===============4271115842920537072==
+--=-=-smartinbox-lit-01-a01-0-=-=
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="A01_2026.pdf"
@@ -39,9 +38,9 @@ UmVzb3VyY2VzIDw8Ci9Gb250IDEgMCBSIC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9J
 bWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3RhdGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdl
 Cj4+CmVuZG9iago1IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgNyAwIFIgL1R5
 cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0F1dGhvciAoUi4gQXNoZ3JvdmUsIEsu
-IE1lcmFsZGksIFAuIEwuIEFzaHdvcnRoKSAvQ3JlYXRpb25EYXRlIChEOjIwMjYwOTA0MTcxNDU2
-KzA1JzAwJykgL0NyZWF0b3IgKFwodW5zcGVjaWZpZWRcKSkgL0tleXdvcmRzICgpIC9Nb2REYXRl
-IChEOjIwMjYwOTA0MTcxNDU2KzA1JzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJh
+IE1lcmFsZGksIFAuIEwuIEFzaHdvcnRoKSAvQ3JlYXRpb25EYXRlIChEOjIwMDAwMTAxMDAwMDAw
+KzAwJzAwJykgL0NyZWF0b3IgKFwodW5zcGVjaWZpZWRcKSkgL0tleXdvcmRzICgpIC9Nb2REYXRl
+IChEOjIwMDAwMTAxMDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJh
 cnkgLSBcKG9wZW5zb3VyY2VcKSkgCiAgL1N1YmplY3QgKFNZTlRIRVRJQyBURVNUIERPQ1VNRU5U
 IFwyMDQgZ2VuZXJhdGVkIGZvciB0aGUgU21hcnQgSW5ib3ggcHJvdG90eXBlLiBObyByZWFsIHBh
 dGllbnQsIHJlcG9ydGVyLCBwcm9kdWN0IG9yIGV2ZW50IGlzIGRlc2NyaWJlZC4pIC9UaXRsZSAo
@@ -124,9 +123,9 @@ Qig0fj5lbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA5CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAw
 MDA2MSAwMDAwMCBuIAowMDAwMDAwMTAyIDAwMDAwIG4gCjAwMDAwMDAyMDkgMDAwMDAgbiAKMDAw
 MDAwMDMyMSAwMDAwMCBuIAowMDAwMDAwNTI0IDAwMDAwIG4gCjAwMDAwMDA1OTIgMDAwMDAgbiAK
 MDAwMDAwMTA2NSAwMDAwMCBuIAowMDAwMDAxMTI0IDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApb
-PDNlZWNhZDBmMDQwYjVlNDYyODBiYjUwYjEzNzI1N2VjPjwzZWVjYWQwZjA0MGI1ZTQ2MjgwYmI1
-MGIxMzcyNTdlYz5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0
+PDM4MGJiMzBkMjMyYzUxZTNjMTRmNjk0OWJiOWI1MWE5PjwzODBiYjMwZDIzMmM1MWUzYzE0ZjY5
+NDliYjliNTFhOT5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0
 IChvcGVuc291cmNlKQoKL0luZm8gNiAwIFIKL1Jvb3QgNSAwIFIKL1NpemUgOQo+PgpzdGFydHhy
 ZWYKNTI2NgolJUVPRgo=
 
---===============4271115842920537072==--
+--=-=-smartinbox-lit-01-a01-0-=-=--

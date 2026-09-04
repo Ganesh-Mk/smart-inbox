@@ -376,3 +376,71 @@ several hundred calls in a full corpus run.
 
 **Affects:** `pipeline/` call ordering; `scripts/run_batch.py`; the cost section of the
 write-up, which can now quote a measured figure and the reason behind it.
+
+---
+
+### D-015 · The corpus was not reproducible, and it was quietly duplicating cases · 4 Sep 2026
+
+Noticed while bringing the stack up for a demo: the database held **76 messages and 118
+documents** where the corpus defines 38 and 59. Nothing had failed; the counts were simply
+wrong.
+
+Cause: `build_eml` used `email.utils.make_msgid()`, which embeds a clock reading and a random
+number — `<178852229627.1696.15523711796242495092.icsr-01-complete-body@smart-inbox.test>`.
+Every regeneration of the corpus therefore produced *new* `Message-ID` headers, so re-seeding
+after a rebuild looked like 38 genuinely new messages rather than the same ones. E2 dedupe was
+working perfectly and being fed different identities.
+
+This is a bad failure in a pharmacovigilance context specifically: a duplicated individual case
+safety report is a reportable data quality problem, not a cosmetic one. And it contradicted the
+generator's own claim to be reproducible from a fixed seed.
+
+Fixed by deriving the header from the corpus key: `<icsr-01-complete-body@smart-inbox.test>`.
+Deterministic, unique, and obviously synthetic.
+
+Chasing that exposed three further sources of build-to-build drift, all now pinned:
+
+* **ReportLab** stamps `/CreationDate`, `/ModDate` and a random `/ID` into every PDF —
+  `rl_config.invariant = 1`.
+* **`EmailMessage`** invents a random MIME boundary per multipart part — boundaries are now
+  derived from the corpus key.
+* **ZIP archives** record each entry's mtime — entries now carry a pinned timestamp.
+
+**57 of 66 corpus files are now byte-identical across rebuilds.** The nine that are not are
+correct to differ, and the docstring says so rather than overclaiming: `encrypted_report.pdf`
+uses a random AES salt and IV (identical output would mean the encryption was broken), and the
+PyMuPDF- and Pillow-written PDFs each stamp their own creation date. Their *content* and their
+parse results are identical; only the container bytes move. The property that actually matters
+— re-seeding never creates a duplicate case — is keyed on `Message-ID` and now holds.
+
+**Affects:** `testdata/generator/messages.py`, `build.py`, `corpus_messages.py`. Verified by
+clearing the database and mailbox and re-seeding: 38 messages, 59 documents, 23 attachments,
+0 duplicates.
+
+---
+
+### D-016 · Spring's mail health check probed our IMAP port as SMTP · 4 Sep 2026
+
+`/actuator/health` reported the whole application **DOWN**:
+
+    "mail": { "status": "DOWN", "location": "localhost:3143",
+              "error": "Got bad greeting from SMTP host: localhost, port: 3143,
+                        response: * OK IMAP4rev1 Server GreenMail v2.1.13 ready" }
+
+`spring-boot-starter-mail` auto-configures a `JavaMailSender` whenever `spring.mail.host` is
+set, and with it a health indicator that opens an **SMTP** connection. Our port 3143 is IMAP,
+so it got an IMAP greeting and declared failure — of a connection this service never makes.
+`ImapMailboxAdapter` builds its own `jakarta.mail` Session from `inbox.mail.*`; the
+`spring.mail` block was vestigial.
+
+Removed it, which removes the indicator, and added `MailboxHealthIndicator` that checks the
+dependency we actually have, through the same adapter the poller uses. Health now reports
+something worth knowing:
+
+    "mailbox": { "status": "UP", "mailbox": "imap://safety@smart-inbox.test@localhost:3143/INBOX",
+                 "messages": 38, "unseen": 0 }
+
+Worth keeping in mind generally: a health check that tests a different protocol on the right
+port fails loudly but tells you nothing true, and it trains people to ignore the endpoint.
+
+**Affects:** `application.yml`, new `MailboxHealthIndicator`.

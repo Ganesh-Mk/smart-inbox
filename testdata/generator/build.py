@@ -3,8 +3,24 @@
     python -m testdata.generator.build            # writes testdata/corpus + testdata/goldens
     python -m testdata.generator.build --clean    # wipe and rebuild from nothing
 
-Everything is driven by a fixed seed, so the corpus is byte-reproducible: a reviewer who runs
-this gets the documents the evaluation numbers were measured on.
+Everything is driven by a fixed seed, and the generator goes out of its way to be
+reproducible: ReportLab runs with `rl_config.invariant`, MIME boundaries are derived from the
+corpus key, ZIP entries carry a pinned timestamp, and `Message-ID` headers are derived from the
+message key rather than from `make_msgid` (which embeds a clock reading and a random number —
+that one mattered, because it made re-seeding create a *second* copy of every case instead of
+being deduplicated).
+
+Four files are still not byte-identical between builds, for reasons that are correct rather
+than sloppy:
+
+* `encrypted_report.pdf` — AES encryption uses a random salt and IV. Identical output would
+  mean the encryption was broken.
+* `hybrid_C07.pdf`, `scan_*.pdf` — PyMuPDF and Pillow each stamp their own creation date into
+  the PDF trailer.
+
+Their *content* is identical and their parse results are identical; only the container bytes
+move. The property that actually matters — that re-seeding the same corpus never creates a
+duplicate case — holds, because that is keyed on `Message-ID`.
 
 The corpus is not a pile of plausible emails. Every item is here to exercise something
 specific, and the `edge_cases` field on each message records which — so `eval/run_eval.py` can
@@ -49,6 +65,14 @@ from .pdf_special import (
     build_encrypted_pdf,
     build_hybrid_pdf,
 )
+
+# ReportLab stamps /CreationDate, /ModDate and a random /ID into every PDF, so without this
+# the corpus is different bytes on every build: the blob store sees new content hashes, the
+# parse cache misses, and `git status` is noisy after a regeneration. `invariant` freezes all
+# three. It must be set before any canvas is created.
+from reportlab import rl_config  # noqa: E402  (import order is deliberate)
+
+rl_config.invariant = 1
 
 SEED = 20260904
 REPO_ROOT = Path(__file__).resolve().parents[2]

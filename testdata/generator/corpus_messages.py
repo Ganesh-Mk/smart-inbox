@@ -241,9 +241,10 @@ def _fake_docx(path: Path) -> Path:
         'relationships/officeDocument" Target="word/document.xml"/></Relationships>'
     )
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", content_types)
-        z.writestr("_rels/.rels", rels)
-        z.writestr("word/document.xml", document_xml)
+        for name, payload in (("[Content_Types].xml", content_types),
+                              ("_rels/.rels", rels),
+                              ("word/document.xml", document_xml)):
+            z.writestr(_fixed_entry(name), payload)
     return path
 
 
@@ -251,9 +252,21 @@ def _fake_zip(path: Path, inner_pdf: Path) -> Path:
     """A zip containing a PDF. Logged and skipped — we do not unpack archives (E6)."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.write(inner_pdf, arcname="completed_form.pdf")
-        z.writestr("README.txt", SYNTHETIC_NOTICE)
+        z.writestr(_fixed_entry("completed_form.pdf"), inner_pdf.read_bytes())
+        z.writestr(_fixed_entry("README.txt"), SYNTHETIC_NOTICE)
     return path
+
+
+# A ZIP entry records the file's modification time, so writing one "now" makes the archive
+# different bytes on every build. Pinning it to the corpus date keeps the output stable.
+ZIP_EPOCH = (2026, 9, 4, 0, 0, 0)
+
+
+def _fixed_entry(name: str) -> zipfile.ZipInfo:
+    info = zipfile.ZipInfo(name, date_time=ZIP_EPOCH)
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.external_attr = 0o644 << 16
+    return info
 
 
 # =======================================================================================

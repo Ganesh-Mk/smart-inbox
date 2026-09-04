@@ -1,14 +1,14 @@
-Message-ID:
- <178852229654.1696.11571968935964511302.adv-06-hybrid-pdf@smart-inbox.test>
+Message-ID: <adv-06-hybrid-pdf@smart-inbox.test>
 From: Marcus Delane <m.delane@harbourside-pharmacy.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Typed cover sheet with handwritten annex
 Date: Fri, 11 Sep 2026 15:35:00 +0000
 X-Smart-Inbox-Corpus-Key: adv-06-hybrid-pdf
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3247503595805754458=="
+Content-Type: multipart/mixed;
+ boundary="=-=-smartinbox-adv-06-hybrid-pdf-0-=-="
 
---===============3247503595805754458==
+--=-=-smartinbox-adv-06-hybrid-pdf-0-=-=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -19,7 +19,7 @@ t the bedside and scanned in. Both are in the one file.
 
 Marcus Delane
 
---===============3247503595805754458==
+--=-=-smartinbox-adv-06-hybrid-pdf-0-=-=
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="report_with_annex.pdf"
@@ -4831,7 +4831,7 @@ MDAwMDAwMjA3MCAwMDAwMCBuIAowMDAwMDAyMTY3IDAwMDAwIG4gCjAwMDAwMDIyNjkgMDAwMDAg
 biAKMDAwMDAwMjQzNCAwMDAwMCBuIAowMDAwMDAyNDgxIDAwMDAwIG4gCjAwMDAwMDI1OTQgMDAw
 MDAgbiAKMDAwMDI3MDkxOCAwMDAwMCBuIAowMDAwMjczMzUwIDAwMDAwIG4gCjAwMDAyNzMzODYg
 MDAwMDAgbiAKMDAwMDI3MzQ5OCAwMDAwMCBuIAoKdHJhaWxlcgo8PC9TaXplIDE1L0luZm8gMTQg
-MCBSL1Jvb3QgMSAwIFIvSURbPEMzODlDMkI2QzI5MjQyNjRDMzgwQzNBOUMzQjgwNkMzPjxCRkQ2
-MzAyNkM1RTc4OTI3NjYwMzMyOTZDNjg3NUE3OD5dPj4Kc3RhcnR4cmVmCjI3MzYwNAolJUVPRgo=
+MCBSL1Jvb3QgMSAwIFIvSURbPEMyODdDMjlDQzI4MEMyOTgwMjA2QzJCN0MyQUVDMjg0PjxGRDND
+OUVGQ0UzQURENzVENjQyOTYwMkNBNDBENjg2RT5dPj4Kc3RhcnR4cmVmCjI3MzYwNAolJUVPRgo=
 
---===============3247503595805754458==--
+--=-=-smartinbox-adv-06-hybrid-pdf-0-=-=--

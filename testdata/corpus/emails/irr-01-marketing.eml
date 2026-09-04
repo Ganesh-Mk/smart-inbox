@@ -1,5 +1,4 @@
-Message-ID:
- <178852229642.1696.15724692792270914452.irr-01-marketing@smart-inbox.test>
+Message-ID: <irr-01-marketing@smart-inbox.test>
 From: Summit Events Team <events@pv-summit.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Register now: 14th Annual Pharmacovigilance Excellence Summit
@@ -7,9 +6,9 @@ Date: Sat, 05 Sep 2026 06:30:00 +0000
 X-Smart-Inbox-Corpus-Key: irr-01-marketing
 MIME-Version: 1.0
 Content-Type: multipart/alternative;
- boundary="===============7799255793853646798=="
+ boundary="=-=-smartinbox-irr-01-marketing-0-=-="
 
---===============7799255793853646798==
+--=-=-smartinbox-irr-01-marketing-0-=-=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -21,7 +20,7 @@ five or more.
 
 Unsubscribe: https://pv-summit.example/unsubscribe
 
---===============7799255793853646798==
+--=-=-smartinbox-irr-01-marketing-0-=-=
 Content-Type: text/html; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
@@ -42,4 +41,4 @@ vailable.</p>
   </body>
 </html>
 
---===============7799255793853646798==--
+--=-=-smartinbox-irr-01-marketing-0-=-=--

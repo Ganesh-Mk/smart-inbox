@@ -46,9 +46,12 @@ spring:
       max-file-size: ${MAX_ATTACHMENT_MB:25}MB
       max-request-size: 200MB
 
-  mail:
-    host: ${MAIL_HOST:localhost}
-    port: ${MAIL_PORT:3143}
+  # NOTE: there is deliberately no `spring.mail` block. We never use Spring's JavaMailSender —
+  # ImapMailboxAdapter builds its own jakarta.mail Session from `inbox.mail.*` below. Setting
+  # spring.mail.host would auto-configure a JavaMailSender and, with it, a health indicator that
+  # probes the port as SMTP. Pointed at our IMAP port it reports the whole application DOWN with
+  # "bad greeting from SMTP host ... * OK IMAP4rev1 Server". MailboxHealthIndicator checks the
+  # connection we actually depend on instead.
 
 server:
   port: ${SERVER_PORT:8080}

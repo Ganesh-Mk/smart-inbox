@@ -1,5 +1,4 @@
-Message-ID:
- <178852229645.1696.11332846732730413360.lang-03-japanese@smart-inbox.test>
+Message-ID: <lang-03-japanese@smart-inbox.test>
 From: Sister Priya Raghunathan <p.raghunathan@st-elwyn.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: =?utf-8?b?5Ymv5L2c55So5aCx5ZGKIOKAlCBOdXZleG9yYWwg57WM5Y+j5oe45r+B?=
@@ -7,9 +6,10 @@ Subject: =?utf-8?b?5Ymv5L2c55So5aCx5ZGKIOKAlCBOdXZleG9yYWwg57WM5Y+j5oe45r+B?=
 Date: Tue, 08 Sep 2026 07:25:00 +0000
 X-Smart-Inbox-Corpus-Key: lang-03-japanese
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2875475639124916293=="
+Content-Type: multipart/mixed;
+ boundary="=-=-smartinbox-lang-03-japanese-0-=-="
 
---===============2875475639124916293==
+--=-=-smartinbox-lang-03-japanese-0-=-=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -23,7 +23,7 @@ Content-Transfer-Encoding: quoted-printable
 =E3=82=88=E3=82=8D=E3=81=97=E3=81=8F=E3=81=8A=E9=A1=98=E3=81=84=E3=81=84=E3=
 =81=9F=E3=81=97=E3=81=BE=E3=81=99=E3=80=82
 
---===============2875475639124916293==
+--=-=-smartinbox-lang-03-japanese-0-=-=
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
@@ -661,9 +661,9 @@ MCAxMDAwIDEwMDAgMTAwMCAxMDAwIDEwMDAgMTAwMCAxMDAwIDEwMDAgCiAgMTAwMCAxMDAwIDEw
 MDAgMTAwMCAxMDAwIDEwMDAgMTAwMCAxMDAwIDEwMDAgMTAwMCAKICAxMDAwIDUwMCBdCj4+CmVu
 ZG9iago4IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgMTAgMCBSIC9UeXBlIC9D
 YXRhbG9nCj4+CmVuZG9iago5IDAgb2JqCjw8Ci9BdXRob3IgKFNtYXJ0IEluYm94IHN5bnRoZXRp
-YyBjb3JwdXMgZ2VuZXJhdG9yKSAvQ3JlYXRpb25EYXRlIChEOjIwMjYwOTA0MTcxNDUxKzA1JzAw
+YyBjb3JwdXMgZ2VuZXJhdG9yKSAvQ3JlYXRpb25EYXRlIChEOjIwMDAwMTAxMDAwMDAwKzAwJzAw
 JykgL0NyZWF0b3IgKFwodW5zcGVjaWZpZWRcKSkgL0tleXdvcmRzICgpIC9Nb2REYXRlIChEOjIw
-MjYwOTA0MTcxNDUxKzA1JzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBc
+MDAwMTAxMDAwMDAwKzAwJzAwJykgL1Byb2R1Y2VyIChSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBc
 KG9wZW5zb3VyY2VcKSkgCiAgL1N1YmplY3QgKFNZTlRIRVRJQyBURVNUIERPQ1VNRU5UIFwyMDQg
 Z2VuZXJhdGVkIGZvciB0aGUgU21hcnQgSW5ib3ggcHJvdG90eXBlLiBObyByZWFsIHBhdGllbnQs
 IHJlcG9ydGVyLCBwcm9kdWN0IG9yIGV2ZW50IGlzIGRlc2NyaWJlZC4pIC9UaXRsZSAoQWR2ZXJz
@@ -709,10 +709,10 @@ cmVhbQplbmRvYmoKeHJlZgowIDEyCjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDA2MSAwMDAw
 MCBuIAowMDAwMDAwMTA0IDAwMDAwIG4gCjAwMDAwMDAyMTEgMDAwMDAgbiAKMDAwMDAwMDQxNiAw
 MDAwMCBuIAowMDAwMDAxOTA3IDAwMDAwIG4gCjAwMDAwMzQxOTYgMDAwMDAgbiAKMDAwMDAzNDQ0
 NyAwMDAwMCBuIAowMDAwMDM1ODU4IDAwMDAwIG4gCjAwMDAwMzU5MjcgMDAwMDAgbiAKMDAwMDAz
-NjM2NiAwMDAwMCBuIAowMDAwMDM2NDI2IDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApbPDJmODk2
-MWFlZjNiMzJiZWVlZjkzOWJkY2E4OGQ0MmE4PjwyZjg5NjFhZWYzYjMyYmVlZWY5MzliZGNhODhk
-NDJhOD5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0IChvcGVu
+NjM2NiAwMDAwMCBuIAowMDAwMDM2NDI2IDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApbPDE2ODM0
+MjIzOWVhZjkzZDk1M2RhM2YwMmYwYzhhMTNlPjwxNjgzNDIyMzllYWY5M2Q5NTNkYTNmMDJmMGM4
+YTEzZT5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0IChvcGVu
 c291cmNlKQoKL0luZm8gOSAwIFIKL1Jvb3QgOCAwIFIKL1NpemUgMTIKPj4Kc3RhcnR4cmVmCjM4
 NDg3CiUlRU9GCg==
 
---===============2875475639124916293==--
+--=-=-smartinbox-lang-03-japanese-0-=-=--

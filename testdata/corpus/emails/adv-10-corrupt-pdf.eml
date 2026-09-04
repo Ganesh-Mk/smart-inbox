@@ -1,14 +1,14 @@
-Message-ID:
- <178852229661.1696.14351857043222102922.adv-10-corrupt-pdf@smart-inbox.test>
+Message-ID: <adv-10-corrupt-pdf@smart-inbox.test>
 From: Dr Ingrid Halvorsen <i.halvorsen@fjordklinikk.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Form attached =?utf-8?b?4oCU?= apologies if it is damaged
 Date: Sun, 13 Sep 2026 16:12:00 +0000
 X-Smart-Inbox-Corpus-Key: adv-10-corrupt-pdf
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9113289449181681843=="
+Content-Type: multipart/mixed;
+ boundary="=-=-smartinbox-adv-10-corrupt-pdf-0-=-="
 
---===============9113289449181681843==
+--=-=-smartinbox-adv-10-corrupt-pdf-0-=-=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -21,7 +21,7 @@ ng Cardexatine 5 mg once daily.
 
 Dr Ingrid Halvorsen
 
---===============9113289449181681843==
+--=-=-smartinbox-adv-10-corrupt-pdf-0-=-=
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="damaged_form.pdf"
@@ -65,4 +65,4 @@ c3RyZWFtCmVuZG9iagp4cmVmCjAgOQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwNjEgMDAw
 MDAgbiAKMDAwMDAwMDEwMiAwMDAwMCBuIAowMDAwMDAwMjA5IDAwMDAwIG4gCjAwMDAwMDAzMjEg
 MDAwMDAgbiAKMDA=
 
---===============9113289449181681843==--
+--=-=-smartinbox-adv-10-corrupt-pdf-0-=-=--

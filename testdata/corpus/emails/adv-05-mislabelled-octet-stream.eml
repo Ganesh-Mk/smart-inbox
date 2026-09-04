@@ -1,13 +1,14 @@
-Message-ID: <178852229654.1696.1175696407894479231.adv-05-mislabelled-octet-stream@smart-inbox.test>
+Message-ID: <adv-05-mislabelled-octet-stream@smart-inbox.test>
 From: Dr Ingrid Halvorsen <i.halvorsen@fjordklinikk.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Report attached (our system mangles the file type)
 Date: Fri, 11 Sep 2026 10:10:00 +0000
 X-Smart-Inbox-Corpus-Key: adv-05-mislabelled-octet-stream
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7546089617284025323=="
+Content-Type: multipart/mixed;
+ boundary="=-=-smartinbox-adv-05-mislabelled-octet-stream-0-=-="
 
---===============7546089617284025323==
+--=-=-smartinbox-adv-05-mislabelled-octet-stream-0-=-=
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -18,7 +19,7 @@ k like a generic binary. It is a normal PDF.
 
 Dr Ingrid Halvorsen
 
---===============7546089617284025323==
+--=-=-smartinbox-adv-05-mislabelled-octet-stream-0-=-=
 Content-Type: application/octet-stream
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="report_export.dat"
@@ -39,8 +40,8 @@ IC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3Rh
 dGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdlCj4+CmVuZG9iago2IDAgb2JqCjw8Ci9Q
 YWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgOCAwIFIgL1R5cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjcg
 MCBvYmoKPDwKL0F1dGhvciAoU21hcnQgSW5ib3ggc3ludGhldGljIGNvcnB1cyBnZW5lcmF0b3Ip
-IC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA5MDQxNzE0NTErMDUnMDAnKSAvQ3JlYXRvciAoXCh1bnNw
-ZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUgKEQ6MjAyNjA5MDQxNzE0NTErMDUnMDAn
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAnKSAvQ3JlYXRvciAoXCh1bnNw
+ZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUgKEQ6MjAwMDAxMDEwMDAwMDArMDAnMDAn
 KSAvUHJvZHVjZXIgKFJlcG9ydExhYiBQREYgTGlicmFyeSAtIFwob3BlbnNvdXJjZVwpKSAKICAv
 U3ViamVjdCAoU1lOVEhFVElDIFRFU1QgRE9DVU1FTlQgXDIwNCBnZW5lcmF0ZWQgZm9yIHRoZSBT
 bWFydCBJbmJveCBwcm90b3R5cGUuIE5vIHJlYWwgcGF0aWVudCwgcmVwb3J0ZXIsIHByb2R1Y3Qg
@@ -106,9 +107,9 @@ CnhyZWYKMCAxMQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwNjEgMDAwMDAgbiAKMDAwMDAw
 MDEwMiAwMDAwMCBuIAowMDAwMDAwMjA5IDAwMDAwIG4gCjAwMDAwMDAzMjEgMDAwMDAgbiAKMDAw
 MDAwMDUyNCAwMDAwMCBuIAowMDAwMDAwNzI4IDAwMDAwIG4gCjAwMDAwMDA3OTYgMDAwMDAgbiAK
 MDAwMDAwMTIzNSAwMDAwMCBuIAowMDAwMDAxMzAwIDAwMDAwIG4gCjAwMDAwMDMxODYgMDAwMDAg
-biAKdHJhaWxlcgo8PAovSUQgCls8MzkyZWU5Mzk4MTdiMmZjYTgzM2ZkMmNhZmRkZjYzZDU+PDM5
-MmVlOTM5ODE3YjJmY2E4MzNmZDJjYWZkZGY2M2Q1Pl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBE
+biAKdHJhaWxlcgo8PAovSUQgCls8NjkyNGYxNTFiYWM2NjFiOWY4YWMzYzdiMDAzYjAyOTQ+PDY5
+MjRmMTUxYmFjNjYxYjlmOGFjM2M3YjAwM2IwMjk0Pl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBE
 RiBkb2N1bWVudCAtLSBkaWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA3IDAgUgovUm9vdCA2IDAg
 UgovU2l6ZSAxMQo+PgpzdGFydHhyZWYKNDQ0NwolJUVPRgo=
 
---===============7546089617284025323==--
+--=-=-smartinbox-adv-05-mislabelled-octet-stream-0-=-=--
