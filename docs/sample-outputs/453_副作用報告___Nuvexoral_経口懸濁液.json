@@ -1,0 +1,598 @@
+{
+  "message_id": 453,
+  "sender": "p.raghunathan@st-elwyn.example",
+  "subject": "副作用報告 — Nuvexoral 経口懸濁液",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "ICSR is missing one or more minimum criteria",
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.95,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from 副作用報告書.pdf)",
+      "decided_by": "RULE"
+    },
+    {
+      "category": "ICSR_INCOMPLETE",
+      "confidence": 0.85,
+      "reason": "3 of 4 ICSR minimum criteria present; missing an adverse event. (from email body)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "ja",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "副作用報告書.pdf",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "FORM",
+      "language": "ja",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": true,
+      "seriousness": {
+        "criteria": [
+          "OTHER_MEDICALLY_IMPORTANT"
+        ],
+        "is_serious": true
+      },
+      "confidence": 0.0,
+      "narrative": "A message in Japanese states that an adverse drug reaction report is attached. The patient is described as a 6-week-old infant. No adverse reactions are described in the message body itself.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "生後6週の女児患者L.O.（体重4.1 kg）に対し、胸部感染症の治療としてNuvexoral経口懸濁液125 mgが1日2回投与された。投与開始日は2026年6月20日であった。投与開始から2日以内の2026年6月22日に、1日10回を超える嘔吐と強い悪心が出現し、哺乳が困難となった。本剤の投与を中止し経口補水療法を行ったところ、約36時間で回復した。併用薬はなく、既往歴に特記すべき事項はない。再投与は行っていない。",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "6",
+          "typed_value": {
+            "value": "6",
+            "unit": "WEEK",
+            "raw": "生後6週",
+            "derived_from_dob": false
+          },
+          "unit": "WEEK",
+          "raw": "生後6週",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "生後6週の乳児",
+              "char_start": 28,
+              "char_end": 35,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": "L.O.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "L.O.",
+              "char_start": 174,
+              "char_end": 178,
+              "bbox": "61.69,233.97,79.69,242.97",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "born at 38 weeks, otherwise well",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "born at 38 weeks, otherwise well",
+              "char_start": 217,
+              "char_end": 249,
+              "bbox": "61.69,295.97,205.69,304.97",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "女性",
+              "char_start": 200,
+              "char_end": 202,
+              "bbox": "61.69,264.97,79.69,273.97",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": "4.1",
+          "typed_value": {
+            "amount": "4.1",
+            "unit": "kg",
+            "raw": "4.1 kg"
+          },
+          "unit": "kg",
+          "raw": "4.1 kg",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "4.1 kg",
+              "char_start": 204,
+              "char_end": 210,
+              "bbox": "302.64,264.97,329.64,273.97",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": "NVX-1188D",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "NVX-1188D",
+              "char_start": 449,
+              "char_end": 458,
+              "bbox": "302.64,477.16,343.14,486.16",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "125",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "125 mg twice daily",
+              "char_start": 410,
+              "char_end": 428,
+              "bbox": "302.64,446.16,383.64,455.16",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "twice daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "twice daily",
+              "char_start": 417,
+              "char_end": 428,
+              "bbox": "302.64,446.16,383.64,455.16",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "125 mg twice daily",
+              "char_start": 410,
+              "char_end": 428,
+              "bbox": "302.64,446.16,383.64,455.16",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Nuvexoral",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Nuvexoral",
+              "char_start": 399,
+              "char_end": 408,
+              "bbox": "61.69,446.16,102.19,455.16",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "20 June 2026",
+          "typed_value": {
+            "raw": "20 June 2026",
+            "iso": "2026-06-20",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "20 June 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "20 June 2026",
+              "char_start": 471,
+              "char_end": 483,
+              "bbox": "61.69,508.16,115.69,517.16",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "22 June 2026",
+          "typed_value": {
+            "raw": "22 June 2026",
+            "iso": "2026-06-22",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "22 June 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "22 June 2026",
+              "char_start": 541,
+              "char_end": 553,
+              "bbox": "302.64,567.75,356.64,576.75",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERED",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "約36時間で回復した",
+              "char_start": 728,
+              "char_end": 738,
+              "bbox": "62.69,669.58,494.69,678.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "severe nausea and vomiting",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "severe nausea and vomiting",
+              "char_start": 513,
+              "char_end": 539,
+              "bbox": "61.69,567.75,178.69,576.75",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": "United Kingdom",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "United Kingdom",
+              "char_start": 356,
+              "char_end": 370,
+              "bbox": "302.64,386.56,365.64,395.56",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Priya Raghunathan",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Sister Priya Raghunathan",
+              "char_start": 272,
+              "char_end": 296,
+              "bbox": "61.69,355.56,169.69,364.56",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "St Elwyn's General Hospital",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "St Elwyn's General Hospital",
+              "char_start": 327,
+              "char_end": 354,
+              "bbox": "61.69,386.56,183.19,395.56",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "NURSE",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Senior Staff Nurse",
+              "char_start": 298,
+              "char_end": 316,
+              "bbox": "302.64,355.56,383.64,364.56",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": "OTHER_MEDICALLY_IMPORTANT",
+          "typed_value": {
+            "criteria": [
+              "OTHER_MEDICALLY_IMPORTANT"
+            ],
+            "is_serious": true
+          },
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "1日10回を超える嘔吐と強い悪心が出現し、哺乳が困難となった",
+              "char_start": 672,
+              "char_end": 702,
+              "bbox": "62.69,657.08,526.19,666.08",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

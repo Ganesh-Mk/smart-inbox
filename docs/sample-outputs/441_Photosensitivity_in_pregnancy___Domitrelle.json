@@ -1,0 +1,494 @@
+{
+  "message_id": 441,
+  "sender": "a.whitfield@northgate-clinic.example",
+  "subject": "Photosensitivity in pregnancy — Domitrelle",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.93,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from email body)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.85,
+      "narrative": "A 29-year-old woman at 22 weeks gestation taking Domitrelle 2 mg at night for generalised anxiety disorder since early 2026 developed an erythematous eruption on sun-exposed skin in July after ten minutes outdoors. The pregnancy is ongoing with no fetal abnormality detected on ultrasound. The exact date of onset is not recorded; the patient reports it occurred some time in July.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A 29-year-old woman at 22 weeks gestation taking Domitrelle 2 mg at night for generalised anxiety disorder since early 2026 developed an erythematous eruption on sun-exposed skin in July after ten minutes outdoors. The pregnancy is ongoing with no fetal abnormality detected on ultrasound. The exact date of onset is not recorded; the patient reports it occurred some time in July.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "29",
+          "typed_value": {
+            "value": "29",
+            "unit": "YEAR",
+            "raw": "29",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "29",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "A 29-year-old woman",
+              "char_start": 19,
+              "char_end": 38,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "generalised anxiety disorder",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "generalised anxiety disorder",
+              "char_start": 106,
+              "char_end": 134,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "29-year-old woman",
+              "char_start": 21,
+              "char_end": 38,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "2",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Domitrelle 2 mg at night",
+              "char_start": 77,
+              "char_end": 101,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "at night",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Domitrelle 2 mg at night",
+              "char_start": 77,
+              "char_end": 101,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Domitrelle 2 mg at night",
+              "char_start": 77,
+              "char_end": 101,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Domitrelle",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Domitrelle 2 mg at night",
+              "char_start": 77,
+              "char_end": 101,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "early 2026",
+          "typed_value": {
+            "raw": "early 2026",
+            "iso": "2026",
+            "precision": "YEAR",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "early 2026",
+          "status": "UNCERTAIN",
+          "confidence": 0.6,
+          "confidence_before_adjustment": 0.6,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "since early 2026",
+              "char_start": 135,
+              "char_end": 151,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "July",
+          "typed_value": {
+            "raw": "July",
+            "iso": "2026-07",
+            "precision": "MONTH",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "July",
+          "status": "STATED",
+          "confidence": 0.75,
+          "confidence_before_adjustment": 0.75,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "In July she developed",
+              "char_start": 153,
+              "char_end": 174,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "erythematous eruption on sun-exposed skin",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "erythematous eruption on sun-exposed skin",
+              "char_start": 178,
+              "char_end": 219,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Aoife Whitfield",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr Aoife Whitfield",
+              "char_start": 435,
+              "char_end": 453,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHYSICIAN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr",
+              "char_start": 435,
+              "char_end": 437,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

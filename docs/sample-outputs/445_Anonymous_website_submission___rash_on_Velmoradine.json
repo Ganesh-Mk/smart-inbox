@@ -1,0 +1,458 @@
+{
+  "message_id": 445,
+  "sender": "noreply@coreline.example",
+  "subject": "Anonymous website submission — rash on Velmoradine",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "ICSR is missing one or more minimum criteria; 1 field(s) below 0.40 confidence",
+  "classifications": [
+    {
+      "category": "ICSR_INCOMPLETE",
+      "confidence": 0.95,
+      "reason": "3 of 4 ICSR minimum criteria present; missing an identifiable reporter. (from email body)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.3,
+      "narrative": "A 58-year-old female taking Velmoradine 20 mg daily developed an itchy rash a few days after starting the medication. No contact details were supplied with the report.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A 58-year-old female taking Velmoradine 20 mg daily developed an itchy rash a few days after starting the medication. No contact details were supplied with the report.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.3,
+          "confidence_before_adjustment": 0.3,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "58",
+          "typed_value": {
+            "value": "58",
+            "unit": "YEAR",
+            "raw": "58-year-old",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "58-year-old",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "A 58-year-old female",
+              "char_start": 112,
+              "char_end": 132,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "A 58-year-old female",
+              "char_start": 112,
+              "char_end": 132,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "20",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg daily",
+              "char_start": 140,
+              "char_end": 163,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg daily",
+              "char_start": 140,
+              "char_end": 163,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg daily",
+              "char_start": 140,
+              "char_end": 163,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Velmoradine",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg daily",
+              "char_start": 140,
+              "char_end": 163,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "a few days before rash onset",
+          "typed_value": {
+            "raw": "a few days before rash onset",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "a few days before rash onset",
+          "status": "UNCERTAIN",
+          "confidence": 0.55,
+          "confidence_before_adjustment": 0.55,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "a few days after starting",
+              "char_start": 188,
+              "char_end": 213,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "a few days after starting",
+          "typed_value": {
+            "raw": "a few days after starting",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "a few days after starting",
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "a few days after starting",
+              "char_start": 188,
+              "char_end": 213,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "itchy rash",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "developed an itchy rash",
+              "char_start": 164,
+              "char_end": 187,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "message_id": 429,
+  "sender": "quality.admin@coreline.example",
+  "subject": "Guidance document and case bundle",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "NOT_RELEVANT",
+      "confidence": 0.98,
+      "reason": "The message is internal administrative communication circulating guidance and archived forms with no safety content. (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": []
+}

@@ -15,12 +15,12 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blocked ·
 |---|---|---|---|
 | P0 | Environment & foundations | `[x]` | Day 0 |
 | P1 | Oracle schema, PL/SQL, queue, Spring skeleton | `[~]` | Day 1 |
-| P2 | Mail ingestion + synthetic corpus | `[~]` | Day 2 |
-| P3 | PDF understanding (Python) | `[ ]` | Day 3 |
-| P4 | LLM pipeline + evidence verification | `[ ]` | Day 4 |
-| P5 | Angular reviewer UI | `[ ]` | Day 5 |
-| P6 | Literature screening (bonus) + evaluation | `[ ]` | Day 6 |
-| P7 | Documentation & submission | `[ ]` | Day 7 |
+| P2 | Mail ingestion + synthetic corpus | `[x]` | Day 2 |
+| P3 | PDF understanding (Python) | `[x]` | Day 3 |
+| P4 | LLM pipeline + evidence verification | `[x]` | Day 4 |
+| P5 | Angular reviewer UI | `[x]` | Day 5 |
+| P6 | Literature screening (bonus) + evaluation | `[x]` | Day 6 |
+| P7 | Documentation & submission | `[~]` | Day 7 |
 
 **Cut order if time runs short:** P6 bonus → P6 eval (reduce to F1 + timings only) → P5 polish.
 The core rubric (85%) is P0–P5 and must never be sacrificed.
@@ -220,6 +220,24 @@ produced exactly the documents the corpus says it should. 45/45 backend tests gr
 ## Open questions / blockers
 
 _(none currently)_
+
+## Measured results (full corpus, 4 Sep 2026)
+
+| Metric | Result | Target |
+|---|---|---|
+| Evidence verification rate | **98.7%** (545/552) | >= 90% |
+| Category F1 micro / macro | **0.952** / 0.983 | >= 0.90 |
+| Multi-label exact-set accuracy | 89.5% | - |
+| Field accuracy (exact / normalised) | 70.2% / 70.7% | - |
+| ICSR element agreement | 71.9% | - |
+| Cost per document | **$0.025** | <= $0.05 |
+| Prompt-cache hit rate | 75.8% | - |
+| Dead-lettered jobs | **0** | - |
+| Schema repairs needed | **0** | - |
+| Messages reaching review | 38 / 38 | - |
+
+Bonus verified: `article_A03` (3-patient case series) split into exactly 3 cases;
+`article_A04` (methodology review) returned 0 cases, inventing no patients from its references.
 
 ## Session log
 

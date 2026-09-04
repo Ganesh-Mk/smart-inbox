@@ -1,0 +1,506 @@
+{
+  "message_id": 433,
+  "sender": "a.whitfield@northgate-clinic.example",
+  "subject": "RE: Possible reaction to Velmoradine — 58F, rash",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.9,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from email body)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.85,
+      "narrative": "A patient began Velmoradine 20 mg once daily for essential hypertension on 3 March 2026. Nine days later she developed a widespread itchy maculopapular rash across the trunk and both forearms. The drug was withdrawn on 13 March and the rash began to settle within 48 hours. No corticosteroid was required. She had taken no other new medicine in the preceding month. The rash has now completely resolved and the patient has not been rechallenged.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A patient began Velmoradine 20 mg once daily for essential hypertension on 3 March 2026. Nine days later she developed a widespread itchy maculopapular rash across the trunk and both forearms. The drug was withdrawn on 13 March and the rash began to settle within 48 hours. No corticosteroid was required. She had taken no other new medicine in the preceding month. The rash has now completely resolved and the patient has not been rechallenged.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": null,
+          "typed_value": {
+            "value": "",
+            "unit": "UNKNOWN",
+            "raw": "",
+            "derived_from_dob": false
+          },
+          "unit": "UNKNOWN",
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "essential hypertension",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "began Velmoradine 20 mg once daily for essential hypertension",
+              "char_start": 303,
+              "char_end": 364,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.55,
+          "confidence_before_adjustment": 0.55,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "she developed a widespread itchy maculopapular rash",
+              "char_start": 398,
+              "char_end": 449,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "20",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 309,
+              "char_end": 337,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "once daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 309,
+              "char_end": 337,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 309,
+              "char_end": 337,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Velmoradine",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 309,
+              "char_end": 337,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "3 March 2026",
+          "typed_value": {
+            "raw": "3 March 2026",
+            "iso": "2026-03-03",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "3 March 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "began Velmoradine 20 mg once daily for essential hypertension on 3 March 2026",
+              "char_start": 303,
+              "char_end": 380,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "Nine days later",
+          "typed_value": {
+            "raw": "Nine days later",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "Nine days later",
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Nine days later she developed a widespread itchy maculopapular rash",
+              "char_start": 382,
+              "char_end": 449,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERED",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "the rash has now completely resolved",
+              "char_start": 53,
+              "char_end": 89,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "widespread itchy maculopapular rash across the trunk and both forearms",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "widespread itchy maculopapular rash across the trunk and both forearms",
+              "char_start": 414,
+              "char_end": 484,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Aoife Whitfield",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr Aoife Whitfield",
+              "char_start": 202,
+              "char_end": 220,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Northgate Clinic",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "a.whitfield@northgate-clinic.example",
+              "char_start": 222,
+              "char_end": 258,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHYSICIAN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr Aoife Whitfield",
+              "char_start": 202,
+              "char_end": 220,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

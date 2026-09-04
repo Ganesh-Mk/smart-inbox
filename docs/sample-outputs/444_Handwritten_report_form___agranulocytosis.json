@@ -1,0 +1,1021 @@
+{
+  "message_id": 444,
+  "sender": "i.halvorsen@fjordklinikk.example",
+  "subject": "Handwritten report form — agranulocytosis",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "32 field(s) where sources disagree",
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.95,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from ward_form_scan.pdf)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "ward_form_scan.pdf",
+      "page_count": 1,
+      "rendering": "SCANNED",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "AER-2026-00157.pdf",
+      "page_count": 2,
+      "rendering": "DIGITAL",
+      "genre": "FORM",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": true,
+      "seriousness": {
+        "criteria": [
+          "LIFE_THREATENING"
+        ],
+        "is_serious": true
+      },
+      "confidence": 0.0,
+      "narrative": "A message from Dr Ingrid Halvorsen transmitting a scanned paper form completed on a ward, with an apology for handwriting quality and notification that a digital version will follow separately. No adverse reaction is described in the message itself.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "The patient began Velmoradine 20 mg once daily for essential hypertension on 3 March 2026. Nine days later she developed a widespread itchy maculopapular rash across the trunk and both forearms. The drug was withdrawn on 13 March and the rash began to settle within 48 hours. No corticosteroid was required. She had taken no other new medicine in the preceding month.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.92,
+          "confidence_before_adjustment": 0.92,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "58",
+          "typed_value": {
+            "value": "58",
+            "unit": "YEAR",
+            "raw": "58-year-old",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "58-year-old",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "58-year-old",
+              "char_start": 97,
+              "char_end": 108,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "34",
+          "typed_value": {
+            "value": "34",
+            "unit": "YEAR",
+            "raw": "34-year-old",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "34-year-old",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "34-year-old",
+              "char_start": 323,
+              "char_end": 334,
+              "bbox": "302.64,232.03,348.15,244.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": "A.M.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "A.M.",
+              "char_start": 87,
+              "char_end": 91,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": "T.B.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "T.B.",
+              "char_start": 317,
+              "char_end": 321,
+              "bbox": "61.69,232.03,78.20,244.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "hypertension, type 2 diabetes",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "hypertension, type 2 diabetes",
+              "char_start": 144,
+              "char_end": 173,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "no significant past medical history",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "no significant past medical history",
+              "char_start": 388,
+              "char_end": 423,
+              "bbox": "61.69,294.03,196.24,306.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "Female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Female",
+              "char_start": 114,
+              "char_end": 120,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "Male",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Male",
+              "char_start": 349,
+              "char_end": 353,
+              "bbox": "61.69,263.03,81.20,275.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": "68",
+          "typed_value": {
+            "amount": "68",
+            "unit": "kg",
+            "raw": "68 kg"
+          },
+          "unit": "kg",
+          "raw": "68 kg",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "68 kg",
+              "char_start": 129,
+              "char_end": 134,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": "81",
+          "typed_value": {
+            "amount": "81",
+            "unit": "kg",
+            "raw": "81 kg"
+          },
+          "unit": "kg",
+          "raw": "81 kg",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "81 kg",
+              "char_start": 355,
+              "char_end": 360,
+              "bbox": "302.64,263.03,324.65,275.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": "VLM-4471B",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Batch: VLM-4471B",
+              "char_start": 229,
+              "char_end": 245,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": "DMT-3320F",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "DMT-3320F",
+              "char_start": 721,
+              "char_end": 730,
+              "bbox": "302.64,475.21,350.64,487.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "20",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 188,
+              "char_end": 216,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "2",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "2 mg twice daily",
+              "char_start": 652,
+              "char_end": 668,
+              "bbox": "302.64,444.21,366.65,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "once daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 188,
+              "char_end": 216,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "twice daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "2 mg twice daily",
+              "char_start": 652,
+              "char_end": 668,
+              "bbox": "302.64,444.21,366.65,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 188,
+              "char_end": 216,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Velmoradine",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 188,
+              "char_end": 216,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Domitrelle",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle",
+              "char_start": 640,
+              "char_end": 650,
+              "bbox": "61.69,444.21,102.19,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "3 March 2026",
+          "typed_value": {
+            "raw": "3 March 2026",
+            "iso": "2026-03-03",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "3 March 2026",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Started: 3 March 2026",
+              "char_start": 246,
+              "char_end": 267,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "2 February 2026",
+          "typed_value": {
+            "raw": "2 February 2026",
+            "iso": "2026-02-02",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "2 February 2026",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "2 February 2026",
+              "char_start": 758,
+              "char_end": 773,
+              "bbox": "61.69,506.21,127.73,518.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "12 March 2026",
+          "typed_value": {
+            "raw": "12 March 2026",
+            "iso": "2026-03-12",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "12 March 2026",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Onset: 12 March 2026",
+              "char_start": 297,
+              "char_end": 317,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "29 March 2026",
+          "typed_value": {
+            "raw": "29 March 2026",
+            "iso": "2026-03-29",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "29 March 2026",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "DATE OF ONSET\n\nagranulocytosis\n\n29 March 2026",
+              "char_start": 824,
+              "char_end": 869,
+              "bbox": "61.69,553.42,363.07,578.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Outcome: recovering",
+              "char_start": 318,
+              "char_end": 337,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "maculopapular rash",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "maculopapular rash",
+              "char_start": 278,
+              "char_end": 296,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "agranulocytosis",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "agranulocytosis",
+              "char_start": 839,
+              "char_end": 854,
+              "bbox": "61.69,565.81,124.22,578.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": "United Kingdom",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "United Kingdom",
+              "char_start": 811,
+              "char_end": 825,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": "Norway",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Norway",
+              "char_start": 561,
+              "char_end": 567,
+              "bbox": "302.64,384.62,333.14,396.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Ingrid Halvorsen",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr Ingrid Halvorsen",
+              "char_start": 175,
+              "char_end": 194,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Aoife Whitfield",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Dr Aoife Whitfield",
+              "char_start": 742,
+              "char_end": 760,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Northgate Community Clinic",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Northgate Community Clinic",
+              "char_start": 784,
+              "char_end": 810,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Fjordklinikken",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Fjordklinikken",
+              "char_start": 545,
+              "char_end": 559,
+              "bbox": "61.69,384.62,116.70,396.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHYSICIAN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr",
+              "char_start": 175,
+              "char_end": 177,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHARMACIST",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Clinical Pharmacologist",
+              "char_start": 497,
+              "char_end": 520,
+              "bbox": "302.64,353.62,396.16,365.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": "LIFE_THREATENING",
+          "typed_value": {
+            "criteria": [
+              "LIFE_THREATENING"
+            ],
+            "is_serious": true
+          },
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "LIFE_THREATENING",
+              "char_start": 914,
+              "char_end": 930,
+              "bbox": "302.64,596.81,391.15,609.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

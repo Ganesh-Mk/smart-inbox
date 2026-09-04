@@ -1,0 +1,374 @@
+{
+  "message_id": 463,
+  "sender": "m.delane@harbourside-pharmacy.example",
+  "subject": "Damaged delivery — Nuvexoral cartons torn",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "ICSR is missing one or more minimum criteria; 1 field(s) below 0.40 confidence",
+  "classifications": [
+    {
+      "category": "ICSR_INCOMPLETE",
+      "confidence": 0.925,
+      "reason": "2 of 4 ICSR minimum criteria present; missing an identifiable patient, an adverse event. (from email body)",
+      "decided_by": "RULE"
+    },
+    {
+      "category": "PQC",
+      "confidence": 0.92,
+      "reason": "Torn cartons, torn blisters, and punctured blisters are explicitly described physical defects in product packaging and integrity. (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.0,
+      "narrative": "A wholesaler delivery arrived with a crushed shipping carton. Four of twelve inner cartons were torn open and two blisters were punctured. No product has been dispensed. The sender enquires whether undamaged cartons from the same delivery remain saleable.",
+      "fields": [
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.category",
+          "value": "PACKAGING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "shipping carton crushed on one corner. Four of the twelve cartons inside were torn open and two blisters were punctured",
+              "char_start": 74,
+              "char_end": 193,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.description",
+          "value": "Shipping carton crushed on one corner. Four of twelve cartons inside torn open and two blisters punctured.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "shipping carton crushed on one corner. Four of the twelve cartons inside were torn open and two blisters were punctured",
+              "char_start": 74,
+              "char_end": 193,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.photo_mentioned",
+          "value": "false",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.quantity",
+          "value": "Four cartons and two blisters",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Four of the twelve cartons inside were torn open and two blisters were punctured",
+              "char_start": 113,
+              "char_end": 193,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A wholesaler delivery arrived with a crushed shipping carton. Four of twelve inner cartons were torn open and two blisters were punctured. No product has been dispensed. The sender enquires whether undamaged cartons from the same delivery remain saleable.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": null,
+          "typed_value": {
+            "value": "",
+            "unit": "UNKNOWN",
+            "raw": "",
+            "derived_from_dob": false
+          },
+          "unit": "UNKNOWN",
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.batch",
+          "value": "NVX-1188D",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Batch: NVX-1188D",
+              "char_start": 308,
+              "char_end": 324,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.expiry",
+          "value": "2026-12-31",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Expiry: 2026-12-31",
+              "char_start": 325,
+              "char_end": 343,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.name",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Marcus Delane",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Marcus Delane",
+              "char_start": 345,
+              "char_end": 358,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Harbourside Pharmacy",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Harbourside Pharmacy",
+              "char_start": 359,
+              "char_end": 379,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHARMACIST",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Harbourside Pharmacy",
+              "char_start": 359,
+              "char_end": 379,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

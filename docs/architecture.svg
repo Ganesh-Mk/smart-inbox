@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 860" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#5a6b7a"/>
+    </marker>
+    <marker id="arrowLight" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#9bb0c2"/>
+    </marker>
+    <style>
+      .box   { fill:#fff; stroke:#c9d4de; stroke-width:1.5; rx:7; }
+      .navy  { fill:#1f3b54; }
+      .h     { font-size:14px; font-weight:700; fill:#1f3b54; }
+      .hw    { font-size:14px; font-weight:700; fill:#fff; }
+      .t     { font-size:11.5px; fill:#31424f; }
+      .tw    { font-size:11.5px; fill:#dbe6ef; }
+      .s     { font-size:10.5px; fill:#6b7d8c; }
+      .lbl   { font-size:10.5px; fill:#5a6b7a; }
+      .edge  { stroke:#5a6b7a; stroke-width:1.6; fill:none; marker-end:url(#arrow); }
+      .edgeL { stroke:#9bb0c2; stroke-width:1.3; fill:none; marker-end:url(#arrowLight);
+               stroke-dasharray:4 3; }
+      .band  { fill:#f2f6f9; stroke:#dfe8ef; stroke-width:1; rx:9; }
+      .keyfill { fill:#fdf6e6; stroke:#e6c98a; stroke-width:1.5; rx:7; }
+    </style>
+  </defs>
+
+  <text x="28" y="34" font-size="19" font-weight="700" fill="#1f3b54">Smart Inbox — architecture</text>
+  <text x="28" y="54" class="s">AI first-pass triage for a pharmacovigilance shared mailbox.
+    Angular → Spring Boot → Python AI service → Oracle, with a durable queue between ingestion and AI work.</text>
+
+  <!-- ============ Angular ============ -->
+  <rect x="28" y="80" width="1124" height="72" class="box"/>
+  <text x="44" y="104" class="h">Angular 22 reviewer UI</text>
+  <text x="44" y="124" class="t">Queue (worst-first: flagged → lowest confidence → oldest)  ·  Message detail: page-image
+    viewer with highlight overlays, ICSR checklist, editable fields, conflicts</text>
+  <text x="44" y="142" class="s">Built into Spring Boot's static resources, so one process serves the whole demo.
+    localhost:8080</text>
+
+  <path d="M590,152 L590,186" class="edge"/>
+  <text x="600" y="174" class="lbl">REST / JSON · HTTP Basic</text>
+
+  <!-- ============ Spring Boot ============ -->
+  <rect x="28" y="188" width="700" height="268" class="box"/>
+  <text x="44" y="212" class="h">Spring Boot 3.5 / Java 21 — owns state, orchestration, audit</text>
+  <text x="44" y="230" class="s">Never calls an LLM. localhost:8080</text>
+
+  <rect x="44" y="244" width="200" height="86" class="box"/>
+  <text x="56" y="264" class="h" font-size="12">Mail ingestion</text>
+  <text x="56" y="282" class="t">ImapMailboxAdapter</text>
+  <text x="56" y="298" class="t">MimeWalker · Sniffer</text>
+  <text x="56" y="314" class="t">Dedupe · BlobStore</text>
+  <text x="56" y="326" class="s">E2 E3 E4 E5 E6 E9 E10 E11</text>
+
+  <rect x="256" y="244" width="212" height="86" class="box"/>
+  <text x="268" y="264" class="h" font-size="12">JobWorkerPool ×4</text>
+  <text x="268" y="282" class="t">ParseDocument →</text>
+  <text x="268" y="298" class="t">ClassifyMessage →</text>
+  <text x="268" y="314" class="t">ExtractCase → Finalise</text>
+  <text x="268" y="326" class="s">idempotent · E36 E37 E38 E39</text>
+
+  <rect x="480" y="244" width="232" height="86" class="box"/>
+  <text x="492" y="264" class="h" font-size="12">Review API</text>
+  <text x="492" y="282" class="t">queue · detail · page PNG</text>
+  <text x="492" y="298" class="t">accept / override / reject</text>
+  <text x="492" y="314" class="t">audit trail · AI-call inspector</text>
+  <text x="492" y="326" class="s">E40 append-only</text>
+
+  <rect x="44" y="344" width="668" height="96" class="keyfill"/>
+  <text x="58" y="366" class="h" font-size="12">Evidence verification — the differentiator (E27)</text>
+  <text x="58" y="386" class="t">The model states a quote; code proves it. Normalise → exact match → rapidfuzz ≥ 90.</text>
+  <text x="58" y="404" class="t">Offsets are rewritten to what was <tspan font-style="italic">actually found</tspan>, never what was claimed. A bounding box is</text>
+  <text x="58" y="422" class="t">resolved from the parse-time span index. Unverifiable ⇒ confidence capped at 0.40 and flagged amber.</text>
+  <text x="58" y="436" class="s">Measured on the corpus: 98.7% of asserted facts verified (545 / 552)</text>
+
+  <!-- ============ GreenMail ============ -->
+  <rect x="756" y="188" width="180" height="120" class="box"/>
+  <text x="770" y="212" class="h" font-size="12">GreenMail</text>
+  <text x="770" y="232" class="t">Real IMAP :3143</text>
+  <text x="770" y="250" class="t">Real SMTP :3025</text>
+  <text x="770" y="272" class="s">A genuine IMAP server,</text>
+  <text x="770" y="288" class="s">no credentials, works</text>
+  <text x="770" y="302" class="s">offline. Gmail = 4 values.</text>
+
+  <path d="M756,250 L732,250" class="edge"/>
+  <text x="700" y="243" class="lbl" text-anchor="end">IMAP poll</text>
+
+  <!-- ============ Oracle ============ -->
+  <rect x="964" y="188" width="188" height="268" class="box"/>
+  <text x="978" y="212" class="h" font-size="12">Oracle 23ai Free</text>
+  <text x="978" y="230" class="s">:1521 · Docker</text>
+  <text x="978" y="254" class="t">20 tables + V_REVIEW_QUEUE</text>
+  <text x="978" y="274" class="t">PKG_JOB_QUEUE</text>
+  <text x="978" y="290" class="s">FOR UPDATE SKIP LOCKED</text>
+  <text x="978" y="310" class="t">PKG_AUDIT</text>
+  <text x="978" y="326" class="s">AUTONOMOUS_TRANSACTION —</text>
+  <text x="978" y="340" class="s">survives a rolled-back txn</text>
+  <text x="978" y="360" class="t">PKG_REVIEW</text>
+  <text x="978" y="376" class="s">override = supersede,</text>
+  <text x="978" y="390" class="s">never overwrite</text>
+  <text x="978" y="414" class="t">AI_CALL_LOG · AUDIT_EVENT</text>
+  <text x="978" y="430" class="s">every decision reproducible</text>
+
+  <path d="M728,300 L960,300" class="edge"/>
+  <text x="844" y="293" class="lbl" text-anchor="middle">JDBC</text>
+
+  <path d="M362,332 L362,300 L960,300" class="edgeL" fill="none"/>
+
+  <!-- ============ Python AI service ============ -->
+  <path d="M362,456 L362,492" class="edge"/>
+  <text x="372" y="478" class="lbl">REST / JSON</text>
+
+  <rect x="28" y="494" width="700" height="252" class="box"/>
+  <text x="44" y="518" class="h">Python 3.12 FastAPI AI service — stateless pure function</text>
+  <text x="44" y="536" class="s">(bytes, task, params) → JSON. No database handle, no session state. localhost:8000</text>
+
+  <rect x="44" y="550" width="216" height="112" class="box"/>
+  <text x="56" y="570" class="h" font-size="12">PDF understanding</text>
+  <text x="56" y="588" class="t">loader · rotation · caps</text>
+  <text x="56" y="604" class="t">layout: columns + span index</text>
+  <text x="56" y="620" class="t">flavour per page · sections</text>
+  <text x="56" y="636" class="t">tables · meaningful images</text>
+  <text x="56" y="654" class="s">E7 E8 E12 E13 E14 E15 E18 E19</text>
+
+  <rect x="272" y="550" width="216" height="112" class="box"/>
+  <text x="284" y="570" class="h" font-size="12">LLM pipeline</text>
+  <text x="284" y="588" class="t">transcribe (vision) · translate</text>
+  <text x="284" y="604" class="t">classify + rules · extract ×3</text>
+  <text x="284" y="620" class="t">summarise · describe · screen</text>
+  <text x="284" y="636" class="t">13 versioned prompts, hashed</text>
+  <text x="284" y="654" class="s">E16 E17 E20 E21 E22 E32 E34</text>
+
+  <rect x="500" y="550" width="212" height="112" class="box"/>
+  <text x="512" y="570" class="h" font-size="12">Post-processing (code)</text>
+  <text x="512" y="588" class="t">verify.py — prove citations</text>
+  <text x="512" y="604" class="t">merge.py — conflict detect</text>
+  <text x="512" y="620" class="t">deterministic confidence chain</text>
+  <text x="512" y="636" class="s">unverified → 0.40</text>
+  <text x="512" y="650" class="s">legibility cap · conflict → 0.50</text>
+  <text x="512" y="664" class="s">E26 E27 E33</text>
+
+  <rect x="44" y="676" width="668" height="56" class="box"/>
+  <text x="58" y="696" class="t"><tspan font-weight="700">Parse cache, keyed by content SHA-256.</tspan> The same PDF attached to two emails is parsed once (E9),</text>
+  <text x="58" y="714" class="t">so a re-run of a processed corpus needs zero live model calls — the demo is replayable offline.</text>
+
+  <!-- ============ OpenRouter ============ -->
+  <path d="M728,600 L800,600" class="edge"/>
+  <text x="764" y="593" class="lbl" text-anchor="middle">HTTPS</text>
+
+  <rect x="808" y="540" width="344" height="120" class="navy" rx="7"/>
+  <text x="824" y="566" class="hw">OpenRouter → anthropic/claude-haiku-4.5</text>
+  <text x="824" y="588" class="tw">The only model, for every task. temperature = 0.</text>
+  <text x="824" y="608" class="tw">Text + vision. Scanned pages are rendered locally to</text>
+  <text x="824" y="626" class="tw">PNG by PyMuPDF and sent to Claude's own vision —</text>
+  <text x="824" y="644" class="tw">the PDF file-parser plugin is never used.</text>
+
+  <rect x="808" y="676" width="344" height="56" class="box"/>
+  <text x="822" y="696" class="t"><tspan font-weight="700">Prompt cache:</tspan> 3.5× measured saving, keyed per schema,</text>
+  <text x="822" y="714" class="t">so batch work is grouped by prompt type. 77% hit rate.</text>
+
+  <!-- ============ Pipeline strip ============ -->
+  <rect x="28" y="768" width="1124" height="72" class="band"/>
+  <text x="44" y="790" class="h" font-size="12">Pipeline</text>
+  <text x="44" y="812" class="t">IMAP poll → ingest (body <tspan font-style="italic">and</tspan> each PDF become DOCUMENT rows) → PARSE_DOCUMENT ×N →
+    <tspan font-weight="700">completion barrier</tspan> (every document terminal, E39) → CLASSIFY_MESSAGE →</text>
+  <text x="44" y="830" class="t">EXTRACT_CASE per matched category → verify every quote → merge &amp; detect conflicts → FINALISE → READY_FOR_REVIEW → reviewer accept / override (audited)</text>
+</svg>

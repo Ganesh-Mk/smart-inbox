@@ -1,0 +1,531 @@
+{
+  "message_id": 461,
+  "sender": "m.delane@harbourside-pharmacy.example",
+  "subject": "Complaint — broken tamper seal, Velmoradine 20 mg",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "ICSR is missing one or more minimum criteria; 1 field(s) below 0.40 confidence",
+  "classifications": [
+    {
+      "category": "ICSR_INCOMPLETE",
+      "confidence": 0.95,
+      "reason": "2 of 4 ICSR minimum criteria present; missing an identifiable patient, an adverse event. (from email body)",
+      "decided_by": "RULE"
+    },
+    {
+      "category": "PQC",
+      "confidence": 0.92,
+      "reason": "A broken tamper-evident seal and creased, partly lifted blister foil are physical defects of the product and packaging. (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.0,
+      "narrative": "A customer returned an unopened carton of Velmoradine 20 mg with a split outer tamper-evident seal and creased, partly lifted blister foil. The customer had not taken any tablets and reported no ill effects.",
+      "fields": [
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.category",
+          "value": "PACKAGING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "tamper-evident seal was already split",
+              "char_start": 104,
+              "char_end": 141,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.description",
+          "value": "Outer tamper-evident seal was split; blister foil underneath was creased and partly lifted",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.92,
+          "confidence_before_adjustment": 0.92,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "The outer tamper-evident seal was already split when the carton was opened, and the blister foil underneath was creased and partly lifted.",
+              "char_start": 94,
+              "char_end": 232,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.photo_mentioned",
+          "value": "false",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "DEFECT",
+          "field_path": "defect.quantity",
+          "value": "1 carton",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "A customer returned an unopened carton",
+              "char_start": 20,
+              "char_end": 58,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A customer returned an unopened carton of Velmoradine 20 mg with a split outer tamper-evident seal and creased, partly lifted blister foil. The customer had not taken any tablets and reported no ill effects.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": null,
+          "typed_value": {
+            "value": "",
+            "unit": "UNKNOWN",
+            "raw": "",
+            "derived_from_dob": false
+          },
+          "unit": "UNKNOWN",
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.batch",
+          "value": "VLM-4471B",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Batch: VLM-4471B",
+              "char_start": 376,
+              "char_end": 392,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.expiry",
+          "value": "2027-11-30",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Expiry: 2027-11-30",
+              "char_start": 393,
+              "char_end": 411,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.name",
+          "value": "Velmoradine 20 mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg",
+              "char_start": 62,
+              "char_end": 79,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": "VLM-4471B",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Batch: VLM-4471B",
+              "char_start": 376,
+              "char_end": 392,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "20",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg",
+              "char_start": 62,
+              "char_end": 79,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg",
+              "char_start": 62,
+              "char_end": 79,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Velmoradine",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Velmoradine 20 mg",
+              "char_start": 62,
+              "char_end": 79,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": null,
+          "typed_value": {
+            "raw": "",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Marcus Delane",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Marcus Delane",
+              "char_start": 413,
+              "char_end": 426,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Harbourside Pharmacy",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Harbourside Pharmacy",
+              "char_start": 427,
+              "char_end": 447,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

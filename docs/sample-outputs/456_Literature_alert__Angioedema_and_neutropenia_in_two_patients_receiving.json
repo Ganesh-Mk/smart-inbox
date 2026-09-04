@@ -1,0 +1,1064 @@
+{
+  "message_id": 456,
+  "sender": "alerts@lit-monitor.example",
+  "subject": "Literature alert: Angioedema and neutropenia in two patients receiving domitrelle: a case series",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.9,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from A02_2026.pdf)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "A02_2026.pdf",
+      "page_count": 2,
+      "rendering": "DIGITAL",
+      "genre": "ARTICLE",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": true,
+      "seriousness": {
+        "criteria": [
+          "LIFE_THREATENING"
+        ],
+        "is_serious": true
+      },
+      "confidence": 0.0,
+      "narrative": "This is a literature screening alert referencing a published case series. The alert provides only bibliographic information (title, authors, journal, DOI) and indicates that the full text is attached. No individual patient data, adverse events, or clinical details are presented in the alert itself. The source is a metadata notification, not a case report.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A 34-year-old man was prescribed Domitrelle 2 mg twice daily for generalised anxiety disorder commencing 2 February 2026. On 29 March 2026, eight weeks into treatment, he developed agranulocytosis with a neutrophil count of 0.3 x 10^9/L, fever and mouth ulceration. The event was life-threatening. Domitrelle was withdrawn and he was managed with granulocyte colony-stimulating factor; the neutrophil count was recovering at the time of writing. A 45-year-old male was prescribed Pralextin 100 micrograms/dose two puffs as required for asthma maintenance commencing 5 May 2026, and was additionally given Astelvia 1 g three times daily on 18 May for post-operative prophylaxis. On 21 May 2026 he developed angioedema with swelling of the lips and tongue and difficulty swallowing, which was life-threatening. On the following day he developed persistent dizziness. He attended the emergency department and was treated with intramuscular adrenaline. Both medicines were stopped and he recovered.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "34",
+          "typed_value": {
+            "value": "34",
+            "unit": "YEAR",
+            "raw": "34-year-old man",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "34-year-old man",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "34-year-old man",
+              "char_start": 1114,
+              "char_end": 1129,
+              "bbox": "51.02,372.87,287.72,384.69",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "no significant past medical history",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "a history of no significant past medical history",
+              "char_start": 1135,
+              "char_end": 1183,
+              "bbox": "51.02,372.87,287.72,396.09",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "male",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "34-year-old man",
+              "char_start": 1114,
+              "char_end": 1129,
+              "bbox": "51.02,372.87,287.72,384.69",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "2",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg twice daily",
+              "char_start": 1269,
+              "char_end": 1296,
+              "bbox": "51.02,413.07,287.72,424.89",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "twice daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg twice daily",
+              "char_start": 1269,
+              "char_end": 1296,
+              "bbox": "51.02,413.07,287.72,424.89",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg twice daily",
+              "char_start": 1269,
+              "char_end": 1296,
+              "bbox": "51.02,413.07,287.72,424.89",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Domitrelle",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg twice daily (domitrelle succinate, gastro-resistant capsule)",
+              "char_start": 1269,
+              "char_end": 1345,
+              "bbox": "51.02,413.07,287.72,436.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "2 February 2026",
+          "typed_value": {
+            "raw": "2 February 2026",
+            "iso": "2026-02-02",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "2 February 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "commencing 2 February 2026",
+              "char_start": 1380,
+              "char_end": 1406,
+              "bbox": "51.02,435.87,287.72,447.69",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].dose.amount",
+          "value": "100",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Pralextin 100 micrograms/dose two puffs",
+              "char_start": 2259,
+              "char_end": 2299,
+              "bbox": "51.02,684.76,287.72,707.98",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].dose.frequency",
+          "value": "two puffs as required",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "two puffs as required",
+              "char_start": 2290,
+              "char_end": 2311,
+              "bbox": "51.02,696.16,287.72,707.98",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].dose.unit",
+          "value": "micrograms/dose",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Pralextin 100 micrograms/dose",
+              "char_start": 2259,
+              "char_end": 2289,
+              "bbox": "51.02,684.76,287.72,707.98",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].name",
+          "value": "Pralextin",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Pralextin 100 micrograms/dose two puffs as required (pralextin, pressurised inhalation)",
+              "char_start": 2259,
+              "char_end": 2347,
+              "bbox": "51.02,684.76,287.72,719.38",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].route",
+          "value": "INHALATION",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].start_date",
+          "value": "5 May 2026",
+          "typed_value": {
+            "raw": "5 May 2026",
+            "iso": "2026-05-05",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "5 May 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "commencing 5 May 2026",
+              "char_start": 2372,
+              "char_end": 2393,
+              "bbox": "51.02,707.56,287.72,730.78",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].dose.amount",
+          "value": "1",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Astelvia 1 g three times daily",
+              "char_start": 3024,
+              "char_end": 3054,
+              "bbox": "307.56,317.87,544.25,329.68",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].dose.frequency",
+          "value": "three times daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "three times daily",
+              "char_start": 3037,
+              "char_end": 3054,
+              "bbox": "307.56,317.87,544.25,329.68",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].dose.unit",
+          "value": "g",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Astelvia 1 g three times daily",
+              "char_start": 3024,
+              "char_end": 3054,
+              "bbox": "307.56,317.87,544.25,329.68",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].name",
+          "value": "Astelvia",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Astelvia 1 g three times daily",
+              "char_start": 3024,
+              "char_end": 3054,
+              "bbox": "307.56,317.87,544.25,329.68",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].role",
+          "value": "CONCOMITANT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].route",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].start_date",
+          "value": "18 May 2026",
+          "typed_value": {
+            "raw": "18 May 2026",
+            "iso": "2026-05-18",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "18 May 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "on 18 May",
+              "char_start": 3055,
+              "char_end": 3064,
+              "bbox": "307.56,317.87,544.25,329.68",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "29 March 2026",
+          "typed_value": {
+            "raw": "29 March 2026",
+            "iso": "2026-03-29",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "29 March 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "beginning 29 March 2026",
+              "char_start": 1543,
+              "char_end": 1566,
+              "bbox": "51.02,476.07,287.72,499.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "the outcome was recorded as recovering",
+              "char_start": 1759,
+              "char_end": 1797,
+              "bbox": "51.02,545.07,208.76,556.89",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "agranulocytosis",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "The reported term was agranulocytosis.",
+              "char_start": 1568,
+              "char_end": 1606,
+              "bbox": "51.02,487.47,225.96,499.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[1].onset",
+          "value": "21 May 2026",
+          "typed_value": {
+            "raw": "21 May 2026",
+            "iso": "2026-05-21",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "21 May 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "beginning 21 May 2026",
+              "char_start": 2529,
+              "char_end": 2550,
+              "bbox": "51.02,747.76,287.72,759.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[1].outcome",
+          "value": "RECOVERED",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "the outcome was recorded as recovered",
+              "char_start": 2864,
+              "char_end": 2901,
+              "bbox": "307.56,277.67,463.38,289.48",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[1].term",
+          "value": "angioedema",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "The reported term was angioedema.",
+              "char_start": 2552,
+              "char_end": 2585,
+              "bbox": "51.02,747.76,287.72,770.98",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[2].onset",
+          "value": "the following day",
+          "typed_value": {
+            "raw": "the following day",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "the following day",
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "on the following day persistent dizziness",
+              "char_start": 3184,
+              "char_end": 3225,
+              "bbox": "307.56,340.67,544.25,363.88",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[2].outcome",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[2].term",
+          "value": "persistent dizziness",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "on the following day persistent dizziness",
+              "char_start": 3184,
+              "char_end": 3225,
+              "bbox": "307.56,340.67,544.25,363.88",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "I. Halvorsen",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "I. Halvorsen",
+              "char_start": 81,
+              "char_end": 93,
+              "bbox": "208.14,94.82,387.13,107.87",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHYSICIAN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.7,
+          "confidence_before_adjustment": 0.7,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "We report a 34-year-old man with a history of no significant past medical history, who was referred to our department for assessment.",
+              "char_start": 1102,
+              "char_end": 1235,
+              "bbox": "51.02,372.87,287.72,407.49",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": "LIFE_THREATENING",
+          "typed_value": {
+            "criteria": [
+              "LIFE_THREATENING"
+            ],
+            "is_serious": true
+          },
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "The event met the regulatory criteria for a serious adverse reaction (life threatening).",
+              "char_start": 1608,
+              "char_end": 1696,
+              "bbox": "51.02,504.87,287.72,528.09",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[1].seriousness",
+          "value": "LIFE_THREATENING",
+          "typed_value": {
+            "criteria": [
+              "LIFE_THREATENING"
+            ],
+            "is_serious": true
+          },
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "The event met the regulatory criteria for a serious adverse reaction (life threatening).",
+              "char_start": 1608,
+              "char_end": 1696,
+              "bbox": "51.02,504.87,287.72,528.09",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[2].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

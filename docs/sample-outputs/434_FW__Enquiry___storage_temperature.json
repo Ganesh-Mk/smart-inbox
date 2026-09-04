@@ -1,0 +1,105 @@
+{
+  "message_id": 434,
+  "sender": "medinfo@coreline.example",
+  "subject": "FW: Enquiry — storage temperature",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "MI",
+      "confidence": 0.95,
+      "reason": "Sister Raghunathan asks two genuine questions: 'Is the product still usable' and 'what is the approved storage range?' (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "MI",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.0,
+      "narrative": "Is the product still usable, and what is the approved storage range?",
+      "fields": [
+        {
+          "field_group": "ENQUIRY",
+          "field_path": "enquiry[0].question",
+          "value": "Is the product still usable, and what is the approved storage range?",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Is the product still usable, and what is the approved storage range?",
+              "char_start": 432,
+              "char_end": 500,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "ENQUIRY",
+          "field_path": "enquiry[0].topic",
+          "value": "storage temperature",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "One of my patients left the pack in a car overnight and it may have reached 35 C",
+              "char_start": 350,
+              "char_end": 430,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.name",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

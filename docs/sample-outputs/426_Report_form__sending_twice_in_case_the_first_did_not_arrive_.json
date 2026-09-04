@@ -1,0 +1,586 @@
+{
+  "message_id": 426,
+  "sender": "a.whitfield@northgate-clinic.example",
+  "subject": "Report form (sending twice in case the first did not arrive)",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.95,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from AER-2026-00141.pdf)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "AER-2026-00141.pdf",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "FORM",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "copy_of_report_form.pdf",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "FORM",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.0,
+      "narrative": "A message from Dr Aoife Whitfield indicating that a completed form has been submitted twice due to a mail system issue. No adverse reaction is described in this message itself.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A 58-year-old female patient with a history of hypertension and type 2 diabetes began Velmoradine 20 mg once daily on 3 March 2026. Nine days later, on 12 March 2026, she developed a widespread itchy maculopapular rash across the trunk and both forearms. The drug was withdrawn on 13 March and the rash began to settle within 48 hours. No corticosteroid was required. She had taken no other new medicine in the preceding month.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.92,
+          "confidence_before_adjustment": 0.92,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "58",
+          "typed_value": {
+            "value": "58",
+            "unit": "YEAR",
+            "raw": "58-year-old",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "58-year-old",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "58-year-old",
+              "char_start": 322,
+              "char_end": 333,
+              "bbox": "302.64,232.03,348.15,244.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": "A.M.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "A.M.",
+              "char_start": 316,
+              "char_end": 320,
+              "bbox": "61.69,232.03,80.20,244.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "hypertension, type 2 diabetes",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "hypertension, type 2 diabetes",
+              "char_start": 389,
+              "char_end": 418,
+              "bbox": "61.69,294.03,179.26,306.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "Female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Female",
+              "char_start": 348,
+              "char_end": 354,
+              "bbox": "61.69,263.03,91.70,275.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": "68",
+          "typed_value": {
+            "amount": "68",
+            "unit": "kg",
+            "raw": "68 kg"
+          },
+          "unit": "kg",
+          "raw": "68 kg",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "68 kg",
+              "char_start": 356,
+              "char_end": 361,
+              "bbox": "302.64,263.03,324.65,275.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": "VLM-4471B",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "VLM-4471B",
+              "char_start": 733,
+              "char_end": 742,
+              "bbox": "302.64,475.21,350.16,487.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "20",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "20 mg once daily",
+              "char_start": 664,
+              "char_end": 680,
+              "bbox": "302.64,444.21,370.67,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "once daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "20 mg once daily",
+              "char_start": 664,
+              "char_end": 680,
+              "bbox": "302.64,444.21,370.67,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "20 mg once daily",
+              "char_start": 664,
+              "char_end": 680,
+              "bbox": "302.64,444.21,370.67,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Velmoradine",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine",
+              "char_start": 651,
+              "char_end": 662,
+              "bbox": "61.69,444.21,112.21,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "3 March 2026",
+          "typed_value": {
+            "raw": "3 March 2026",
+            "iso": "2026-03-03",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "3 March 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "3 March 2026",
+              "char_start": 770,
+              "char_end": 782,
+              "bbox": "61.69,506.21,116.72,518.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "12 March 2026",
+          "typed_value": {
+            "raw": "12 March 2026",
+            "iso": "2026-03-12",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "12 March 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "12 March 2026",
+              "char_start": 868,
+              "char_end": 881,
+              "bbox": "302.64,565.81,362.67,578.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Recovering",
+              "char_start": 914,
+              "char_end": 924,
+              "bbox": "61.69,596.81,107.21,609.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "maculopapular rash",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "maculopapular rash",
+              "char_start": 848,
+              "char_end": 866,
+              "bbox": "61.69,565.81,140.72,578.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": "United Kingdom",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "United Kingdom",
+              "char_start": 564,
+              "char_end": 578,
+              "bbox": "302.64,384.62,366.66,396.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Aoife Whitfield",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr Aoife Whitfield",
+              "char_start": 169,
+              "char_end": 187,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Northgate Community Clinic",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Northgate Community Clinic",
+              "char_start": 536,
+              "char_end": 562,
+              "bbox": "61.69,384.62,173.72,396.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHYSICIAN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "General Practitioner",
+              "char_start": 491,
+              "char_end": 511,
+              "bbox": "302.64,353.62,382.67,365.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

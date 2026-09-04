@@ -1,0 +1,856 @@
+{
+  "generated_at": "2026-09-04 13:24 UTC",
+  "corpus": {
+    "messages": 38,
+    "documents": 59,
+    "goldens": 38
+  },
+  "categories": {
+    "per_category": {
+      "MI": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 5
+      },
+      "ICSR": {
+        "precision": 0.875,
+        "recall": 1.0,
+        "f1": 0.9333,
+        "support": 28
+      },
+      "NOT_RELEVANT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      },
+      "PQC": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 4
+      }
+    },
+    "micro": {
+      "precision": 0.9091,
+      "recall": 1.0,
+      "f1": 0.9524,
+      "support": 40
+    },
+    "macro_f1": 0.9833,
+    "exact_set_accuracy": 0.8947,
+    "messages_scored": 38
+  },
+  "fields": {
+    "outcomes": {
+      "correct": 524,
+      "correct_normalised": 528,
+      "wrong": 223,
+      "abstained_correctly": 65,
+      "false_confident": 72,
+      "missing_field": 23
+    },
+    "field_accuracy": 0.7015,
+    "field_accuracy_normalised": 0.7068,
+    "abstention_correctness": 0.4745,
+    "mismatches": [
+      {
+        "message": "pqc-03-damaged-carton",
+        "field": "defect.summary",
+        "expected": "damaged packaging in transit",
+        "got": "Shipping carton crushed on one corner. Four of twelve cartons inside torn open and two blisters punctured."
+      },
+      {
+        "message": "adv-03-encrypted-pdf",
+        "field": "reaction[0].term",
+        "expected": "maculopapular rash",
+        "got": "itchy rash"
+      },
+      {
+        "message": "adv-03-encrypted-pdf",
+        "field": "reaction[0].onset.raw",
+        "expected": "12 March 2026",
+        "got": "nine days after starting Velmoradine 20 mg once daily"
+      },
+      {
+        "message": "adv-03-encrypted-pdf",
+        "field": "reaction[0].onset.precision",
+        "expected": "DAY",
+        "got": "UNKNOWN"
+      },
+      {
+        "message": "adv-03-encrypted-pdf",
+        "field": "reaction[0].onset.iso",
+        "expected": "2026-03-12",
+        "got": ""
+      },
+      {
+        "message": "adv-05-mislabelled-octet-stream",
+        "field": "reporter.role",
+        "expected": "OTHER_HCP",
+        "got": "PHARMACIST"
+      },
+      {
+        "message": "adv-10-corrupt-pdf",
+        "field": "reporter.role",
+        "expected": "OTHER_HCP",
+        "got": "PHYSICIAN"
+      },
+      {
+        "message": "adv-10-corrupt-pdf",
+        "field": "product[0].start_date.raw",
+        "expected": "11 January 2026",
+        "got": "four weeks before 6 February 2026"
+      },
+      {
+        "message": "adv-10-corrupt-pdf",
+        "field": "product[0].start_date.iso",
+        "expected": "2026-01-11",
+        "got": ""
+      },
+      {
+        "message": "adv-10-corrupt-pdf",
+        "field": "reaction[0].term",
+        "expected": "fatal arrhythmia",
+        "got": "ventricular arrhythmia"
+      },
+      {
+        "message": "adv-10-corrupt-pdf",
+        "field": "reaction[0].onset.raw",
+        "expected": "6 February 2026",
+        "got": "four weeks after starting Cardexatine 5 mg once daily"
+      },
+      {
+        "message": "adv-10-corrupt-pdf",
+        "field": "reaction[0].onset.precision",
+        "expected": "DAY",
+        "got": "UNKNOWN"
+      }
+    ],
+    "per_field": {
+      "defect.category": {
+        "correct": 4,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "defect.quantity": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 4
+      },
+      "defect.summary": {
+        "correct": 0,
+        "wrong": 4,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "enquiry[0].question": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 5
+      },
+      "enquiry[0].topic": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 5
+      },
+      "enquiry[1].question": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "enquiry[1].topic": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "patient.age": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 5,
+        "false_confident": 0
+      },
+      "patient.age.raw": {
+        "correct": 21,
+        "wrong": 6,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "patient.age.unit": {
+        "correct": 22,
+        "wrong": 3,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "patient.age.value": {
+        "correct": 20,
+        "wrong": 5,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "patient.initials": {
+        "correct": 13,
+        "wrong": 14,
+        "abstained_correctly": 5,
+        "false_confident": 0
+      },
+      "patient.medical_history": {
+        "correct": 14,
+        "wrong": 13,
+        "abstained_correctly": 5,
+        "false_confident": 0
+      },
+      "patient.sex": {
+        "correct": 26,
+        "wrong": 1,
+        "abstained_correctly": 5,
+        "false_confident": 0
+      },
+      "patient.weight": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 6,
+        "false_confident": 0
+      },
+      "patient.weight.raw": {
+        "correct": 12,
+        "wrong": 14,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product.batch": {
+        "correct": 3,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product.expiry": {
+        "correct": 3,
+        "wrong": 0,
+        "abstained_correctly": 1,
+        "false_confident": 0
+      },
+      "product.name": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 5,
+        "false_confident": 4
+      },
+      "product[0].batch": {
+        "correct": 13,
+        "wrong": 13,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[0].dose.amount": {
+        "correct": 21,
+        "wrong": 5,
+        "abstained_correctly": 1,
+        "false_confident": 1
+      },
+      "product[0].dose.frequency": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 2,
+        "false_confident": 0
+      },
+      "product[0].dose.frequency_raw": {
+        "correct": 22,
+        "wrong": 4,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[0].dose.unit": {
+        "correct": 22,
+        "wrong": 4,
+        "abstained_correctly": 1,
+        "false_confident": 1
+      },
+      "product[0].name": {
+        "correct": 24,
+        "wrong": 2,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[0].role": {
+        "correct": 26,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[0].route": {
+        "correct": 16,
+        "wrong": 10,
+        "abstained_correctly": 2,
+        "false_confident": 0
+      },
+      "product[0].start_date": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 2,
+        "false_confident": 0
+      },
+      "product[0].start_date.iso": {
+        "correct": 16,
+        "wrong": 6,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[0].start_date.raw": {
+        "correct": 19,
+        "wrong": 7,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[1].batch": {
+        "correct": 1,
+        "wrong": 2,
+        "abstained_correctly": 1,
+        "false_confident": 0
+      },
+      "product[1].dose.amount": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].dose.frequency": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].dose.frequency_raw": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[1].dose.unit": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].name": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].role": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].route": {
+        "correct": 1,
+        "wrong": 2,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].start_date": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 1
+      },
+      "product[1].start_date.iso": {
+        "correct": 1,
+        "wrong": 2,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[1].start_date.raw": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "product[2].batch": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 2,
+        "false_confident": 0
+      },
+      "product[2].dose.amount": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[2].dose.frequency": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[2].dose.unit": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[2].name": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[2].role": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "product[2].route": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 1,
+        "false_confident": 1
+      },
+      "product[2].start_date": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 2
+      },
+      "reaction[0].onset.iso": {
+        "correct": 13,
+        "wrong": 9,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[0].onset.precision": {
+        "correct": 18,
+        "wrong": 9,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[0].onset.raw": {
+        "correct": 17,
+        "wrong": 10,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[0].outcome": {
+        "correct": 20,
+        "wrong": 7,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[0].term": {
+        "correct": 17,
+        "wrong": 10,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[1].onset": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 6
+      },
+      "reaction[1].onset.iso": {
+        "correct": 1,
+        "wrong": 2,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[1].onset.precision": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[1].onset.raw": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      },
+      "reaction[1].outcome": {
+        "correct": 1,
+        "wrong": 2,
+        "abstained_correctly": 2,
+        "false_confident": 4
+      },
+      "reaction[1].seriousness": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 6,
+        "false_confident": 3
+      },
+      "reaction[1].term": {
+        "correct": 2,
+        "wrong": 1,
+        "abstained_correctly": 0,
+        "false_confident": 6
+      },
+      "reaction[2].onset": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 3
+      },
+      "reaction[2].outcome": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 2,
+        "false_confident": 1
+      },
+      "reaction[2].seriousness": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 3,
+        "false_confident": 0
+      },
+      "reaction[2].term": {
+        "correct": 0,
+        "wrong": 0,
+        "abstained_correctly": 0,
+        "false_confident": 3
+      },
+      "reporter.country": {
+        "correct": 14,
+        "wrong": 17,
+        "abstained_correctly": 1,
+        "false_confident": 0
+      },
+      "reporter.name": {
+        "correct": 26,
+        "wrong": 5,
+        "abstained_correctly": 1,
+        "false_confident": 0
+      },
+      "reporter.organisation": {
+        "correct": 17,
+        "wrong": 10,
+        "abstained_correctly": 5,
+        "false_confident": 0
+      },
+      "reporter.role": {
+        "correct": 19,
+        "wrong": 12,
+        "abstained_correctly": 1,
+        "false_confident": 0
+      },
+      "severity.criteria": {
+        "correct": 23,
+        "wrong": 4,
+        "abstained_correctly": 0,
+        "false_confident": 0
+      }
+    }
+  },
+  "icsr_elements": {
+    "per_element": {
+      "has_identifiable_patient": {
+        "agreement": 0.7188,
+        "n": 32
+      },
+      "has_identifiable_reporter": {
+        "agreement": 0.875,
+        "n": 32
+      },
+      "has_suspect_product": {
+        "agreement": 0.625,
+        "n": 32
+      },
+      "has_adverse_event": {
+        "agreement": 0.6562,
+        "n": 32
+      }
+    },
+    "overall": 0.7188
+  },
+  "calibration": {
+    "curve": [
+      {
+        "band": "0.2-0.3",
+        "n": 1,
+        "accuracy": 1.0,
+        "mean_confidence": 0.25
+      },
+      {
+        "band": "0.4-0.5",
+        "n": 5,
+        "accuracy": 1.0,
+        "mean_confidence": 0.45
+      },
+      {
+        "band": "0.5-0.6",
+        "n": 63,
+        "accuracy": 0.4762,
+        "mean_confidence": 0.55
+      },
+      {
+        "band": "0.6-0.7",
+        "n": 4,
+        "accuracy": 0.5,
+        "mean_confidence": 0.65
+      },
+      {
+        "band": "0.7-0.8",
+        "n": 6,
+        "accuracy": 0.6667,
+        "mean_confidence": 0.75
+      },
+      {
+        "band": "0.8-0.9",
+        "n": 11,
+        "accuracy": 0.4545,
+        "mean_confidence": 0.85
+      },
+      {
+        "band": "0.9-1.0",
+        "n": 426,
+        "accuracy": 0.8592,
+        "mean_confidence": 0.95
+      }
+    ],
+    "expected_calibration_error": 0.1013,
+    "n": 516
+  },
+  "verification": {
+    "asserted_with_evidence": 552,
+    "verified": 545,
+    "exact": 545,
+    "fuzzy": 0,
+    "unverified": 7,
+    "rate": 0.9873
+  },
+  "performance": {
+    "stages": [
+      {
+        "stage": "CLASSIFY_MESSAGE",
+        "n": 80,
+        "mean_ms": 8512,
+        "p50_ms": 6005,
+        "max_ms": 55694
+      },
+      {
+        "stage": "EXTRACT_CASE",
+        "n": 53,
+        "mean_ms": 17748,
+        "p50_ms": 14292,
+        "max_ms": 45190
+      },
+      {
+        "stage": "FINALISE_MESSAGE",
+        "n": 38,
+        "mean_ms": 8235,
+        "p50_ms": 6157,
+        "max_ms": 19011
+      },
+      {
+        "stage": "PARSE_DOCUMENT",
+        "n": 59,
+        "mean_ms": 4183,
+        "p50_ms": 1084,
+        "max_ms": 33314
+      }
+    ],
+    "ai_calls": 414,
+    "total_cost_usd": 1.47103,
+    "cost_per_document_usd": 0.02493,
+    "cost_per_message_usd": 0.03871,
+    "prompt_tokens": 2065507,
+    "completion_tokens": 161660,
+    "cached_tokens": 1564973,
+    "cache_hit_rate": 0.7577,
+    "mean_latency_ms": 4400,
+    "schema_repairs": 0,
+    "by_purpose": [
+      {
+        "purpose": "P1_classify",
+        "calls": 104,
+        "cost_usd": 0.36228,
+        "mean_latency_ms": 5246
+      },
+      {
+        "purpose": "P6_summarise",
+        "calls": 56,
+        "cost_usd": 0.32883,
+        "mean_latency_ms": 4629
+      },
+      {
+        "purpose": "P2a_extract_parties",
+        "calls": 78,
+        "cost_usd": 0.24542,
+        "mean_latency_ms": 4138
+      },
+      {
+        "purpose": "P2b_extract_products",
+        "calls": 78,
+        "cost_usd": 0.22197,
+        "mean_latency_ms": 3648
+      },
+      {
+        "purpose": "P2c_extract_reactions",
+        "calls": 78,
+        "cost_usd": 0.18884,
+        "mean_latency_ms": 3337
+      },
+      {
+        "purpose": "P8_translate",
+        "calls": 5,
+        "cost_usd": 0.046,
+        "mean_latency_ms": 6482
+      },
+      {
+        "purpose": "P3_extract_pqc",
+        "calls": 5,
+        "cost_usd": 0.03086,
+        "mean_latency_ms": 3506
+      },
+      {
+        "purpose": "P5_transcribe",
+        "calls": 3,
+        "cost_usd": 0.02864,
+        "mean_latency_ms": 25525
+      },
+      {
+        "purpose": "P4_extract_mi",
+        "calls": 7,
+        "cost_usd": 0.01819,
+        "mean_latency_ms": 3240
+      }
+    ]
+  },
+  "edge_cases": {
+    "E3": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E4": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E5": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E6": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E7": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E9": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E10": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E11": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E12": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E13": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E14": {
+      "messages": 3,
+      "processed": 3
+    },
+    "E15": {
+      "messages": 3,
+      "processed": 3
+    },
+    "E16": {
+      "messages": 3,
+      "processed": 3
+    },
+    "E17": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E18": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E19": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E21": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E22": {
+      "messages": 3,
+      "processed": 3
+    },
+    "E23": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E24": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E25": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E28": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E30": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E31": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E32": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E33": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E34": {
+      "messages": 2,
+      "processed": 2
+    },
+    "E35": {
+      "messages": 1,
+      "processed": 1
+    },
+    "E39": {
+      "messages": 2,
+      "processed": 2
+    }
+  },
+  "health": {
+    "messages": 38,
+    "ready": 38,
+    "documents": 59,
+    "parsed": 56,
+    "parse_failed": 3,
+    "dead_jobs": 0,
+    "cases": 35
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "message_id": 458,
+  "sender": "m.delane@harbourside-pharmacy.example",
+  "subject": "Enquiry — dosing in renal impairment",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "MI",
+      "confidence": 0.95,
+      "reason": "The sender asks a genuine question about dose adjustment in renal impairment: 'Could you tell me whether the dose needs to be reduced in a patient with an eGFR of 28 mL/min/1.73m2, and if so what reduction you would recommend?' (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "MI",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.0,
+      "narrative": "Could you tell me whether the dose needs to be reduced in a patient with an eGFR of 28 mL/min/1.73m2, and if so what reduction you would recommend?",
+      "fields": [
+        {
+          "field_group": "ENQUIRY",
+          "field_path": "enquiry[0].question",
+          "value": "Could you tell me whether the dose needs to be reduced in a patient with an eGFR of 28 mL/min/1.73m2, and if so what reduction you would recommend?",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Could you tell me whether the dose needs to be reduced in a patient with an eGFR of 28 mL/min/1.73m2, and if so what reduction you would recommend?",
+              "char_start": 27,
+              "char_end": 174,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "ENQUIRY",
+          "field_path": "enquiry[0].topic",
+          "value": "dosing in renal impairment",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "dose needs to be reduced in a patient with an eGFR of 28 mL/min/1.73m2",
+              "char_start": 57,
+              "char_end": 127,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product.name",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

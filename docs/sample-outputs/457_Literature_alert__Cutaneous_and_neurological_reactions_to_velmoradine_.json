@@ -1,0 +1,1046 @@
+{
+  "message_id": 457,
+  "sender": "alerts@lit-monitor.example",
+  "subject": "Literature alert: Cutaneous and neurological reactions to velmoradine: three illustrative cases",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "1 field(s) below 0.40 confidence",
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.9,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from A03_2026.pdf)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "A03_2026.pdf",
+      "page_count": 2,
+      "rendering": "DIGITAL",
+      "genre": "ARTICLE",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.0,
+      "narrative": "This is a literature screening alert summarising a published journal article. The alert provides bibliographic information (title, authors, journal, DOI) but does not describe any individual patient case or adverse reaction. The full text of the article is referenced as attached but is not included in the source material provided for extraction. No adverse events, patient identifiers, or clinical details are present in this alert itself.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "Three patients developed adverse reactions during treatment with velmoradine or related agents. Case 1: A 58-year-old female with hypertension and type 2 diabetes was prescribed Velmoradine 20 mg once daily starting 3 March 2026. Nine days later she developed a widespread itchy maculopapular rash across the trunk and both forearms. The drug was withdrawn on 13 March and the rash began to settle within 48 hours without corticosteroid treatment. Case 2: A 29-year-old pregnant woman at 22 weeks gestation had been taking Domitrelle 2 mg at night for generalised anxiety disorder since early 2026. In July she developed an erythematous eruption on sun-exposed skin after only ten minutes outdoors. The pregnancy remained ongoing with no fetal abnormality detected on ultrasound. Case 3: A woman born in 1966 with a history of migraine with aura was prescribed Fenaquil 500 mg as required for acute migraine starting last March. About two weeks later she developed light-headedness on standing, worse in the mornings. The symptom improved but had not fully resolved at the time of reporting.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.15,
+          "confidence_before_adjustment": 0.15,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "58",
+          "typed_value": {
+            "value": "58",
+            "unit": "YEAR",
+            "raw": "58-year-old female",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "58-year-old female",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "58-year-old female",
+              "char_start": 1033,
+              "char_end": 1051,
+              "bbox": "51.02,372.87,287.72,384.69",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "hypertension, type 2 diabetes",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "history of hypertension, type 2 diabetes",
+              "char_start": 1059,
+              "char_end": 1099,
+              "bbox": "51.02,372.87,287.72,396.09",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "58-year-old female",
+              "char_start": 1033,
+              "char_end": 1051,
+              "bbox": "51.02,372.87,287.72,384.69",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": null,
+          "typed_value": {
+            "amount": "",
+            "unit": "",
+            "raw": ""
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "20",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 1185,
+              "char_end": 1213,
+              "bbox": "51.02,413.07,287.72,436.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "once daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 1185,
+              "char_end": 1213,
+              "bbox": "51.02,413.07,287.72,436.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily",
+              "char_start": 1185,
+              "char_end": 1213,
+              "bbox": "51.02,413.07,287.72,436.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Velmoradine",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Velmoradine 20 mg once daily (velmoradine hydrochloride, film-coated tablet)",
+              "char_start": 1185,
+              "char_end": 1261,
+              "bbox": "51.02,413.07,287.72,436.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "3 March 2026",
+          "typed_value": {
+            "raw": "3 March 2026",
+            "iso": "2026-03-03",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "3 March 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "commencing 3 March 2026",
+              "char_start": 1290,
+              "char_end": 1313,
+              "bbox": "51.02,435.87,287.72,447.69",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].dose.amount",
+          "value": "2",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg once daily at night",
+              "char_start": 2191,
+              "char_end": 2226,
+              "bbox": "51.02,690.16,287.72,713.38",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].dose.frequency",
+          "value": "once daily at night",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg once daily at night",
+              "char_start": 2191,
+              "char_end": 2226,
+              "bbox": "51.02,690.16,287.72,713.38",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg once daily at night",
+              "char_start": 2191,
+              "char_end": 2226,
+              "bbox": "51.02,690.16,287.72,713.38",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].name",
+          "value": "Domitrelle",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Domitrelle 2 mg once daily at night (domitrelle succinate, gastro-resistant capsule)",
+              "char_start": 2191,
+              "char_end": 2275,
+              "bbox": "51.02,690.16,287.72,713.38",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[1].start_date",
+          "value": "early 2026",
+          "typed_value": {
+            "raw": "early 2026",
+            "iso": "2026",
+            "precision": "YEAR",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "early 2026",
+          "status": "STATED",
+          "confidence": 0.75,
+          "confidence_before_adjustment": 0.75,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "commencing in early 2026",
+              "char_start": 2310,
+              "char_end": 2334,
+              "bbox": "51.02,712.96,287.72,724.78",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].batch",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].dose.amount",
+          "value": "500",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Fenaquil 500 mg as required",
+              "char_start": 3262,
+              "char_end": 3289,
+              "bbox": "307.56,399.95,544.25,411.77",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].dose.frequency",
+          "value": "as required",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Fenaquil 500 mg as required",
+              "char_start": 3262,
+              "char_end": 3289,
+              "bbox": "307.56,399.95,544.25,411.77",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].dose.unit",
+          "value": "mg",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Fenaquil 500 mg as required",
+              "char_start": 3262,
+              "char_end": 3289,
+              "bbox": "307.56,399.95,544.25,411.77",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].name",
+          "value": "Fenaquil",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Fenaquil 500 mg as required (fenaquil dipotassium, effervescent tablet)",
+              "char_start": 3262,
+              "char_end": 3333,
+              "bbox": "307.56,399.95,544.25,423.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].route",
+          "value": "ORAL",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[2].start_date",
+          "value": "last March",
+          "typed_value": {
+            "raw": "last March",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "last March",
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "commencing last March",
+              "char_start": 3354,
+              "char_end": 3375,
+              "bbox": "307.56,422.75,542.23,434.57",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "12 March 2026",
+          "typed_value": {
+            "raw": "12 March 2026",
+            "iso": "2026-03-12",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "12 March 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "beginning 12 March 2026",
+              "char_start": 1459,
+              "char_end": 1485,
+              "bbox": "51.02,487.47,173.57,499.29",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "the rash began to settle within 48 hours",
+              "char_start": 1870,
+              "char_end": 1910,
+              "bbox": "51.02,579.27,287.72,602.49",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "maculopapular rash",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "maculopapular rash",
+              "char_start": 353,
+              "char_end": 371,
+              "bbox": "51.02,164.62,544.25,176.44",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[1].onset",
+          "value": "July",
+          "typed_value": {
+            "raw": "July",
+            "iso": "2026-07",
+            "precision": "MONTH",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "July",
+          "status": "STATED",
+          "confidence": 0.8,
+          "confidence_before_adjustment": 0.8,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "In July she developed an erythematous eruption",
+              "char_start": 2917,
+              "char_end": 2963,
+              "bbox": "307.56,289.07,544.25,300.88",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[1].outcome",
+          "value": "RECOVERED",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "The pregnancy is ongoing and no fetal abnormality has been detected on ultrasound",
+              "char_start": 3017,
+              "char_end": 3098,
+              "bbox": "307.56,300.47,544.25,335.08",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[1].term",
+          "value": "photosensitivity reaction",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "photosensitivity reaction",
+              "char_start": 375,
+              "char_end": 400,
+              "bbox": "51.02,164.62,544.25,176.44",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[2].onset",
+          "value": "about two weeks later",
+          "typed_value": {
+            "raw": "about two weeks later",
+            "iso": "",
+            "precision": "UNKNOWN",
+            "is_relative": true
+          },
+          "unit": null,
+          "raw": "about two weeks later",
+          "status": "UNCERTAIN",
+          "confidence": 0.6,
+          "confidence_before_adjustment": 0.6,
+          "adjustment_reason": "relative date, not resolved",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "About two weeks later I started getting very light-headed",
+              "char_start": 3756,
+              "char_end": 3813,
+              "bbox": "307.56,520.55,544.25,543.77",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[2].outcome",
+          "value": "RECOVERING",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.8,
+          "confidence_before_adjustment": 0.8,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "It is a bit better now but has not gone",
+              "char_start": 3858,
+              "char_end": 3897,
+              "bbox": "307.56,543.35,544.25,555.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[2].term",
+          "value": "dizziness",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "dizziness",
+              "char_start": 443,
+              "char_end": 452,
+              "bbox": "51.02,176.02,544.25,187.84",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": null,
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "S. Halloran",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "S. Halloran",
+              "char_start": 80,
+              "char_end": 91,
+              "bbox": "220.56,94.82,374.71,107.87",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Review of Imaginary Dermatology",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.85,
+          "confidence_before_adjustment": 0.85,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Review of Imaginary Dermatology",
+              "char_start": 120,
+              "char_end": 151,
+              "bbox": "178.91,112.93,416.36,123.92",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "UNKNOWN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[1].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[2].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}

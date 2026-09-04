@@ -1,0 +1,29 @@
+{
+  "message_id": 450,
+  "sender": "m.delane@harbourside-pharmacy.example",
+  "subject": "Automatic reply: Serious ADR report — hepatitis, Fenaquil",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "NOT_RELEVANT",
+      "confidence": 0.95,
+      "reason": "This is a standard out-of-office auto-reply with contact redirection; the subject line references a safety report but the message body is only an automatic absence notification. (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": []
+}

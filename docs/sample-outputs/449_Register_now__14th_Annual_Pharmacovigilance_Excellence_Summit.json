@@ -1,0 +1,29 @@
+{
+  "message_id": 449,
+  "sender": "events@pv-summit.example",
+  "subject": "Register now: 14th Annual Pharmacovigilance Excellence Summit",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": false,
+  "attention_reason": null,
+  "classifications": [
+    {
+      "category": "NOT_RELEVANT",
+      "confidence": 0.98,
+      "reason": "This is a marketing email for a conference event with no safety content. (from email body)",
+      "decided_by": "AI"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": []
+}

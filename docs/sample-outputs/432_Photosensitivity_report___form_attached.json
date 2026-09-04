@@ -1,0 +1,636 @@
+{
+  "message_id": 432,
+  "sender": "a.whitfield@northgate-clinic.example",
+  "subject": "Photosensitivity report — form attached",
+  "status": "READY_FOR_REVIEW",
+  "needs_attention": true,
+  "attention_reason": "1 citation(s) could not be verified against the source; 4 field(s) where sources disagree",
+  "classifications": [
+    {
+      "category": "ICSR",
+      "confidence": 0.95,
+      "reason": "All four ICSR minimum criteria are present; confidence is the weakest of the four. (from AER-2026-00244.pdf)",
+      "decided_by": "RULE"
+    }
+  ],
+  "documents": [
+    {
+      "source_kind": "EMAIL_BODY",
+      "filename": "email-body.txt",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "LETTER",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    },
+    {
+      "source_kind": "PDF_ATTACHMENT",
+      "filename": "AER-2026-00244.pdf",
+      "page_count": 1,
+      "rendering": "DIGITAL",
+      "genre": "FORM",
+      "language": "en",
+      "parse_status": "PARSED",
+      "parse_error": null
+    }
+  ],
+  "cases": [
+    {
+      "case_type": "ICSR",
+      "is_serious": false,
+      "seriousness": {
+        "criteria": [],
+        "is_serious": false
+      },
+      "confidence": 0.6,
+      "narrative": "A 58-year-old female started Pralextin on 14 May 2026 and experienced a photosensitivity reaction. No further details about the reaction's severity, course, or outcome are provided in the email.",
+      "fields": [
+        {
+          "field_group": "NARRATIVE",
+          "field_path": "narrative",
+          "value": "A 71-year-old female patient with a history of osteoarthritis and hypothyroidism was started on Pralextin 100 micrograms/dose, two puffs twice daily by inhalation on 14 May 2026. She developed an erythematous eruption on sun-exposed skin thirteen days after starting the medication, with onset noted on 27 May 2026. The reaction recovered.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.9,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "58",
+          "typed_value": {
+            "value": "58",
+            "unit": "YEAR",
+            "raw": "58-year-old",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "58-year-old",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "58-year-old female",
+              "char_start": 62,
+              "char_end": 80,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.age",
+          "value": "71",
+          "typed_value": {
+            "value": "71",
+            "unit": "YEAR",
+            "raw": "71-year-old",
+            "derived_from_dob": false
+          },
+          "unit": "YEAR",
+          "raw": "71-year-old",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "71-year-old",
+              "char_start": 320,
+              "char_end": 331,
+              "bbox": "302.64,232.03,348.15,244.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.initials",
+          "value": "M.D.",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "M.D.",
+              "char_start": 314,
+              "char_end": 318,
+              "bbox": "61.69,232.03,80.69,244.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.medical_history",
+          "value": "osteoarthritis, hypothyroidism",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "osteoarthritis, hypothyroidism",
+              "char_start": 387,
+              "char_end": 417,
+              "bbox": "61.69,294.03,178.73,306.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.sex",
+          "value": "female",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "58-year-old female",
+              "char_start": 62,
+              "char_end": 80,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PATIENT",
+          "field_path": "patient.weight",
+          "value": "59",
+          "typed_value": {
+            "amount": "59",
+            "unit": "kg",
+            "raw": "59 kg"
+          },
+          "unit": "kg",
+          "raw": "59 kg",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "59 kg",
+              "char_start": 354,
+              "char_end": 359,
+              "bbox": "302.64,263.03,324.65,275.40",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].batch",
+          "value": "PLX-7741E",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.4,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "evidence could not be verified, capped at 0.40",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "BATCH / LOT NUMBER\n\nPLX-7741E",
+              "char_start": null,
+              "char_end": null,
+              "bbox": null,
+              "verified": false,
+              "verify_method": "FAILED",
+              "match_score": 0.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.amount",
+          "value": "100",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "100 micrograms/dose two puffs twice daily",
+              "char_start": 661,
+              "char_end": 702,
+              "bbox": "302.64,444.21,471.69,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.frequency",
+          "value": "two puffs twice daily",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "100 micrograms/dose two puffs twice daily",
+              "char_start": 661,
+              "char_end": 702,
+              "bbox": "302.64,444.21,471.69,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].dose.unit",
+          "value": "micrograms/dose",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "100 micrograms/dose two puffs twice daily",
+              "char_start": 661,
+              "char_end": 702,
+              "bbox": "302.64,444.21,471.69,456.58",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].name",
+          "value": "Pralextin",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "started Pralextin on 14 May 2026",
+              "char_start": 85,
+              "char_end": 117,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].role",
+          "value": "SUSPECT",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].route",
+          "value": "INHALATION",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": []
+        },
+        {
+          "field_group": "PRODUCT",
+          "field_path": "product[0].start_date",
+          "value": "14 May 2026",
+          "typed_value": {
+            "raw": "14 May 2026",
+            "iso": "2026-05-14",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "14 May 2026",
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "started Pralextin on 14 May 2026",
+              "char_start": 85,
+              "char_end": 117,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "14 May 2026",
+          "typed_value": {
+            "raw": "14 May 2026",
+            "iso": "2026-05-14",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "14 May 2026",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.9,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "started Pralextin on 14 May 2026",
+              "char_start": 85,
+              "char_end": 117,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].onset",
+          "value": "27 May 2026",
+          "typed_value": {
+            "raw": "27 May 2026",
+            "iso": "2026-05-27",
+            "precision": "DAY",
+            "is_relative": false
+          },
+          "unit": null,
+          "raw": "27 May 2026",
+          "status": "CONFLICT",
+          "confidence": 0.5,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": "sources disagree, capped at 0.50",
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "27 May 2026",
+              "char_start": 902,
+              "char_end": 913,
+              "bbox": "302.64,565.81,354.67,578.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].outcome",
+          "value": "RECOVERED",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Recovered",
+              "char_start": 946,
+              "char_end": 955,
+              "bbox": "61.69,596.81,105.21,609.17",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REACTION",
+          "field_path": "reaction[0].term",
+          "value": "photosensitivity reaction",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "photosensitivity reaction",
+              "char_start": 31,
+              "char_end": 56,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.country",
+          "value": "United Kingdom",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "United Kingdom",
+              "char_start": 563,
+              "char_end": 577,
+              "bbox": "302.64,384.62,366.66,396.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.name",
+          "value": "Aoife Whitfield",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "EMAIL_BODY",
+              "page_no": 0,
+              "quote": "Dr Aoife Whitfield",
+              "char_start": 152,
+              "char_end": 170,
+              "bbox": null,
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.organisation",
+          "value": "Northgate Community Clinic",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "Northgate Community Clinic",
+              "char_start": 535,
+              "char_end": 561,
+              "bbox": "61.69,384.62,173.72,396.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "REPORTER",
+          "field_path": "reporter.role",
+          "value": "PHYSICIAN",
+          "typed_value": null,
+          "unit": null,
+          "raw": null,
+          "status": "STATED",
+          "confidence": 0.95,
+          "confidence_before_adjustment": 0.95,
+          "adjustment_reason": null,
+          "evidence": [
+            {
+              "source_type": "PDF_PAGE",
+              "page_no": 1,
+              "quote": "General Practitioner",
+              "char_start": 490,
+              "char_end": 510,
+              "bbox": "302.64,353.62,382.67,365.99",
+              "verified": true,
+              "verify_method": "EXACT",
+              "match_score": 100.0
+            }
+          ]
+        },
+        {
+          "field_group": "SEVERITY",
+          "field_path": "reaction[0].seriousness",
+          "value": null,
+          "typed_value": {
+            "criteria": [],
+            "is_serious": false
+          },
+          "unit": null,
+          "raw": null,
+          "status": "NOT_STATED",
+          "confidence": 0.0,
+          "confidence_before_adjustment": 0.0,
+          "adjustment_reason": null,
+          "evidence": []
+        }
+      ]
+    }
+  ]
+}
