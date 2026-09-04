@@ -217,3 +217,38 @@ The README states Node ≥ 22.22.3 (or 24 LTS) as a prerequisite, which is Angul
 requirement and not something we invented. A reviewer on a current Node needs nothing extra.
 
 **Affects:** `.gitignore`; frontend build commands take a `PATH` prefix; README prerequisites.
+
+---
+
+### D-011 · Two IMAP bugs that only a real server exposes · 4 Sep 2026
+
+Both were found by running the application against the GreenMail container and comparing the
+resulting Oracle rows against `testdata/corpus/manifest.json` — not by a test. Every unit and
+integration test was green while both were live, because all of them parsed `.eml` files from
+disk, and a file-backed `MimeMessage` behaves differently from an `IMAPMessage`.
+
+**Bug 1 — the forwarded case silently vanished.** `adv-02-forwarded-rfc822` produced one
+document instead of two. The inner PDF arrived as a **zero-byte** part named `part-1.pdf`
+(rather than `AER-2026-00188.pdf`), sniffed as `application/x-empty`, and was recorded with
+`skip_reason='EMPTY'`. Cause: jakarta.mail fetches `IMAPMessage` parts lazily from the folder's
+connection, and a nested `message/rfc822` part cannot be read reliably once the stream position
+has moved on. Fix: materialise each message with `writeTo` into a plain `MimeMessage` before
+handing it to the handler. The failure mode is the dangerous kind — no exception, no warning,
+just a case quietly missing from the review queue.
+
+**Bug 2 — a failed message would never be retried.** Worse, and partly created by the fix for
+bug 1. Reading a message body over IMAP causes the server to set `\Seen` itself (RFC 3501
+§6.4.5). So although the poller only calls `setFlag(SEEN)` *after* the handler commits, the
+flag was already set by the act of reading — and a message whose ingestion threw was skipped
+forever by the next poll. Fix: `mail.imap.peek=true`, which issues `BODY.PEEK[]` instead of
+`BODY[]`. The `\Seen` flag is meant to be *our* high-water mark and now genuinely is.
+
+**What this changes about testing.** File-based fixtures cannot catch either bug. Added
+`ImapForwardedMessageTest`, which drives an in-process GreenMail IMAP server: it asserts the
+forwarded PDF arrives with real bytes and its real filename, that `\Seen` prevents
+re-ingestion, and that a handler which throws leaves the message unread. The third assertion is
+the one that caught bug 2.
+
+**Affects:** `ImapMailboxAdapter`; a new integration test; the write-up's "what I'd change for
+production" gains a concrete point about testing mail code against a real protocol rather than
+against saved messages.

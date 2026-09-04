@@ -1,5 +1,5 @@
 Message-ID:
- <178852072126.3552.11770194365862588398.lang-02-french@smart-inbox.test>
+ <178852183200.20308.18311771472809935499.lang-02-french@smart-inbox.test>
 From: Dr Aoife Whitfield <a.whitfield@northgate-clinic.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: =?utf-8?q?D=C3=A9claration_d=27effet_ind=C3=A9sirable_=E2=80=94?=
@@ -7,9 +7,9 @@ Subject: =?utf-8?q?D=C3=A9claration_d=27effet_ind=C3=A9sirable_=E2=80=94?=
 Date: Mon, 07 Sep 2026 15:12:00 +0000
 X-Smart-Inbox-Corpus-Key: lang-02-french
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5734655955567707610=="
+Content-Type: multipart/mixed; boundary="===============3095480800060074266=="
 
---===============5734655955567707610==
+--===============3095480800060074266==
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -22,7 +22,7 @@ Veuillez trouver ci-joint le formulaire de d=C3=A9claration compl=C3=A9t=C3=
 Cordialement,
 Dr Aoife Whitfield
 
---===============5734655955567707610==
+--===============3095480800060074266==
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="declaration_AER-2026-00312.pdf"
@@ -39,9 +39,9 @@ UmVzb3VyY2VzIDw8Ci9Gb250IDEgMCBSIC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9J
 bWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3RhdGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdl
 Cj4+CmVuZG9iago1IDAgb2JqCjw8Ci9QYWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgNyAwIFIgL1R5
 cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjYgMCBvYmoKPDwKL0F1dGhvciAoU21hcnQgSW5ib3ggc3lu
-dGhldGljIGNvcnB1cyBnZW5lcmF0b3IpIC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA5MDQxNjQ4MzYr
+dGhldGljIGNvcnB1cyBnZW5lcmF0b3IpIC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA5MDQxNzA3MDcr
 MDUnMDAnKSAvQ3JlYXRvciAoXCh1bnNwZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUg
-KEQ6MjAyNjA5MDQxNjQ4MzYrMDUnMDAnKSAvUHJvZHVjZXIgKFJlcG9ydExhYiBQREYgTGlicmFy
+KEQ6MjAyNjA5MDQxNzA3MDcrMDUnMDAnKSAvUHJvZHVjZXIgKFJlcG9ydExhYiBQREYgTGlicmFy
 eSAtIFwob3BlbnNvdXJjZVwpKSAKICAvU3ViamVjdCAoU1lOVEhFVElDIFRFU1QgRE9DVU1FTlQg
 XDIwNCBnZW5lcmF0ZWQgZm9yIHRoZSBTbWFydCBJbmJveCBwcm90b3R5cGUuIE5vIHJlYWwgcGF0
 aWVudCwgcmVwb3J0ZXIsIHByb2R1Y3Qgb3IgZXZlbnQgaXMgZGVzY3JpYmVkLikgL1RpdGxlIChB
@@ -87,10 +87,10 @@ aXMoWSFXPzojXztvS0RwQ3JaKFxPO0JQb2k1dUwuRFFFaT0uLkpaYGckX2JuL1hARGpBNFw8R3Ah
 fj5lbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA5CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDA2
 MSAwMDAwMCBuIAowMDAwMDAwMTAyIDAwMDAwIG4gCjAwMDAwMDAyMDkgMDAwMDAgbiAKMDAwMDAw
 MDMyMSAwMDAwMCBuIAowMDAwMDAwNTI0IDAwMDAwIG4gCjAwMDAwMDA1OTIgMDAwMDAgbiAKMDAw
-MDAwMTAzMSAwMDAwMCBuIAowMDAwMDAxMDkwIDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApbPDBk
-NWIzN2VlNjk0ZTI1MGNhMjQ0ZGE4MTVkYjA1YzU5PjwwZDViMzdlZTY5NGUyNTBjYTI0NGRhODE1
-ZGIwNWM1OT5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0IChv
+MDAwMTAzMSAwMDAwMCBuIAowMDAwMDAxMDkwIDAwMDAwIG4gCnRyYWlsZXIKPDwKL0lEIApbPDll
+OGU1MmZjYTc4YjcwNGU4MmVkNzg3ZmY1ODJmZWU5Pjw5ZThlNTJmY2E3OGI3MDRlODJlZDc4N2Zm
+NTgyZmVlOT5dCiUgUmVwb3J0TGFiIGdlbmVyYXRlZCBQREYgZG9jdW1lbnQgLS0gZGlnZXN0IChv
 cGVuc291cmNlKQoKL0luZm8gNiAwIFIKL1Jvb3QgNSAwIFIKL1NpemUgOQo+PgpzdGFydHhyZWYK
 MzIxMQolJUVPRgo=
 
---===============5734655955567707610==--
+--===============3095480800060074266==--

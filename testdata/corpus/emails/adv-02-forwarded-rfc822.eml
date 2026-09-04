@@ -1,13 +1,13 @@
-Message-ID: <178852072130.3552.6317536114950609291.adv-02-forwarded-rfc822@smart-inbox.test>
+Message-ID: <178852183205.20308.14179900922790454988.adv-02-forwarded-rfc822@smart-inbox.test>
 From: Reception Desk <reception@meadowvale-hosp.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: FW: patient reaction =?utf-8?b?4oCU?= please pass to safety
 Date: Wed, 09 Sep 2026 11:15:00 +0000
 X-Smart-Inbox-Corpus-Key: adv-02-forwarded-rfc822
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3741052401735848227=="
+Content-Type: multipart/mixed; boundary="===============6360721037755522961=="
 
---===============3741052401735848227==
+--===============6360721037755522961==
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -18,22 +18,22 @@ e to us. Forwarding it on unchanged =E2=80=94 I have not read the attachment.
 
 Reception
 
---===============3741052401735848227==
+--===============6360721037755522961==
 Content-Type: message/rfc822
 Content-Transfer-Encoding: 8bit
 Content-Disposition: attachment; filename="adv-02-inner-original.eml"
 MIME-Version: 1.0
 
-Message-ID: <178852072131.3552.13876786834712820559.adv-02-inner-original@smart-inbox.test>
+Message-ID: <178852183205.20308.13860600091661350932.adv-02-inner-original@smart-inbox.test>
 From: Dr Rupert Ashgrove <r.ashgrove@meadowvale-hosp.example>
 To: Drug Safety <safety@smart-inbox.test>
 Subject: Fwd: patient reaction =?utf-8?b?4oCU?= please pass to safety
 Date: Tue, 08 Sep 2026 14:30:00 +0000
 X-Smart-Inbox-Corpus-Key: adv-02-inner-original
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8323106185833001729=="
+Content-Type: multipart/mixed; boundary="===============6911594721882727901=="
 
---===============8323106185833001729==
+--===============6911594721882727901==
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -47,7 +47,7 @@ and there was no history of alcohol excess. Fenaquil was stopped on admission.
 
 Dr Rupert Ashgrove, Consultant Hepatologist
 
---===============8323106185833001729==
+--===============6911594721882727901==
 Content-Type: application/pdf
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="AER-2026-00188.pdf"
@@ -68,8 +68,8 @@ IC9Qcm9jU2V0IFsgL1BERiAvVGV4dCAvSW1hZ2VCIC9JbWFnZUMgL0ltYWdlSSBdCj4+IC9Sb3Rh
 dGUgMCAvVHJhbnMgPDwKCj4+IAogIC9UeXBlIC9QYWdlCj4+CmVuZG9iago2IDAgb2JqCjw8Ci9Q
 YWdlTW9kZSAvVXNlTm9uZSAvUGFnZXMgOCAwIFIgL1R5cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjcg
 MCBvYmoKPDwKL0F1dGhvciAoU21hcnQgSW5ib3ggc3ludGhldGljIGNvcnB1cyBnZW5lcmF0b3Ip
-IC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA5MDQxNjQ4MzYrMDUnMDAnKSAvQ3JlYXRvciAoXCh1bnNw
-ZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUgKEQ6MjAyNjA5MDQxNjQ4MzYrMDUnMDAn
+IC9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA5MDQxNzA3MDcrMDUnMDAnKSAvQ3JlYXRvciAoXCh1bnNw
+ZWNpZmllZFwpKSAvS2V5d29yZHMgKCkgL01vZERhdGUgKEQ6MjAyNjA5MDQxNzA3MDcrMDUnMDAn
 KSAvUHJvZHVjZXIgKFJlcG9ydExhYiBQREYgTGlicmFyeSAtIFwob3BlbnNvdXJjZVwpKSAKICAv
 U3ViamVjdCAoU1lOVEhFVElDIFRFU1QgRE9DVU1FTlQgXDIwNCBnZW5lcmF0ZWQgZm9yIHRoZSBT
 bWFydCBJbmJveCBwcm90b3R5cGUuIE5vIHJlYWwgcGF0aWVudCwgcmVwb3J0ZXIsIHByb2R1Y3Qg
@@ -137,11 +137,11 @@ PmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDExCjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDA2
 MSAwMDAwMCBuIAowMDAwMDAwMTAyIDAwMDAwIG4gCjAwMDAwMDAyMDkgMDAwMDAgbiAKMDAwMDAw
 MDMyMSAwMDAwMCBuIAowMDAwMDAwNTI0IDAwMDAwIG4gCjAwMDAwMDA3MjggMDAwMDAgbiAKMDAw
 MDAwMDc5NiAwMDAwMCBuIAowMDAwMDAxMjM1IDAwMDAwIG4gCjAwMDAwMDEzMDAgMDAwMDAgbiAK
-MDAwMDAwMzMxNyAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzxiMDFiZGUxOWNlMjJhMTkzZWVl
-NGFlMzdmYWYzZWRkYT48YjAxYmRlMTljZTIyYTE5M2VlZTRhZTM3ZmFmM2VkZGE+XQolIFJlcG9y
+MDAwMDAwMzMxNyAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzxmNTBiOWUzODAzMGNjYjk1ZGNm
+NDBjMWNjNTJmYzdiZj48ZjUwYjllMzgwMzBjY2I5NWRjZjQwYzFjYzUyZmM3YmY+XQolIFJlcG9y
 dExhYiBnZW5lcmF0ZWQgUERGIGRvY3VtZW50IC0tIGRpZ2VzdCAob3BlbnNvdXJjZSkKCi9JbmZv
 IDcgMCBSCi9Sb290IDYgMCBSCi9TaXplIDExCj4+CnN0YXJ0eHJlZgo0NTc4CiUlRU9GCg==
 
---===============8323106185833001729==--
+--===============6911594721882727901==--
 
---===============3741052401735848227==--
+--===============6360721037755522961==--

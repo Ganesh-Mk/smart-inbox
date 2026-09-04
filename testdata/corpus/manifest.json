@@ -4,7 +4,7 @@
   "notice": "SYNTHETIC TEST DOCUMENT — generated for the Smart Inbox prototype. No real patient, reporter, product or event is described.",
   "counts": {
     "emails": 38,
-    "documents": 60,
+    "documents": 59,
     "pdfs": 23,
     "goldens": 38
   },
@@ -328,7 +328,7 @@
       "categories": [
         "ICSR"
       ],
-      "documents": 3,
+      "documents": 2,
       "edge_cases": [
         "E5",
         "E25"

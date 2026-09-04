@@ -698,7 +698,9 @@ def build_messages(cases: dict[str, CaseSpec], pdfs: dict[str, Path],
             "The outer body says nothing clinical; the real case is one level down inside a "
             "message/rfc822 part. Classifying the outer body alone yields NOT_RELEVANT, which "
             "is wrong. Recurse one level and hoist the attachments (E5)."),
-        edge_cases=["E5", "E25"], expect_documents=3,
+        # Two documents, not three: the message/rfc822 part is consumed by the walker and its
+        # PDF hoisted onto the parent, so it never becomes a document in its own right.
+        edge_cases=["E5", "E25"], expect_documents=2,
     ))
 
     m.append(MessageSpec(

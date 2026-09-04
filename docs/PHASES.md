@@ -72,16 +72,18 @@ The core rubric (85%) is P0–P5 and must never be sacrificed.
 ## P2 — Mail ingestion + synthetic corpus · Day 2
 
 ### Ingestion
-- [ ] `MailboxAdapter` + `ImapMailboxAdapter` (jakarta.mail), GreenMail profile + Gmail profile
-- [ ] `MailPoller` scheduled, high-water UID, marks `\Seen`
-- [ ] `MimeWalker` — depth-first, text/plain preferred, HTML→text via jsoup **(E3)**
-- [ ] `AttachmentSniffer` — magic-byte `%PDF-` detection **(E4)**
-- [ ] One-level `message/rfc822` recursion with `nesting_level` **(E5)**
-- [ ] `QuotedTextDetector` — reply/forward boundary **(E10)**
-- [ ] `BlobStore` — SHA-256 content-addressed, dedupe **(E9)**
-- [ ] `DedupeService` — Message-ID + fallback hash, UQ constraint **(E2)**
-- [ ] `IngestService` — creates `DOCUMENT` rows incl. `EMAIL_BODY` **(E11)**, enqueues `PARSE_DOCUMENT`
-- [ ] Size/page caps enforced **(E8)**; non-PDF logged with `skip_reason` **(E6)**
+- [x] `MailboxAdapter` + `ImapMailboxAdapter` (jakarta.mail), GreenMail default, Gmail by 4 values
+- [x] `MailPoller` scheduled, non-overlapping, marks `\Seen` **only after** the handler commits
+      (needed `mail.imap.peek=true` — see DECISIONS D-011)
+- [x] `MimeWalker` — depth-first, text/plain preferred, HTML→text via jsoup **(E3)**
+- [x] `AttachmentSniffer` — magic bytes for PDF/PNG/JPEG/GIF/RTF/OLE/OOXML **(E4)**
+- [x] One-level `message/rfc822` recursion with `nesting_level` **(E5)** — and the two live-IMAP
+      bugs this exposed, fixed and regression-tested (D-011)
+- [x] `QuotedTextDetector` — both quoting styles; quoted text de-prioritised, never deleted **(E10)**
+- [x] `BlobStore` — SHA-256 content-addressed, atomic writes, verified dedupe **(E9)**
+- [x] `DedupeService` — Message-ID + fallback content hash, UQ constraint enforces it **(E2)**
+- [x] `IngestService` — creates `DOCUMENT` rows incl. `EMAIL_BODY` **(E11)**, enqueues `PARSE_DOCUMENT`
+- [x] Size caps enforced **(E8)**; non-PDF logged with `skip_reason` **(E6)**
 
 ### Corpus generator (`testdata/generator/`, seeded RNG)
 - [x] 12 emails, varying detail levels (complete / missing reporter / missing product / vague)
@@ -103,6 +105,10 @@ The core rubric (85%) is P0–P5 and must never be sacrificed.
 - [x] `scripts/seed_mailbox.py` — 38 messages posted over real SMTP, all 38 read back over IMAP
 
 **Exit criteria:** ~30 emails / ~38 documents land in `INBOX_MESSAGE` with correct attachment rows and no duplicates.
+
+**MET, verified live against GreenMail on 4 Sep 2026:** 38 messages / 59 documents / 23 attachment
+rows, 0 duplicates, and **0 mismatches against `testdata/corpus/manifest.json`** — every message
+produced exactly the documents the corpus says it should. 45/45 backend tests green.
 
 ---
 
