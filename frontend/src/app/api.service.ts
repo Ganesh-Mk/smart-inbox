@@ -130,6 +130,18 @@ export class ApiService {
     return `${this.base}/documents/${documentId}/pages/${pageNo}/image`;
   }
 
+  /**
+   * The page PNG, fetched as a blob rather than left to the browser as an `<img src>`.
+   *
+   * A plain `<img>` is a browser subresource fetch: it never passes through HttpClient, so the
+   * Authorization interceptor does not apply, the endpoint answers 401 with a `WWW-Authenticate`
+   * header, and the browser pops its own native sign-in dialog on top of the review screen.
+   * Going through HttpClient keeps the image on the same authenticated path as every other call.
+   */
+  pageImageBlob(documentId: number, pageNo: number): Observable<Blob> {
+    return this.http.get(this.pageImageUrl(documentId, pageNo), { responseType: 'blob' });
+  }
+
   review(id: number, decision: string, categories: string[], notes: string): Observable<any> {
     return this.http.post<any>(`${this.base}/messages/${id}/review`,
       { decision, categories, notes });

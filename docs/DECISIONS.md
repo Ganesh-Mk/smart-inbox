@@ -549,3 +549,45 @@ but it is the kind of thing that only surfaces when everything actually runs at 
 reviewer cloning this repo onto a 8 GB laptop will meet it.
 
 **Affects:** README should mention the read-only mode; `CLAUDE.md` environment facts.
+
+---
+
+### D-020 · An `<img src>` bypasses the auth interceptor and the browser prompts for credentials · 4 Sep 2026
+
+Opening a message with a scanned page put a native **"Sign in to http://localhost:8080"** dialog
+over the review screen — on the one interaction the whole traceability design exists for.
+
+Nothing was wrong with the credentials. The cause is that there are two different fetch paths:
+
+- Every `HttpClient` call is cloned by the interceptor in `app.config.ts` and carries
+  `Authorization: Basic …`.
+- The page PNG was `<img [src]="pageImageUrl()">`. That is a **browser subresource fetch**. It
+  never enters `HttpClient`, so no interceptor runs, so no header is attached.
+
+`/api/documents/**` is `authenticated()`, so it answered `401` with `WWW-Authenticate: Basic`,
+and the browser did what that header tells it to do — asked the user itself. Reproduced exactly:
+
+```
+curl -o /dev/null -w '%{http_code}'    localhost:8080/api/documents/696/pages/1/image   -> 401
+curl -o /dev/null -w '%{http_code}' -u reviewer:reviewer  …/image                       -> 200
+```
+
+**Fix:** fetch the page as a blob through `HttpClient` (`ApiService.pageImageBlob`) and bind an
+object URL, in an `effect` keyed on the selected document and page. Object URLs are revoked on
+replacement and on destroy, so the 4 MB page renders do not accumulate.
+
+**The option not taken** was `permitAll()` on the image endpoint. It would have been one line,
+but page renders *are* the document content — the scanned patient form itself. Making the
+protected data public to silence a dialog about protecting it is the wrong trade, even with a
+synthetic corpus and even in a prototype whose auth is admittedly not a security boundary.
+
+A second-order point worth stating: the template now branches on `hasPageImage()` (known
+synchronously) rather than on the image URL, so the plain-text fallback does not flash while the
+blob is in flight.
+
+**Also found:** `mvn package` without `clean` leaves stale hashed bundles in `target/classes`,
+so the jar shipped both `main-BN4H6VEW.js` and `main-UW5R5ECW.js`. `ng build` had correctly
+removed the old file from the working tree; only Maven's output directory was stale. Pruning
+`target/classes/static` before packaging is enough.
+
+**Affects:** `frontend/src/app/api.service.ts`, `detail.component.{ts,html}`.

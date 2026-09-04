@@ -64,9 +64,11 @@
         }
 
         <div class="page-view">
-          @if (pageImageUrl()) {
+          @if (hasPageImage()) {
             <div class="page-canvas">
-              <img [src]="pageImageUrl()" alt="Page {{ activePage() }}" />
+              @if (pageImageSrc(); as src) {
+                <img [src]="src" alt="Page {{ activePage() }}" />
+              }
               @if (highlightStyle(); as style) {
                 <div class="hl" [style]="style"></div>
               }

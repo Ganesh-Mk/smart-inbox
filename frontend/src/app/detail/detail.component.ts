@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
@@ -31,7 +31,7 @@ interface Highlight {
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss',
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
   private readonly api = inject(ApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -46,6 +46,29 @@ export class DetailComponent implements OnInit {
   readonly activePage = signal(1);
   readonly highlight = signal<Highlight | null>(null);
   readonly inspectedCall = signal<any>(null);
+
+  readonly pageImageSrc = signal<string | null>(null);
+  private objectUrl: string | null = null;
+
+  /**
+   * Re-fetch the page PNG whenever the selected document or page changes. The blob comes back
+   * through HttpClient, so it carries the same Basic credentials as every other request; a bare
+   * `<img src>` would not, and the browser would prompt for them itself.
+   */
+  private readonly pageImageLoader = effect((onCleanup) => {
+    const doc = this.activeDocument();
+    const page = this.currentPage();
+    if (!doc || !page || !page.RENDER_PATH) {
+      this.setPageImage(null);
+      return;
+    }
+    let cancelled = false;
+    onCleanup(() => { cancelled = true; });
+    this.api.pageImageBlob(doc.ID, page.PAGE_NO).subscribe({
+      next: (blob) => { if (!cancelled) this.setPageImage(URL.createObjectURL(blob)); },
+      error: () => { if (!cancelled) this.setPageImage(null); },
+    });
+  });
 
   reviewNotes = '';
   editing: { fieldId: number; caseId: number; value: string; status: string } | null = null;
@@ -134,11 +157,21 @@ export class DetailComponent implements OnInit {
       .find((p: any) => p.PAGE_NO === this.activePage());
   }
 
-  pageImageUrl(): string | null {
-    const doc = this.activeDocument();
+  /** Whether this page has a rendered PNG at all, decided synchronously so the text fallback
+   *  does not flash while the image request is still in flight. */
+  hasPageImage(): boolean {
     const page = this.currentPage();
-    if (!doc || !page || !page.RENDER_PATH) return null;
-    return this.api.pageImageUrl(doc.ID, page.PAGE_NO);
+    return !!this.activeDocument() && !!page && !!page.RENDER_PATH;
+  }
+
+  private setPageImage(url: string | null): void {
+    if (this.objectUrl) URL.revokeObjectURL(this.objectUrl);
+    this.objectUrl = url;
+    this.pageImageSrc.set(url);
+  }
+
+  ngOnDestroy(): void {
+    this.setPageImage(null);
   }
 
   selectDocument(doc: any): void {
