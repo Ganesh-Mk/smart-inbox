@@ -4,7 +4,7 @@
   <header class="page-head">
     <div class="titles">
       <h1>Review queue</h1>
-      <p class="sub">Worst first — anything flagged, then lowest confidence, then oldest.</p>
+      <p class="sub">{{ orderDescription() }}</p>
     </div>
 
     @if (stats(); as s) {
@@ -105,7 +105,9 @@
         <tbody>
           @for (row of view(); track row.messageId) {
             <tr (click)="open(row)" [class.attention]="row.needsAttention === 'Y'"
-                tabindex="0" (keyup.enter)="open(row)">
+                tabindex="0" (keyup.enter)="open(row)"
+                [attr.aria-label]="'Open message: ' + row.subject + ', from '
+                  + (row.senderName || row.senderEmail)">
               <td class="c-status">
                 <ui-badge [tone]="statusTone(row.status)" size="sm">
                   {{ humanise(row.status) | lowercase }}

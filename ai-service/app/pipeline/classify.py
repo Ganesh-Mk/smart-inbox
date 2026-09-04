@@ -59,6 +59,12 @@ class Label:
     decided_by: str  # AI | RULE
     evidence_quote: str = ""
     evidence_page: int = 0
+    # Which unit produced this label. Set when rolling up to message level (E25), so a consumer
+    # can find the element checklist the label was actually decided from. The unit name was
+    # previously only interpolated into `reason` as "(from x.pdf)", which reads well and is
+    # useless to code: the backend had to guess, took unit 0, and stored the email body's
+    # checklist beside a label decided on the attachment.
+    source_unit: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -68,6 +74,7 @@ class Label:
             "decided_by": self.decided_by,
             "evidence_quote": self.evidence_quote,
             "evidence_page": self.evidence_page,
+            "source_unit": self.source_unit,
         }
 
 
@@ -255,6 +262,7 @@ def roll_up_message(unit_outcomes: list[tuple[str, ClassificationOutcome]]) -> l
                     decided_by=label.decided_by,
                     evidence_quote=label.evidence_quote,
                     evidence_page=label.evidence_page,
+                    source_unit=unit_name,
                 )
 
     labels = list(best.values())

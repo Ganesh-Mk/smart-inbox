@@ -841,3 +841,99 @@ reported jobs pending and running against documents that never existed, and with
 disabled they could never drain. That is precisely the "JOBS RUNNING only ever climbs" symptom in
 the report, which I had attributed entirely to the extension clicking Re-process. Both tests now
 clean up on the way out as well; after a run the queue holds 0 synthetic jobs.
+
+---
+
+### D-025 · The screen contradicting its own rule, and six more from a second browser pass · 5 Sep 2026
+
+The re-run reached everything the first pass could not. Its verdict on the central claim: on
+digital PDFs the highlight box lands on the quoted text *precisely* — eight chips across four
+messages, every one accurate. The 0.40 cap, the striped bars, conflict adjudication across two
+documents, the three distinct parse-failure reasons and the non-English rendering all behaved.
+
+**1 · The Classification card printed the opposite of its own checklist**
+
+On message 624 the prose read "All four ICSR minimum criteria are present" directly above a
+widget reading **1/4**, with three crosses. Not a wording bug — the two disagreed in the database:
+
+```
+REASON   : All four ICSR minimum criteria are present… (from Meldebogen_AER-2026-00301.pdf)
+VALIDITY : patient=N reporter=Y product=N event=N  → 1/4
+```
+
+`apply_rules` cannot produce that: the count and the sentence come from the same dict. The fault
+was one line in `ClassifyMessageHandler`:
+
+```java
+JsonNode elements = response.path("units").path(0).path("icsr_elements");
+```
+
+A message is classified unit by unit and the message label is the strongest of them (E25). On a
+covering email with a completed form attached the label comes from the **attachment**; `units[0]`
+is the **email body**. So the card showed one document's label above another document's
+checklist, quoting the wrong source — which is also why a criterion marked absent still displayed
+a supporting quote. The reviewer was being asked to check a claim against evidence for a
+different claim.
+
+The unit was knowable all along, but only as prose: `roll_up_message` interpolated it into the
+reason as "(from x.pdf)". Readable, and useless to code. `Label` now carries `source_unit`, and
+the handler selects that unit's checklist, falling back to the first for older responses.
+
+**Repaired without re-running the model.** Every per-unit classification response is already in
+`AI_CALL_LOG`; units are built from `document ORDER BY id` and called in that order, so the Nth
+call is the Nth unit and the reason names which one to use. `scripts/backfill_icsr_validity.py`
+corrected 11 messages — 624 went 1/4 → 4/4 and now quotes the German PDF it was decided from.
+Cost: nothing.
+
+**2 · Override appended instead of replacing (V7)**
+
+Unticking a category left it live. `apply_override` superseded rows with
+`decided_by <> 'REVIEWER'` — a guard meant to spare the rows the same call had just inserted,
+which also spared every label an *earlier* override had set. Overriding twice produced two live
+labels at 100%, both "set by reviewer", contradicting the dialog's own promise. V7 records the
+highest classification id before inserting and supersedes rows at or below it: the old rows, and
+only the old rows, whoever decided them. Verified: `[ICSR INCOMPLETE, PQC]` → override to MI →
+`[MI]`.
+
+**3 · Override silently un-rejected a rejected message.** An override after a rejection is a
+legitimate change of mind, so the status change stays — but it is no longer silent. The dialog
+now says the rejection will stop being the status and remain in the audit trail.
+
+**4 · The amber unverified chip destroyed the page image.** An unverified citation often carries
+no usable page number — the model named a source that could not be found. Setting `activePage`
+to it left `currentPage()` undefined, so neither the image nor the text fallback rendered and the
+pane went blank white. The worst possible answer to "show me where you claim this came from".
+`showEvidence` now lands only on a page that exists.
+
+**5 · The highlight persisted onto the wrong page.** Paging away redrew the box at the same
+coordinates over unrelated content — a highlight over blank space implying the quote was there.
+`highlightStyle()` now returns null unless the box belongs to the current document *and* page.
+
+**6 · Scanned pages gave a green chip and no box.** Correct — a scan has no text geometry — but
+silently. The evidence bar now says the quote was found in the transcribed text and there are no
+coordinates to draw at.
+
+**7 · Three field types were exempt from the product's central principle.** `product.role`,
+`product.route` and `narrative` render 90–95% confidence with no citation at all. The cause is in
+`schemas.py`: `product_role: ProductRole` and `route: Route` are bare enums, not `Fact`, so no
+quote is ever requested; role also *inherits* the product name's confidence rather than earning
+one. This is not a quick fix — adding quote fields grows a schema that OpenRouter silently drops
+past ~4 KB (D-013), which is why it is already split — so the honest step now is to stop
+presenting them as verified: a dashed "no citation" chip explaining, per field, why nothing
+checked it. **The schema change remains the real fix and is not done.**
+
+**Also from the ⚠️ list:** the focus indicator was a 22%-opacity glow at roughly 1.2:1, under the
+3:1 WCAG 2.2 requires — now a solid 2px outline; queue rows gained `aria-label`s; the subtitle
+claimed "worst first" whatever the sort said; a failed load showed the raw string "Http failure
+response for …: 404"; narratives wrapped into a ribbon in a 170px cell.
+
+**Two corrections to my own record.** The report's "JOBS RUNNING only ever climbs" was real and I
+had blamed it on the extension clicking Re-process — it was the queue tests leaving synthetic rows
+behind (D-024 follow-up). And its keyboard-accessibility finding was withdrawn on re-check: rows
+are reachable in five tab stops and Enter activates them. Asking it to re-examine a disagreement
+rather than assuming it was wrong produced both the withdrawal and a sharper, correct finding
+about contrast.
+
+**Affects:** `classify.py`, `ClassifyMessageHandler`, `V7__override_supersedes.sql`,
+`scripts/backfill_icsr_validity.py`, `detail.component.{ts,html,scss}`,
+`queue.component.{ts,html,scss}`, `styles.scss`.

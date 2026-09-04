@@ -141,7 +141,15 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 12px 0; }
 /* Numeric columns line up only with tabular figures. */
 .tnum, table td, table th { font-variant-numeric: tabular-nums; }
 
-:focus-visible { outline: none; box-shadow: var(--ring); border-radius: var(--r-xs); }
+:focus-visible {
+  /* A solid 2px outline in the brand colour, plus a soft halo for visibility on dark rows.
+     The previous indicator was the halo alone at 22% opacity — about 1.2:1 against the row
+     background, well under the 3:1 WCAG 2.2 requires of a focus indicator. */
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+  box-shadow: var(--ring);
+  border-radius: var(--r-xs);
+}
 
 ::selection { background: var(--brand-soft); color: var(--brand-ink); }
 

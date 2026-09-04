@@ -97,7 +97,7 @@ public class ClassifyMessageHandler implements JobHandler {
       // E22: the ICSR element checklist behind a rule-decided label, stored so a reviewer can
       // check the decision element by element rather than taking the label on trust.
       if (category.startsWith("ICSR")) {
-        storeIcsrValidity(classificationId, response);
+        storeIcsrValidity(classificationId, response, label.path("source_unit").asText(""));
       }
     }
 
@@ -249,8 +249,21 @@ public class ClassifyMessageHandler implements JobHandler {
     return keys.getKey().longValue();
   }
 
-  private void storeIcsrValidity(long classificationId, JsonNode response) {
-    JsonNode elements = response.path("units").path(0).path("icsr_elements");
+  /**
+   * Store the element checklist the label was actually decided from.
+   *
+   * <p>This used to read {@code units[0]} unconditionally. A message is classified unit by unit
+   * and the message label is the strongest of them (E25), so on a covering email with a completed
+   * form attached the label comes from the attachment while unit 0 is the email body. The result
+   * was a card that said "All four ICSR minimum criteria are present" directly above a checklist
+   * reading 1/4, with quotes from the wrong document — the screen contradicting itself on the one
+   * claim a reviewer is being asked to check.
+   *
+   * <p>{@code source_unit} names the unit that produced the label. Falling back to the first unit
+   * keeps older responses working, since they do not carry the field.
+   */
+  private void storeIcsrValidity(long classificationId, JsonNode response, String sourceUnit) {
+    JsonNode elements = elementsForUnit(response, sourceUnit);
     if (elements.isMissingNode() || elements.isEmpty()) {
       return;
     }
@@ -284,6 +297,20 @@ public class ClassifyMessageHandler implements JobHandler {
         yn(event), event.path("confidence").asDouble(), truncate(event.path("quote").asText(), 2000),
         present,
         missing.stream().map(ParseDocumentHandler::jsonString).toList().toString());
+  }
+
+  /** The {@code icsr_elements} of the named unit, or the first unit's if it cannot be found. */
+  private static JsonNode elementsForUnit(JsonNode response, String sourceUnit) {
+    if (sourceUnit != null && !sourceUnit.isBlank()) {
+      for (JsonNode unit : response.path("units")) {
+        if (sourceUnit.equals(unit.path("unit").asText())) {
+          return unit.path("icsr_elements");
+        }
+      }
+      log.warn("Classification names source unit '{}' but no such unit is in the response;"
+          + " falling back to the first", sourceUnit);
+    }
+    return response.path("units").path(0).path("icsr_elements");
   }
 
   private static String yn(JsonNode node) {

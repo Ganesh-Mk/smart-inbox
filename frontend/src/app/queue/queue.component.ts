@@ -56,6 +56,16 @@ export class QueueComponent implements OnInit, OnDestroy {
     }
   });
 
+  /** The subtitle used to claim "worst first" whatever the sort dropdown said. */
+  readonly orderDescription = computed(() => {
+    switch (this.sort()) {
+      case 'confidence': return 'Lowest confidence first.';
+      case 'received': return 'Newest first.';
+      case 'sender': return 'By sender name.';
+      default: return 'Worst first — anything flagged, then lowest confidence, then oldest.';
+    }
+  });
+
   readonly attentionCount = computed(() =>
     this.rows().filter((r) => r.needsAttention === 'Y').length);
 

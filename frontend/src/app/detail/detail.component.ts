@@ -14,6 +14,8 @@ interface Highlight {
   bbox: [number, number, number, number] | null;
   quote: string;
   verified: boolean;
+  /** Verified, but with no bounding box — a scanned page has no text geometry to draw at. */
+  locatedButUnpositioned?: boolean;
 }
 
 /**
@@ -148,7 +150,13 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set(err?.message ?? 'Could not load the message');
+        // Angular's default `err.message` is the raw transport string — "Http failure response
+        // for http://localhost:8080/api/messages/999999: 404" — which is a stack trace shown to
+        // a reviewer. Say what happened instead, and keep the detail for the console.
+        this.error.set(
+          err?.status === 404
+            ? `No message exists with id ${id}.`
+            : err?.error?.message ?? 'The message could not be loaded. The server may be down.');
         this.loading.set(false);
       },
     });
@@ -175,15 +183,32 @@ export class DetailComponent implements OnInit, OnDestroy {
     const document = this.documents().find((d: any) => d.ID === documentId);
     if (document) this.activeDocument.set(document);
 
-    const pageNo = evidence.PAGE_NO ?? 1;
+    // Land on a page that actually exists.
+    //
+    // An unverified citation often carries no usable page number — the model named a source that
+    // could not be found, so there may be nothing sane to point at. Setting `activePage` to it
+    // anyway left `currentPage()` undefined, and with no page there was neither an image nor a
+    // text fallback to render: the document pane went blank white, which is the worst possible
+    // response to "show me where you claim this came from".
+    const pages = (document ?? this.activeDocument())?.pages ?? [];
+    const requested = evidence.PAGE_NO;
+    const exists = pages.some((p: any) => p.PAGE_NO === requested);
+    const pageNo = exists ? requested : (pages[0]?.PAGE_NO ?? this.activePage());
     this.activePage.set(pageNo);
+
+    const bbox = evidence.VERIFIED === 'Y' && evidence.BBOX
+      ? this.parseBbox(evidence.BBOX) : null;
 
     this.highlight.set({
       documentId,
       pageNo,
-      bbox: evidence.VERIFIED === 'Y' && evidence.BBOX ? this.parseBbox(evidence.BBOX) : null,
+      bbox,
       quote: evidence.QUOTE,
       verified: evidence.VERIFIED === 'Y',
+      // Verified, but with no coordinates to draw at — a scanned page whose evidence is located
+      // in the transcribed text rather than in the page geometry. Saying so is better than a
+      // reviewer hunting for a box that was never going to appear.
+      locatedButUnpositioned: evidence.VERIFIED === 'Y' && !bbox && !!evidence.PAGE_NO,
     });
   }
 
@@ -199,6 +224,10 @@ export class DetailComponent implements OnInit, OnDestroy {
     const h = this.highlight();
     const page = this.currentPage();
     if (!h?.bbox || !page || !page.WIDTH || !page.HEIGHT) return null;
+    // Only draw on the page the quote is actually on. Paging away used to leave the box behind,
+    // redrawn at the same coordinates over unrelated content — a highlight sitting on blank
+    // space, implying the quote was there.
+    if (h.documentId !== this.activeDocument()?.ID || h.pageNo !== this.activePage()) return null;
     const [x0, y0, x1, y1] = h.bbox;
     return {
       left: `${(x0 / page.WIDTH) * 100}%`,
@@ -414,6 +443,30 @@ export class DetailComponent implements OnInit, OnDestroy {
     if (decidedBy === 'RULE') return 'brand';
     if (decidedBy === 'REVIEWER') return 'violet';
     return 'neutral';
+  }
+
+  /**
+   * Why a field carries no evidence chip.
+   *
+   * Most fields are verified quote-by-quote. Three are not, and showing them a bare em-dash next
+   * to 95% confidence made them look verified when nothing had checked them. A narrative is
+   * generated prose with no single source sentence to cite. Product role and route come back from
+   * the model as bare enums: the extraction schema does not request a quote for them, and it
+   * cannot simply be extended — OpenRouter silently drops schemas past ~4 KB (D-013), which is
+   * why the schema is already split. Naming the gap is honest; hiding it behind a dash was not.
+   */
+  noCitationReason(field: any): string {
+    if (field?.FIELD_GROUP === 'NARRATIVE') {
+      return 'A narrative is written from the whole document, so there is no single quote to '
+           + 'verify it against. Check it against the source yourself.';
+    }
+    const path = String(field?.FIELD_PATH ?? '');
+    if (path.endsWith('.role') || path.endsWith('.route')) {
+      return 'The extraction schema returns this as a fixed choice without a supporting quote, '
+           + 'so nothing verified it. Its confidence is inherited from the product name, not '
+           + 'earned. Treat it as unchecked.';
+    }
+    return 'No supporting quote was recorded for this field, so nothing verified it.';
   }
 
   relevanceTone(relevance: string): Tone {

@@ -203,6 +203,11 @@
 .fields tr.is-override td { background: var(--brand-soft); }
 
 .f-label { width: 148px; color: var(--text-2); text-transform: capitalize; }
+
+/* A narrative is a paragraph, not a cell value: given the field grid's value column it wrapped
+   into a tall ribbon with the rest of the row empty beside it. It spans instead. */
+.fields tr.is-narrative .f-value { white-space: normal; line-height: 1.6; }
+.fields tr.is-narrative .f-label { vertical-align: top; padding-top: 8px; }
 .f-value { min-width: 150px; }
 .f-value .v { font-weight: 550; }
 .f-value .v.none { color: var(--text-3); font-weight: 400; }
@@ -311,3 +316,19 @@ td.pad { padding: 16px 14px; }
   font-size: 11.5px;
 }
 .timeline li.t-note q { color: var(--text-2); }
+
+.dialog-notice {
+  display: flex; align-items: flex-start; gap: 8px;
+  margin-bottom: 12px; padding: 9px 11px;
+  font-size: 12px; line-height: 1.55; color: var(--warn);
+  background: var(--warn-soft); border: 1px solid var(--warn-border); border-radius: var(--r-sm);
+}
+
+/* Not an error, but not a verified fact either — it must not read as a neutral blank. */
+.no-cite {
+  display: inline-block; padding: 1px 6px;
+  font-size: 10.5px; font-weight: 600;
+  color: var(--text-3); background: var(--surface-2);
+  border: 1px dashed var(--line-strong); border-radius: var(--r-full);
+  cursor: help; white-space: nowrap;
+}

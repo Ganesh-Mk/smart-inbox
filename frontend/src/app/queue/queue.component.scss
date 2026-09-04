@@ -59,7 +59,14 @@
 .queue th:last-child  { border-top-right-radius: var(--r-md); }
 
 .queue tbody tr { outline: none; }
-.queue tbody tr:focus-visible td { background: var(--brand-soft); }
+.queue tbody tr:focus-visible { outline: none; }
+.queue tbody tr:focus-visible td {
+  background: var(--brand-soft);
+  border-top: 2px solid var(--brand);
+  border-bottom: 2px solid var(--brand);
+}
+.queue tbody tr:focus-visible td:first-child { border-left: 2px solid var(--brand); }
+.queue tbody tr:focus-visible td:last-child { border-right: 2px solid var(--brand); }
 
 /* A flagged row gets a rail, not a wash: the badges already carry the reason, and a tinted row
    would fight every badge sitting inside it. */

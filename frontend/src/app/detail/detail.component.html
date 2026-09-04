@@ -153,9 +153,15 @@
               <div class="ev-title">
                 {{ h.verified ? 'Verified evidence' : 'Cited but not found in source' }}
                 <span class="ev-sub">
-                  {{ h.verified
-                       ? '— this quote was located in the source'
-                       : '— the model reported this quote, code could not locate it, and the confidence was capped at 0.40' }}
+                  @if (!h.verified) {
+                    — the model reported this quote, code could not locate it, and the confidence
+                    was capped at 0.40
+                  } @else if (h.locatedButUnpositioned) {
+                    — found in this page's transcribed text. A scanned page carries no text
+                    geometry, so there are no coordinates to draw a box at
+                  } @else {
+                    — this quote was located in the source
+                  }
                 </span>
               </div>
               <q>{{ h.quote }}</q>
@@ -312,7 +318,8 @@
                         <tbody>
                           @for (f of g.fields; track f.ID) {
                             <tr [class.is-conflict]="f.STATUS === 'CONFLICT'"
-                                [class.is-override]="f.DECIDED_BY === 'REVIEWER'">
+                                [class.is-override]="f.DECIDED_BY === 'REVIEWER'"
+                                [class.is-narrative]="g.group === 'NARRATIVE'">
                               <td class="f-label">{{ shortLabel(f.FIELD_PATH) }}</td>
 
                               <td class="f-value">
@@ -358,7 +365,9 @@
                                     {{ e.VERIFIED === 'Y' ? 'p' + (e.PAGE_NO ?? 0) : 'unverified' }}
                                   </button>
                                 }
-                                @if (!f.evidence?.length) { <span class="dim">—</span> }
+                                @if (!f.evidence?.length) {
+                                  <span class="no-cite" [attr.title]="noCitationReason(f)">no citation</span>
+                                }
                               </td>
 
                               <td class="f-act">
@@ -566,6 +575,16 @@
             subheading="The audit trail is append-only — this cannot be undone."
             [width]="520" (closed)="cancelDecision()">
     @if (decision === 'OVERRIDE') {
+      @if (m.status === 'REJECTED') {
+        <div class="dialog-notice">
+          <ui-icon name="alert" [size]="15" />
+          <span>
+            This message is currently <strong>rejected</strong>. Saving an override records a new
+            decision and the status becomes <strong>reviewed</strong>. The rejection stays in the
+            audit trail, but it will no longer be the message's status.
+          </span>
+        </div>
+      }
       <p class="dialog-lead">
         Choose the categories that are actually correct. Your choice supersedes the AI's labels;
         the originals stay in the record and point at yours.
