@@ -1,0 +1,41 @@
+{
+  "key": "adv-09-original-message-chain",
+  "subject": "FW: Enquiry — storage temperature",
+  "sender": "Coreline Medical Information <medinfo@coreline.example>",
+  "sent_at": "2026-09-13T11:30:00+00:00",
+  "expected_categories": [
+    "MI"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E10"
+  ],
+  "notes": "The other common quoting style. The enquiry itself is only in the quoted block, so unlike adv-08 the quoted text here is the *only* source of the fact — quoted text is de-prioritised, not discarded (E10).",
+  "cases": [
+    {
+      "case_id": "M02",
+      "case_type": "MI",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Sister Priya Raghunathan",
+        "reporter.role": "NURSE",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "St Elwyn's General Hospital",
+        "enquiry.question": "One of my patients left the pack in a car overnight and it may have reached 35 C. Is the product still usable, and what is the approved storage range?",
+        "enquiry.topic": "storage temperature"
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": true
+}

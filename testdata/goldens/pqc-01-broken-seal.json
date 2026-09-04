@@ -1,0 +1,42 @@
+{
+  "key": "pqc-01-broken-seal",
+  "subject": "Complaint — broken tamper seal, Velmoradine 20 mg",
+  "sender": "Marcus Delane <m.delane@harbourside-pharmacy.example>",
+  "sent_at": "2026-08-30T10:20:00+00:00",
+  "expected_categories": [
+    "PQC"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [],
+  "notes": "Physical defect, no patient and no reaction. PQC alone.",
+  "cases": [
+    {
+      "case_id": "P01",
+      "case_type": "PQC",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Marcus Delane",
+        "reporter.role": "PHARMACIST",
+        "reporter.country": "Ireland",
+        "reporter.organisation": "Harbourside Pharmacy",
+        "defect.summary": "broken tamper seal",
+        "defect.category": "PACKAGING",
+        "product.batch": "VLM-4471B",
+        "product.expiry": "2027-11-30",
+        "defect.photo_mentioned": false
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

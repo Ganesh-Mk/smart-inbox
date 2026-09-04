@@ -1,0 +1,39 @@
+{
+  "key": "mi-02-storage-temperature",
+  "subject": "Enquiry — storage temperature",
+  "sender": "Sister Priya Raghunathan <p.raghunathan@st-elwyn.example>",
+  "sent_at": "2026-09-03T11:10:00+00:00",
+  "expected_categories": [
+    "MI"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [],
+  "notes": "A genuine question with no reaction and no defect. Explicitly says no harm occurred, which is the distinction from an ICSR.",
+  "cases": [
+    {
+      "case_id": "M02",
+      "case_type": "MI",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Sister Priya Raghunathan",
+        "reporter.role": "NURSE",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "St Elwyn's General Hospital",
+        "enquiry.question": "One of my patients left the pack in a car overnight and it may have reached 35 C. Is the product still usable, and what is the approved storage range?",
+        "enquiry.topic": "storage temperature"
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

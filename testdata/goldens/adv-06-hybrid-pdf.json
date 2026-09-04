@@ -1,0 +1,88 @@
+{
+  "key": "adv-06-hybrid-pdf",
+  "subject": "Typed cover sheet with handwritten annex",
+  "sender": "Marcus Delane <m.delane@harbourside-pharmacy.example>",
+  "sent_at": "2026-09-11T15:35:00+00:00",
+  "expected_categories": [
+    "ICSR"
+  ],
+  "expected_document_count": 2,
+  "edge_cases": [
+    "E12"
+  ],
+  "notes": "One document, two renderings: page 1 DIGITAL, page 2 SCANNED, document-level MIXED. This is the file that makes per-page flavour detection necessary rather than merely tidy (E12).",
+  "cases": [
+    {
+      "case_id": "C07",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": true,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR",
+      "is_serious": true,
+      "seriousness_criteria": [
+        "LIFE_THREATENING"
+      ],
+      "fields": {
+        "patient.age.value": "45",
+        "patient.age.unit": "YEAR",
+        "patient.age.raw": "45-year-old",
+        "patient.sex": "MALE",
+        "patient.initials": "K.J.",
+        "patient.weight.raw": "94 kg",
+        "patient.medical_history": "asthma since childhood",
+        "reporter.name": "Marcus Delane",
+        "reporter.role": "PHARMACIST",
+        "reporter.country": "Ireland",
+        "reporter.organisation": "Harbourside Pharmacy",
+        "product[0].name": "Pralextin",
+        "product[0].role": "SUSPECT",
+        "product[0].dose.amount": "100",
+        "product[0].dose.unit": "micrograms/dose",
+        "product[0].dose.frequency_raw": "two puffs as required",
+        "product[0].route": "INHALATION",
+        "product[0].batch": "PLX-7741E",
+        "product[0].start_date.raw": "5 May 2026",
+        "product[0].start_date.iso": "2026-05-05",
+        "product[1].name": "Astelvia",
+        "product[1].role": "CONCOMITANT",
+        "product[1].dose.amount": "1",
+        "product[1].dose.unit": "g",
+        "product[1].dose.frequency_raw": "three times daily",
+        "product[1].route": "IV",
+        "product[1].batch": "AST-6612G",
+        "product[1].start_date.raw": "18 May 2026",
+        "product[1].start_date.iso": "2026-05-18",
+        "reaction[0].term": "angioedema",
+        "reaction[0].outcome": "RECOVERED",
+        "reaction[0].onset.raw": "21 May 2026",
+        "reaction[0].onset.precision": "DAY",
+        "reaction[0].onset.is_relative": false,
+        "reaction[0].onset.iso": "2026-05-21",
+        "reaction[1].term": "dizziness",
+        "reaction[1].outcome": "RECOVERING",
+        "reaction[1].onset.raw": "22 May 2026",
+        "reaction[1].onset.precision": "DAY",
+        "reaction[1].onset.is_relative": false,
+        "reaction[1].onset.iso": "2026-05-22",
+        "severity.is_serious": true,
+        "severity.criteria": [
+          "LIFE_THREATENING"
+        ]
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "report_with_annex.pdf",
+      "declared_type": null,
+      "sha256_of": "hybrid_C07.pdf"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

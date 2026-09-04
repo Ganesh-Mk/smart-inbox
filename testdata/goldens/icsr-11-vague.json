@@ -1,0 +1,38 @@
+{
+  "key": "icsr-11-vague",
+  "subject": "not sure who to tell",
+  "sender": "Greta Lindqvist <g.lindqvist@examplemail.example>",
+  "sent_at": "2026-08-29T19:02:00+00:00",
+  "expected_categories": [
+    "ICSR_INCOMPLETE"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E22"
+  ],
+  "notes": "Almost nothing is stated. Only the reporter is identifiable. Nearly every field should come back NOT_STATED — this message is the abstention test.",
+  "cases": [
+    {
+      "case_id": "C11",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Greta Lindqvist",
+        "reporter.role": "CONSUMER",
+        "reporter.country": "Sweden"
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

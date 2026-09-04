@@ -1,0 +1,29 @@
+{
+  "key": "adv-04-unsupported-types",
+  "subject": "Guidance document and case bundle",
+  "sender": "Coreline Quality Admin <quality.admin@coreline.example>",
+  "sent_at": "2026-09-10T13:20:00+00:00",
+  "expected_categories": [
+    "NOT_RELEVANT"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E6"
+  ],
+  "notes": "Neither attachment is content-processed. Both are recorded with processed='N' and skip_reason='UNSUPPORTED_TYPE' — logged, not silently dropped (E6).",
+  "cases": [],
+  "attachments": [
+    {
+      "filename": "reporting_guidance.docx",
+      "declared_type": null,
+      "sha256_of": "reporting_guidance.docx"
+    },
+    {
+      "filename": "case_bundle.zip",
+      "declared_type": null,
+      "sha256_of": "case_bundle.zip"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

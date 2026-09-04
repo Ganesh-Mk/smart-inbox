@@ -15,7 +15,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blocked ·
 |---|---|---|---|
 | P0 | Environment & foundations | `[x]` | Day 0 |
 | P1 | Oracle schema, PL/SQL, queue, Spring skeleton | `[~]` | Day 1 |
-| P2 | Mail ingestion + synthetic corpus | `[ ]` | Day 2 |
+| P2 | Mail ingestion + synthetic corpus | `[~]` | Day 2 |
 | P3 | PDF understanding (Python) | `[ ]` | Day 3 |
 | P4 | LLM pipeline + evidence verification | `[ ]` | Day 4 |
 | P5 | Angular reviewer UI | `[ ]` | Day 5 |
@@ -84,17 +84,23 @@ The core rubric (85%) is P0–P5 and must never be sacrificed.
 - [ ] Size/page caps enforced **(E8)**; non-PDF logged with `skip_reason` **(E6)**
 
 ### Corpus generator (`testdata/generator/`, seeded RNG)
-- [ ] 12 emails, varying detail levels
-- [ ] 6 digital form PDFs (ReportLab, incl. a lab-values table)
-- [ ] 3 scanned/handwritten PDFs (Pillow + Segoe Script / Ink Free / Bradley Hand, noise + rotation)
-- [ ] 6 article PDFs, two-column — **2 are case series with 2–3 patients** (E32)
-- [ ] 3 non-English (German, French, Japanese) — one mixed-language **(E17)**
-- [ ] 3 PQC-only, 3 MI-only, 2 irrelevant
-- [ ] Adversarial set: duplicate PDF **(E9)**, forwarded rfc822 **(E5)**, password-protected **(E7)**,
-      .docx + .zip **(E6)**, mislabelled octet-stream **(E4)**, hybrid digital+scanned **(E12)**,
-      body-vs-attachment age conflict **(E33)**, quoted-repeat reply chain **(E10)**
-- [ ] `testdata/goldens/*.json` ground-truth labels written as each doc is generated
-- [ ] `scripts/seed_mailbox.py` — SMTP :3025 into GreenMail
+- [x] 12 emails, varying detail levels (complete / missing reporter / missing product / vague)
+- [x] 6 digital form PDFs + 1 multi-page with a lab table continuing across a page break (E18)
+- [x] 3 scanned/handwritten PDFs — verified 0 extractable chars, so genuinely image-only; one
+      built at `ScanStyle.hard()` to drive the legibility path (E34)
+- [x] 6 article PDFs, two-column — 2 case series (2 and 3 patients, E32), plus a review and a
+      trial write-up as negative examples. Naive `sort=True` reading order verified to
+      interleave ("Introduction    Conclusion" on one line) — the E14 demo is real
+- [x] 3 non-English (German, French, Japanese — CJK glyphs render correctly) + 1 mixed-language
+- [x] 3 PQC-only, 3 MI-only, 2 irrelevant, plus 2 deliberate combinations (E23, E24)
+- [x] Adversarial set, all 10 verified by inspecting the generated files: duplicate PDF **(E9)**,
+      forwarded rfc822 with the case one level down **(E5)**, password-protected **(E7)**,
+      corrupt-but-valid-magic-bytes **(E7)**, .docx + .zip **(E6)**, mislabelled octet-stream
+      **(E4)**, hybrid digital+scanned **(E12)** — confirmed page 1 DIGITAL / page 2 SCANNED,
+      body-vs-form age conflict 58 vs 71 **(E33)**, two quoted reply styles **(E10)**
+- [x] `testdata/goldens/*.json` — 38 files, derived from the same `CaseSpec` that renders the
+      document, so ground truth is true by construction rather than by later annotation
+- [x] `scripts/seed_mailbox.py` — 38 messages posted over real SMTP, all 38 read back over IMAP
 
 **Exit criteria:** ~30 emails / ~38 documents land in `INBOX_MESSAGE` with correct attachment rows and no duplicates.
 

@@ -1,0 +1,39 @@
+{
+  "key": "mi-01-dosing-in-renal-impairment",
+  "subject": "Enquiry — dosing in renal impairment",
+  "sender": "Marcus Delane <m.delane@harbourside-pharmacy.example>",
+  "sent_at": "2026-09-02T11:05:00+00:00",
+  "expected_categories": [
+    "MI"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [],
+  "notes": "A genuine question with no reaction and no defect. Explicitly says no harm occurred, which is the distinction from an ICSR.",
+  "cases": [
+    {
+      "case_id": "M01",
+      "case_type": "MI",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Marcus Delane",
+        "reporter.role": "PHARMACIST",
+        "reporter.country": "Ireland",
+        "reporter.organisation": "Harbourside Pharmacy",
+        "enquiry.question": "Could you tell me whether the dose needs to be reduced in a patient with an eGFR of 28 mL/min/1.73m2, and if so what reduction you would recommend?",
+        "enquiry.topic": "dosing in renal impairment"
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

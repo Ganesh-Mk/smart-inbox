@@ -1,0 +1,57 @@
+{
+  "key": "icsr-09-no-reporter",
+  "subject": "Anonymous website submission — rash on Velmoradine",
+  "sender": "Coreline Website <noreply@coreline.example>",
+  "sent_at": "2026-08-28T07:55:00+00:00",
+  "expected_categories": [
+    "ICSR_INCOMPLETE"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E22"
+  ],
+  "notes": "Three of four minimum elements. No identifiable reporter, so the rule gives ICSR_INCOMPLETE and names the missing element (E22).",
+  "cases": [
+    {
+      "case_id": "C09",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": false,
+        "has_suspect_product": true,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR_INCOMPLETE",
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "patient.age.value": "58",
+        "patient.age.unit": "YEAR",
+        "patient.age.raw": "58-year-old",
+        "patient.sex": "FEMALE",
+        "patient.initials": "A.M.",
+        "patient.weight.raw": "68 kg",
+        "patient.medical_history": "hypertension, type 2 diabetes",
+        "product[0].name": "Velmoradine",
+        "product[0].role": "SUSPECT",
+        "product[0].dose.amount": "20",
+        "product[0].dose.unit": "mg",
+        "product[0].dose.frequency_raw": "once daily",
+        "product[0].route": "ORAL",
+        "product[0].batch": "VLM-4471B",
+        "product[0].start_date.raw": "in April",
+        "reaction[0].term": "maculopapular rash",
+        "reaction[0].outcome": "RECOVERING",
+        "reaction[0].onset.raw": "a few days later",
+        "reaction[0].onset.precision": "UNKNOWN",
+        "reaction[0].onset.is_relative": true,
+        "severity.is_serious": false,
+        "severity.criteria": []
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

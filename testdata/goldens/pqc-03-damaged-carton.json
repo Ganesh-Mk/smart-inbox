@@ -1,0 +1,42 @@
+{
+  "key": "pqc-03-damaged-carton",
+  "subject": "Damaged delivery — Nuvexoral cartons torn",
+  "sender": "Marcus Delane <m.delane@harbourside-pharmacy.example>",
+  "sent_at": "2026-09-01T12:20:00+00:00",
+  "expected_categories": [
+    "PQC"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [],
+  "notes": "Transit damage. Still a quality complaint, still no patient.",
+  "cases": [
+    {
+      "case_id": "P03",
+      "case_type": "PQC",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Marcus Delane",
+        "reporter.role": "PHARMACIST",
+        "reporter.country": "Ireland",
+        "reporter.organisation": "Harbourside Pharmacy",
+        "defect.summary": "damaged packaging in transit",
+        "defect.category": "PACKAGING",
+        "product.batch": "NVX-1188D",
+        "product.expiry": "2026-12-31",
+        "defect.photo_mentioned": false
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

@@ -1,0 +1,74 @@
+{
+  "key": "adv-01-duplicate-pdf",
+  "subject": "Report form (sending twice in case the first did not arrive)",
+  "sender": "Dr Aoife Whitfield <a.whitfield@northgate-clinic.example>",
+  "sent_at": "2026-09-09T09:00:00+00:00",
+  "expected_categories": [
+    "ICSR"
+  ],
+  "expected_document_count": 3,
+  "edge_cases": [
+    "E9"
+  ],
+  "notes": "Byte-identical PDF under two filenames. The content-addressed blob store must recognise the second as a duplicate and reuse the cached parse — zero extra LLM calls (E9).",
+  "cases": [
+    {
+      "case_id": "C01",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": true,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR",
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "patient.age.value": "58",
+        "patient.age.unit": "YEAR",
+        "patient.age.raw": "58-year-old",
+        "patient.sex": "FEMALE",
+        "patient.initials": "A.M.",
+        "patient.weight.raw": "68 kg",
+        "patient.medical_history": "hypertension, type 2 diabetes",
+        "reporter.name": "Dr Aoife Whitfield",
+        "reporter.role": "PHYSICIAN",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "Northgate Community Clinic",
+        "product[0].name": "Velmoradine",
+        "product[0].role": "SUSPECT",
+        "product[0].dose.amount": "20",
+        "product[0].dose.unit": "mg",
+        "product[0].dose.frequency_raw": "once daily",
+        "product[0].route": "ORAL",
+        "product[0].batch": "VLM-4471B",
+        "product[0].start_date.raw": "3 March 2026",
+        "product[0].start_date.iso": "2026-03-03",
+        "reaction[0].term": "maculopapular rash",
+        "reaction[0].outcome": "RECOVERING",
+        "reaction[0].onset.raw": "12 March 2026",
+        "reaction[0].onset.precision": "DAY",
+        "reaction[0].onset.is_relative": false,
+        "reaction[0].onset.iso": "2026-03-12",
+        "severity.is_serious": false,
+        "severity.criteria": []
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "AER-2026-00141.pdf",
+      "declared_type": null,
+      "sha256_of": "form_C01.pdf"
+    },
+    {
+      "filename": "copy_of_report_form.pdf",
+      "declared_type": null,
+      "sha256_of": "form_C01.pdf"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

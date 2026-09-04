@@ -1,0 +1,73 @@
+{
+  "key": "lang-03-japanese",
+  "subject": "副作用報告 — Nuvexoral 経口懸濁液",
+  "sender": "Sister Priya Raghunathan <p.raghunathan@st-elwyn.example>",
+  "sent_at": "2026-09-08T07:25:00+00:00",
+  "expected_categories": [
+    "ICSR"
+  ],
+  "expected_document_count": 2,
+  "edge_cases": [
+    "E16"
+  ],
+  "notes": "Japanese, non-Latin script, with a non-ASCII attachment filename.",
+  "cases": [
+    {
+      "case_id": "C04",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": true,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR",
+      "is_serious": true,
+      "seriousness_criteria": [
+        "OTHER_MEDICALLY_IMPORTANT"
+      ],
+      "fields": {
+        "patient.age.value": "6",
+        "patient.age.unit": "WEEK",
+        "patient.age.raw": "6-week-old",
+        "patient.sex": "FEMALE",
+        "patient.initials": "L.O.",
+        "patient.weight.raw": "4.1 kg",
+        "patient.medical_history": "born at 38 weeks, otherwise well",
+        "reporter.name": "Sister Priya Raghunathan",
+        "reporter.role": "NURSE",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "St Elwyn's General Hospital",
+        "product[0].name": "Nuvexoral",
+        "product[0].role": "SUSPECT",
+        "product[0].dose.amount": "125",
+        "product[0].dose.unit": "mg",
+        "product[0].dose.frequency_raw": "twice daily",
+        "product[0].route": "ORAL",
+        "product[0].batch": "NVX-1188D",
+        "product[0].start_date.raw": "20 June 2026",
+        "product[0].start_date.iso": "2026-06-20",
+        "reaction[0].term": "severe nausea and vomiting",
+        "reaction[0].outcome": "RECOVERED",
+        "reaction[0].onset.raw": "22 June 2026",
+        "reaction[0].onset.precision": "DAY",
+        "reaction[0].onset.is_relative": false,
+        "reaction[0].onset.iso": "2026-06-22",
+        "severity.is_serious": true,
+        "severity.criteria": [
+          "OTHER_MEDICALLY_IMPORTANT"
+        ]
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "副作用報告書.pdf",
+      "declared_type": null,
+      "sha256_of": "form_ja.pdf"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

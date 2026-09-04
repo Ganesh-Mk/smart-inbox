@@ -1,0 +1,38 @@
+{
+  "key": "mi-03-drug-interaction",
+  "subject": "Enquiry — drug interaction",
+  "sender": "Tomas Berhane <tberhane@examplemail.example>",
+  "sent_at": "2026-09-04T11:15:00+00:00",
+  "expected_categories": [
+    "MI"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [],
+  "notes": "A genuine question with no reaction and no defect. Explicitly says no harm occurred, which is the distinction from an ICSR.",
+  "cases": [
+    {
+      "case_id": "M03",
+      "case_type": "MI",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Tomas Berhane",
+        "reporter.role": "PATIENT",
+        "reporter.country": "Netherlands",
+        "enquiry.question": "Is there a clinically significant interaction with clarithromycin? I have a patient who needs a course for a chest infection.",
+        "enquiry.topic": "drug interaction"
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

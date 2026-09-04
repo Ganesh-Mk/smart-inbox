@@ -1,0 +1,466 @@
+{
+  "seed": 20260904,
+  "generated_for": "safety@smart-inbox.test",
+  "notice": "SYNTHETIC TEST DOCUMENT — generated for the Smart Inbox prototype. No real patient, reporter, product or event is described.",
+  "counts": {
+    "emails": 38,
+    "documents": 60,
+    "pdfs": 23,
+    "goldens": 38
+  },
+  "edge_cases_covered": [
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "E7",
+    "E9",
+    "E10",
+    "E11",
+    "E12",
+    "E13",
+    "E14",
+    "E15",
+    "E16",
+    "E17",
+    "E18",
+    "E19",
+    "E21",
+    "E22",
+    "E23",
+    "E24",
+    "E25",
+    "E28",
+    "E30",
+    "E31",
+    "E32",
+    "E33",
+    "E34",
+    "E35",
+    "E39"
+  ],
+  "messages": [
+    {
+      "key": "icsr-01-complete-body",
+      "subject": "Possible reaction to Velmoradine — 58F, rash",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E11"
+      ]
+    },
+    {
+      "key": "icsr-02-serious-with-form",
+      "subject": "Serious ADR report — hepatitis, Fenaquil (form attached)",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E18"
+      ]
+    },
+    {
+      "key": "icsr-03-fatal",
+      "subject": "URGENT — fatal outcome following Cardexatine initiation",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E35"
+      ]
+    },
+    {
+      "key": "icsr-04-paediatric-weeks",
+      "subject": "Report — 6-week-old infant, vomiting after Nuvexoral",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E30"
+      ]
+    },
+    {
+      "key": "icsr-05-pregnancy",
+      "subject": "Photosensitivity in pregnancy — Domitrelle",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E28"
+      ]
+    },
+    {
+      "key": "icsr-06-relative-dates",
+      "subject": "dizzy since starting migraine tablets",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E28"
+      ]
+    },
+    {
+      "key": "icsr-07-multi-product",
+      "subject": "Angioedema then dizziness — two medicines involved",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E3",
+        "E31"
+      ]
+    },
+    {
+      "key": "icsr-08-scanned-form",
+      "subject": "Handwritten report form — agranulocytosis",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 3,
+      "edge_cases": [
+        "E13",
+        "E34"
+      ]
+    },
+    {
+      "key": "icsr-09-no-reporter",
+      "subject": "Anonymous website submission — rash on Velmoradine",
+      "categories": [
+        "ICSR_INCOMPLETE"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E22"
+      ]
+    },
+    {
+      "key": "icsr-10-no-product",
+      "subject": "Fall on the ward — medicine unknown",
+      "categories": [
+        "ICSR_INCOMPLETE"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E22",
+        "E34"
+      ]
+    },
+    {
+      "key": "icsr-11-vague",
+      "subject": "not sure who to tell",
+      "categories": [
+        "ICSR_INCOMPLETE"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E22"
+      ]
+    },
+    {
+      "key": "icsr-12-mi-and-icsr",
+      "subject": "my rash is worse, should I stop the tablets?",
+      "categories": [
+        "ICSR",
+        "MI"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E24"
+      ]
+    },
+    {
+      "key": "pqc-01-broken-seal",
+      "subject": "Complaint — broken tamper seal, Velmoradine 20 mg",
+      "categories": [
+        "PQC"
+      ],
+      "documents": 1,
+      "edge_cases": []
+    },
+    {
+      "key": "pqc-02-particulates",
+      "subject": "Particles visible in Zorbitran vials — photo attached",
+      "categories": [
+        "PQC"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E6",
+        "E19"
+      ]
+    },
+    {
+      "key": "pqc-03-damaged-carton",
+      "subject": "Damaged delivery — Nuvexoral cartons torn",
+      "categories": [
+        "PQC"
+      ],
+      "documents": 1,
+      "edge_cases": []
+    },
+    {
+      "key": "mi-01-dosing-in-renal-impairment",
+      "subject": "Enquiry — dosing in renal impairment",
+      "categories": [
+        "MI"
+      ],
+      "documents": 1,
+      "edge_cases": []
+    },
+    {
+      "key": "mi-02-storage-temperature",
+      "subject": "Enquiry — storage temperature",
+      "categories": [
+        "MI"
+      ],
+      "documents": 1,
+      "edge_cases": []
+    },
+    {
+      "key": "mi-03-drug-interaction",
+      "subject": "Enquiry — drug interaction",
+      "categories": [
+        "MI"
+      ],
+      "documents": 1,
+      "edge_cases": []
+    },
+    {
+      "key": "irr-01-marketing",
+      "subject": "Register now: 14th Annual Pharmacovigilance Excellence Summit",
+      "categories": [
+        "NOT_RELEVANT"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E21"
+      ]
+    },
+    {
+      "key": "irr-02-out-of-office",
+      "subject": "Automatic reply: Serious ADR report — hepatitis, Fenaquil",
+      "categories": [
+        "NOT_RELEVANT"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E21"
+      ]
+    },
+    {
+      "key": "combo-01-icsr-and-pqc",
+      "subject": "Contaminated vial AND reaction in the same patient",
+      "categories": [
+        "ICSR",
+        "PQC"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E23"
+      ]
+    },
+    {
+      "key": "lang-01-german",
+      "subject": "UAW-Meldung — Agranulozytose unter Domitrelle",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E16"
+      ]
+    },
+    {
+      "key": "lang-02-french",
+      "subject": "Déclaration d'effet indésirable — Domitrelle, grossesse",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E16"
+      ]
+    },
+    {
+      "key": "lang-03-japanese",
+      "subject": "副作用報告 — Nuvexoral 経口懸濁液",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E16"
+      ]
+    },
+    {
+      "key": "lang-04-mixed",
+      "subject": "ADR report form (English form, German narrative)",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E17"
+      ]
+    },
+    {
+      "key": "adv-01-duplicate-pdf",
+      "subject": "Report form (sending twice in case the first did not arrive)",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 3,
+      "edge_cases": [
+        "E9"
+      ]
+    },
+    {
+      "key": "adv-02-forwarded-rfc822",
+      "subject": "FW: patient reaction — please pass to safety",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 3,
+      "edge_cases": [
+        "E5",
+        "E25"
+      ]
+    },
+    {
+      "key": "adv-03-encrypted-pdf",
+      "subject": "Completed form attached (password protected)",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E7",
+        "E39"
+      ]
+    },
+    {
+      "key": "adv-04-unsupported-types",
+      "subject": "Guidance document and case bundle",
+      "categories": [
+        "NOT_RELEVANT"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E6"
+      ]
+    },
+    {
+      "key": "adv-05-mislabelled-octet-stream",
+      "subject": "Report attached (our system mangles the file type)",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E4"
+      ]
+    },
+    {
+      "key": "adv-06-hybrid-pdf",
+      "subject": "Typed cover sheet with handwritten annex",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E12"
+      ]
+    },
+    {
+      "key": "adv-07-body-form-conflict",
+      "subject": "Photosensitivity report — form attached",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E33"
+      ]
+    },
+    {
+      "key": "adv-08-quoted-reply-chain",
+      "subject": "RE: Possible reaction to Velmoradine — 58F, rash",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E10"
+      ]
+    },
+    {
+      "key": "adv-09-original-message-chain",
+      "subject": "FW: Enquiry — storage temperature",
+      "categories": [
+        "MI"
+      ],
+      "documents": 1,
+      "edge_cases": [
+        "E10"
+      ]
+    },
+    {
+      "key": "adv-10-corrupt-pdf",
+      "subject": "Form attached — apologies if it is damaged",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E7",
+        "E39"
+      ]
+    },
+    {
+      "key": "lit-01-a01",
+      "subject": "Literature alert: Cholestatic hepatitis following short-course fenaquil: a case report",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E14",
+        "E15"
+      ]
+    },
+    {
+      "key": "lit-02-a02",
+      "subject": "Literature alert: Angioedema and neutropenia in two patients receiving domitrelle: a case series",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E14",
+        "E15",
+        "E32"
+      ]
+    },
+    {
+      "key": "lit-03-a03",
+      "subject": "Literature alert: Cutaneous and neurological reactions to velmoradine: three illustrative cases",
+      "categories": [
+        "ICSR"
+      ],
+      "documents": 2,
+      "edge_cases": [
+        "E14",
+        "E15",
+        "E32"
+      ]
+    }
+  ]
+}

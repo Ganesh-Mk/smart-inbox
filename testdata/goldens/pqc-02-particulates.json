@@ -1,0 +1,51 @@
+{
+  "key": "pqc-02-particulates",
+  "subject": "Particles visible in Zorbitran vials — photo attached",
+  "sender": "Sister Priya Raghunathan <p.raghunathan@st-elwyn.example>",
+  "sent_at": "2026-08-31T11:20:00+00:00",
+  "expected_categories": [
+    "PQC"
+  ],
+  "expected_document_count": 2,
+  "edge_cases": [
+    "E6",
+    "E19"
+  ],
+  "notes": "A bare image attachment gets a vision description rather than being skipped (E6, E19).",
+  "cases": [
+    {
+      "case_id": "P02",
+      "case_type": "PQC",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": false,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": false
+      },
+      "icsr_label": null,
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "reporter.name": "Sister Priya Raghunathan",
+        "reporter.role": "NURSE",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "St Elwyn's General Hospital",
+        "defect.summary": "particulate contamination",
+        "defect.category": "CONTAMINATION",
+        "product.batch": "ZBT-5530H",
+        "product.expiry": "2027-04-30",
+        "defect.photo_mentioned": true
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "blister_defect.jpg",
+      "declared_type": null,
+      "sha256_of": "blister_defect.jpg"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

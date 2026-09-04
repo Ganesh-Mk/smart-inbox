@@ -1,0 +1,61 @@
+{
+  "key": "icsr-10-no-product",
+  "subject": "Fall on the ward — medicine unknown",
+  "sender": "Sister Priya Raghunathan <p.raghunathan@st-elwyn.example>",
+  "sent_at": "2026-08-28T12:08:00+00:00",
+  "expected_categories": [
+    "ICSR_INCOMPLETE"
+  ],
+  "expected_document_count": 2,
+  "edge_cases": [
+    "E22",
+    "E34"
+  ],
+  "notes": "No suspect product anywhere in the message. The correct answer for product.name is NOT_STATED — a guessed drug name here is a false-confident value, scored separately from a miss. The attachment is the hard-to-read scan, so page legibility should cap field confidence (E34).",
+  "cases": [
+    {
+      "case_id": "C10",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": false,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR_INCOMPLETE",
+      "is_serious": true,
+      "seriousness_criteria": [
+        "HOSPITALISATION_OR_PROLONGATION"
+      ],
+      "fields": {
+        "patient.age.raw": "elderly",
+        "patient.sex": "MALE",
+        "patient.initials": "R.K.",
+        "patient.medical_history": "atrial fibrillation, mild renal impairment",
+        "reporter.name": "Sister Priya Raghunathan",
+        "reporter.role": "NURSE",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "St Elwyn's General Hospital",
+        "reaction[0].term": "syncope",
+        "reaction[0].outcome": "RECOVERED",
+        "reaction[0].onset.raw": "on Tuesday",
+        "reaction[0].onset.precision": "UNKNOWN",
+        "reaction[0].onset.is_relative": true,
+        "severity.is_serious": true,
+        "severity.criteria": [
+          "HOSPITALISATION_OR_PROLONGATION"
+        ]
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "ward_note_scan.pdf",
+      "declared_type": null,
+      "sha256_of": "scan_hard.pdf"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

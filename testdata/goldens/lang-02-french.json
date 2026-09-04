@@ -1,0 +1,67 @@
+{
+  "key": "lang-02-french",
+  "subject": "Déclaration d'effet indésirable — Domitrelle, grossesse",
+  "sender": "Dr Aoife Whitfield <a.whitfield@northgate-clinic.example>",
+  "sent_at": "2026-09-07T15:12:00+00:00",
+  "expected_categories": [
+    "ICSR"
+  ],
+  "expected_document_count": 2,
+  "edge_cases": [
+    "E16"
+  ],
+  "notes": "French throughout.",
+  "cases": [
+    {
+      "case_id": "C05",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": true,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR",
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "patient.age.value": "29",
+        "patient.age.unit": "YEAR",
+        "patient.age.raw": "29-year-old",
+        "patient.sex": "FEMALE",
+        "patient.initials": "N.P.",
+        "patient.weight.raw": "70 kg",
+        "patient.medical_history": "first pregnancy, 22 weeks gestation",
+        "reporter.name": "Dr Aoife Whitfield",
+        "reporter.role": "PHYSICIAN",
+        "reporter.country": "United Kingdom",
+        "reporter.organisation": "Northgate Community Clinic",
+        "product[0].name": "Domitrelle",
+        "product[0].role": "SUSPECT",
+        "product[0].dose.amount": "2",
+        "product[0].dose.unit": "mg",
+        "product[0].dose.frequency_raw": "once daily at night",
+        "product[0].route": "ORAL",
+        "product[0].batch": "DMT-3320F",
+        "product[0].start_date.raw": "in early 2026",
+        "reaction[0].term": "photosensitivity reaction",
+        "reaction[0].outcome": "RECOVERED",
+        "reaction[0].onset.raw": "in July",
+        "reaction[0].onset.precision": "MONTH",
+        "reaction[0].onset.is_relative": false,
+        "severity.is_serious": false,
+        "severity.criteria": []
+      }
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "declaration_AER-2026-00312.pdf",
+      "declared_type": null,
+      "sha256_of": "form_fr.pdf"
+    }
+  ],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

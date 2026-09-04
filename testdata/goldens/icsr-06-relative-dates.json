@@ -1,0 +1,58 @@
+{
+  "key": "icsr-06-relative-dates",
+  "subject": "dizzy since starting migraine tablets",
+  "sender": "Tomas Berhane <tberhane@examplemail.example>",
+  "sent_at": "2026-08-26T16:47:00+00:00",
+  "expected_categories": [
+    "ICSR"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E28"
+  ],
+  "notes": "Relative dates ('last March', 'about two weeks later') must be stored raw with is_relative=true and never resolved against today (E28).",
+  "cases": [
+    {
+      "case_id": "C06",
+      "case_type": "ICSR",
+      "case_index": 0,
+      "icsr_elements": {
+        "has_identifiable_patient": true,
+        "has_identifiable_reporter": true,
+        "has_suspect_product": true,
+        "has_adverse_event": true
+      },
+      "icsr_label": "ICSR",
+      "is_serious": false,
+      "seriousness_criteria": [],
+      "fields": {
+        "patient.age.raw": "born in 1966",
+        "patient.sex": "FEMALE",
+        "patient.initials": "S.V.",
+        "patient.weight.raw": "72 kg",
+        "patient.medical_history": "migraine with aura",
+        "reporter.name": "Tomas Berhane",
+        "reporter.role": "PATIENT",
+        "reporter.country": "Netherlands",
+        "product[0].name": "Fenaquil",
+        "product[0].role": "SUSPECT",
+        "product[0].dose.amount": "500",
+        "product[0].dose.unit": "mg",
+        "product[0].dose.frequency_raw": "as required",
+        "product[0].route": "ORAL",
+        "product[0].batch": "FNQ-2210A",
+        "product[0].start_date.raw": "last March",
+        "reaction[0].term": "dizziness",
+        "reaction[0].outcome": "RECOVERING",
+        "reaction[0].onset.raw": "about two weeks later",
+        "reaction[0].onset.precision": "UNKNOWN",
+        "reaction[0].onset.is_relative": true,
+        "severity.is_serious": false,
+        "severity.criteria": []
+      }
+    }
+  ],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

@@ -1,0 +1,45 @@
+Message-ID:
+ <178852072124.3552.14640319591449678802.irr-01-marketing@smart-inbox.test>
+From: Summit Events Team <events@pv-summit.example>
+To: Drug Safety <safety@smart-inbox.test>
+Subject: Register now: 14th Annual Pharmacovigilance Excellence Summit
+Date: Sat, 05 Sep 2026 06:30:00 +0000
+X-Smart-Inbox-Corpus-Key: irr-01-marketing
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8813097721470954734=="
+
+--===============8813097721470954734==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Early-bird registration closes on Friday.
+
+Join 400 delegates for two days of keynotes on signal detection, AI in case p=
+rocessing and regulatory convergence. Group discounts available for teams of =
+five or more.
+
+Unsubscribe: https://pv-summit.example/unsubscribe
+
+--===============8813097721470954734==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html>
+  <head><meta charset=3D"utf-8"></head>
+  <body style=3D"font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#=
+1f2933">
+    <p>Early-bird registration closes on Friday.</p>
+    <div style=3D"border-left:3px solid #c9d4de;padding-left:12px;margin:12px=
+ 0">
+      <p>Join 400 delegates for two days of keynotes.</p><p>Group discounts a=
+vailable.</p>
+    </div>
+    <p style=3D"color:#5a6b7a;font-size:12px">
+      This message was sent to the drug safety mailbox. Synthetic test data.
+    </p>
+  </body>
+</html>
+
+--===============8813097721470954734==--

@@ -1,0 +1,18 @@
+{
+  "key": "irr-02-out-of-office",
+  "subject": "Automatic reply: Serious ADR report — hepatitis, Fenaquil",
+  "sender": "Marcus Delane <m.delane@harbourside-pharmacy.example>",
+  "sent_at": "2026-09-05T06:31:00+00:00",
+  "expected_categories": [
+    "NOT_RELEVANT"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E21"
+  ],
+  "notes": "An auto-reply whose subject line quotes a real ADR report. Classifying on the subject alone gets this wrong.",
+  "cases": [],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}

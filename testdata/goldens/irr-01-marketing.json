@@ -1,0 +1,18 @@
+{
+  "key": "irr-01-marketing",
+  "subject": "Register now: 14th Annual Pharmacovigilance Excellence Summit",
+  "sender": "Summit Events Team <events@pv-summit.example>",
+  "sent_at": "2026-09-05T06:30:00+00:00",
+  "expected_categories": [
+    "NOT_RELEVANT"
+  ],
+  "expected_document_count": 1,
+  "edge_cases": [
+    "E21"
+  ],
+  "notes": "Marketing. NOT_RELEVANT must be the only label — it is assigned if and only if the other three sets are empty, enforced in code (E21).",
+  "cases": [],
+  "attachments": [],
+  "has_forwarded_message": false,
+  "has_quoted_history": false
+}
