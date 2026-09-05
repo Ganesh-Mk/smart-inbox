@@ -1038,3 +1038,66 @@ started cleanly and failed one expensive job at a time.
 Six tests in `tests/test_api_key_guard.py`; 141 Python tests pass.
 
 **Affects:** `app/settings.py`, `app/main.py`, `app/routes/meta.py`.
+
+---
+
+### D-028 · Hosting: one OCI Ampere A1 Always Free VM, because PL/SQL is not portable · 5 Sep 2026
+
+The requirement was a free public URL instead of `localhost`. The obvious modern answer — frontend
+on Vercel, database on a free Postgres tier — **is not available to this project**, and the reason
+is a deliberate earlier choice rather than an oversight.
+
+`V3__packages.sql` puts the job queue (`FOR UPDATE SKIP LOCKED`), the append-only audit
+(`AUTONOMOUS_TRANSACTION`) and the reviewer-override supersede in **PL/SQL packages**, because the
+brief's stated stack is "Oracle (PL/SQL)" and PROJECT_PLAN §5.1/§9.4 build on it. Nothing on a free
+Postgres/MySQL tier runs that schema. Rewriting the queue in Java to reach a cheaper host would
+throw away the part of the build the brief asked for most explicitly. So the host has to be one
+that can run an Oracle container, and the only genuinely free, non-expiring one of those is
+**Oracle Cloud's own Ampere A1 Always Free shape** — 4 OCPU / 24 GB, no time limit.
+
+**This also retires D-019.** The 8 GB development machine could not hold the full stack; the OS
+killed the backend twice at 0.7 GB free, and `docs/RUNNING.md` still documents a low-memory
+browse-only mode as a workaround. 24 GB removes the constraint entirely — the deployed stack runs
+four workers with Oracle at its full 2 GB licence cap and no `-Xmx320m` juggling.
+
+**The one risk, checked before committing to it.** Ampere A1 is arm64, and an image without an
+arm64 manifest would have sunk the plan after the VM was already created. All six were verified
+against the registry first:
+
+| Image | Architectures |
+|---|---|
+| `gvenzl/oracle-free:23-slim-faststart` | amd64, **arm64** |
+| `greenmail/standalone:latest` | amd64, **arm64** |
+| `maven:3.9-eclipse-temurin-21` | amd64, **arm64**, ppc64le, riscv64, s390x |
+| `eclipse-temurin:21-jre` | amd64, **arm64**, ppc64le, s390x |
+| `python:3.12-slim` | 386, amd64, arm, **arm64**, ppc64le, riscv64, s390x |
+| `caddy:2-alpine` | amd64, arm, **arm64**, ppc64le, riscv64, s390x |
+
+No x86 fallback is needed, and the Autonomous Database alternative — managed, but requiring a
+wallet and mTLS for a JDBC URL that currently needs neither — was dropped once Oracle 23ai Free
+was confirmed to run on arm64.
+
+**Shape of the deployment.** Caddy terminates TLS on 80/443 and is the only thing the internet can
+reach. The backend, AI service, Oracle and GreenMail have no published ports; Oracle and GreenMail
+bind to `127.0.0.1` so `sqlplus` and `scripts/seed_mailbox.py` still work over SSH. The backend
+already serves the committed Angular bundle from `src/main/resources/static`, so there is one
+public origin, no CORS, and no separate frontend host.
+
+Three details that are not obvious and each cost a deploy if missed:
+
+- **`SERVER_FORWARD_HEADERS_STRATEGY=framework`.** Behind Caddy, Tomcat sees plain HTTP. Without
+  this Spring builds redirects as `http://` and the browser blocks them as mixed content.
+- **OCI's Ubuntu image REJECTs everything but SSH in its own iptables.** Opening 80/443 in the
+  console security list alone leaves the site unreachable with no error anywhere — the single most
+  common reason a first OCI deploy looks like it hung. `scripts/deploy.sh` opens and persists them.
+- **DNS is checked before the first build.** Let's Encrypt rate-limits failures, so the script
+  compares the VM's public IP against `SITE_ADDRESS` and stops rather than burning attempts.
+
+**Verified locally before writing any of this down.** `docker compose -f docker-compose.prod.yml
+config` validates; both images build (backend 769 MB, ai-service 874 MB); the AI service refuses to
+start with no key and answers `/health` 200 with one; the backend boots on Java 21 as uid 10001 and
+fails exactly where it should, on `ORA-12541: no listener`. The Oracle-backed path could not be
+exercised on this machine — that is D-019 again, and it is the thing the VM fixes.
+
+**Affects:** new `docker-compose.prod.yml`, `backend/Dockerfile`, `ai-service/Dockerfile`,
+`infra/caddy/Caddyfile`, `.env.prod.example`, `scripts/deploy.sh`, `docs/DEPLOY.md`.

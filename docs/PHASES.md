@@ -217,6 +217,31 @@ produced exactly the documents the corpus says it should. 45/45 backend tests gr
 
 ---
 
+## P8 — Public deployment · not in the brief, but a live URL beats a screen recording
+
+Everything in the repo is done and locally verified (D-028). What remains needs an account, a
+card or a browser, so it cannot be automated from here.
+
+- [x] `docker-compose.prod.yml` — Caddy + backend + ai-service + Oracle + GreenMail
+- [x] `backend/Dockerfile` (Maven → JRE, no Node: the Angular bundle is committed)
+- [x] `ai-service/Dockerfile` (pure wheels, arm64-clean)
+- [x] `infra/caddy/Caddyfile` — TLS termination, the only public surface
+- [x] `.env.prod.example` + `scripts/deploy.sh` + `docs/DEPLOY.md`
+- [x] All six images verified to publish `linux/arm64` manifests
+- [x] Both images build; AI service and backend smoke-tested locally
+- [ ] **Push these commits to GitHub** — `scripts/deploy.sh` clones from there
+- [ ] Oracle Cloud account; **home region is permanent, pick one with A1 capacity**
+- [ ] `VM.Standard.A1.Flex`, Ubuntu 22.04, 4 OCPU / 24 GB / 100 GB, public IPv4
+- [ ] Security-list ingress for TCP 80 and 443 from `0.0.0.0/0` (cloud-side; the script cannot)
+- [ ] DuckDNS subdomain (or a real `A` record) pointing at the VM
+- [ ] `bash scripts/deploy.sh` on the VM, then seed the corpus
+- [ ] Put the live URL in `README.md` and in the submission email
+
+**Exit criteria:** `https://<domain>` serves the reviewer UI over a valid certificate, with the
+corpus ingested and the queue drained.
+
+---
+
 ## Open questions / blockers
 
 _(none currently)_
@@ -243,5 +268,6 @@ Bonus verified: `article_A03` (3-patient case series) split into exactly 3 cases
 
 | Date | Session | What happened |
 |---|---|---|
+| 2026-09-05 | 4 | Deployment built: production compose (Caddy + backend + ai-service + Oracle + GreenMail), a Dockerfile each for backend and ai-service, `infra/caddy/Caddyfile`, `.env.prod.example`, `scripts/deploy.sh` and `docs/DEPLOY.md`. Target is an OCI Ampere A1 Always Free VM; all six images verified arm64 first. Both images build and were smoke-tested locally. Decision D-028 recorded; it retires the D-019 memory constraint. Remaining work is account-side: OCI signup, VM, security list, DNS. |
 | 2026-09-04 | 2 | P0 closed and P1 built: both Docker images confirmed; `docker compose up` brings up Oracle 23ai Free + GreenMail healthy; Flyway V1–V4 apply clean (20 tables, 33 indexes, 3 PL/SQL packages, 4 triggers, `V_REVIEW_QUEUE`, zero compile errors); `JobQueueRepository` + `JobWorkerPool`; **10/10 backend tests green** incl. 8-way SKIP LOCKED concurrency and autonomous-transaction audit survival; LLM client + smoke test proving schema-valid output, abstention, measured cost and an 11.8× prompt-cache saving. Decisions D-007..D-010 recorded. |
 | 2026-09-04 | 1 | Assignment analysed; `PROJECT_PLAN.md` written; OpenRouter model verified and key smoke-tested; Docker data relocated to D: (freed 22.5 GB); repo + tracking docs created |

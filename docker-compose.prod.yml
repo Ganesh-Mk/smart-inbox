@@ -1,0 +1,152 @@
+# Smart Inbox — production stack (single host, everything behind one TLS domain).
+#
+#   docker compose -f docker-compose.prod.yml up -d --build
+#   docker compose -f docker-compose.prod.yml logs -f backend
+#
+# Differences from the development docker-compose.yml:
+#   * backend and ai-service run as containers here, not as foreground host processes
+#   * Caddy terminates TLS on 80/443 and is the ONLY thing the internet can reach
+#   * Oracle and GreenMail publish to 127.0.0.1 only — reachable for sqlplus and for
+#     scripts/seed_mailbox.py run on the host, unreachable from outside the VM
+#
+# Target host: OCI Ampere A1 Always Free (arm64, 4 OCPU / 24 GB). Every image below has an
+# arm64 manifest, verified against the registry.
+
+name: smart-inbox
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim-faststart
+    container_name: smart-inbox-oracle
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?set ORACLE_PASSWORD in .env}
+      APP_USER: ${ORACLE_APP_USER:-SMARTINBOX}
+      APP_USER_PASSWORD: ${ORACLE_APP_PASSWORD:?set ORACLE_APP_PASSWORD in .env}
+    ports:
+      # Loopback only. The database is never exposed to the internet.
+      - "127.0.0.1:1521:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./infra/oracle/init:/container-entrypoint-initdb.d:ro
+    # Oracle Database Free is licence-limited to 2 GB regardless of the host's 24 GB.
+    mem_limit: 2g
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD", "/opt/oracle/healthcheck.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 60
+      start_period: 60s
+    restart: unless-stopped
+
+  greenmail:
+    image: greenmail/standalone:latest
+    container_name: smart-inbox-greenmail
+    environment:
+      GREENMAIL_OPTS: >-
+        -Dgreenmail.setup.test.all
+        -Dgreenmail.hostname=0.0.0.0
+        -Dgreenmail.users=${MAIL_USER:-safety@smart-inbox.test}:${MAIL_PASSWORD:?set MAIL_PASSWORD in .env}
+        -Dgreenmail.auth.disabled=false
+        -Dgreenmail.verbose
+      JAVA_TOOL_OPTIONS: -Xmx384m
+    ports:
+      # Loopback only, so scripts/seed_mailbox.py can run from the host: 3025 to send the
+      # corpus, 3143 for its --check readback. Neither is reachable from outside the VM.
+      - "127.0.0.1:3025:3025"
+      - "127.0.0.1:3143:3143"
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/3143"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+
+  ai-service:
+    build:
+      context: ./ai-service
+    container_name: smart-inbox-ai
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?set OPENROUTER_API_KEY in .env}
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      AI_MODEL: ${AI_MODEL:-anthropic/claude-haiku-4.5}
+      MAX_ATTACHMENT_MB: ${MAX_ATTACHMENT_MB:-25}
+      MAX_PDF_PAGES: ${MAX_PDF_PAGES:-60}
+    # Never published. Only the backend talks to it, over the compose network.
+    expose:
+      - "8000"
+    mem_limit: 1500m
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    container_name: smart-inbox-backend
+    depends_on:
+      oracle:
+        condition: service_healthy
+      greenmail:
+        condition: service_healthy
+      ai-service:
+        condition: service_healthy
+    environment:
+      # Service discovery is by compose service name, not localhost.
+      ORACLE_HOST: oracle
+      ORACLE_PORT: 1521
+      ORACLE_SERVICE: ${ORACLE_SERVICE:-FREEPDB1}
+      ORACLE_APP_USER: ${ORACLE_APP_USER:-SMARTINBOX}
+      ORACLE_APP_PASSWORD: ${ORACLE_APP_PASSWORD:?set ORACLE_APP_PASSWORD in .env}
+
+      MAIL_HOST: greenmail
+      MAIL_PORT: 3143
+      MAIL_USER: ${MAIL_USER:-safety@smart-inbox.test}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:?set MAIL_PASSWORD in .env}
+      MAIL_SSL: ${MAIL_SSL:-false}
+      MAIL_FOLDER: ${MAIL_FOLDER:-INBOX}
+
+      AI_SERVICE_URL: http://ai-service:8000
+
+      # Caddy terminates TLS, so Tomcat sees plain HTTP. Without this, Spring builds redirects
+      # and absolute links as http:// and the browser trips the mixed-content block.
+      SERVER_FORWARD_HEADERS_STRATEGY: framework
+
+      MAX_ATTACHMENT_MB: ${MAX_ATTACHMENT_MB:-25}
+      MAX_PDF_PAGES: ${MAX_PDF_PAGES:-60}
+      WORKER_THREADS: ${WORKER_THREADS:-4}
+
+      # Demo logins. Change these before the URL is shared with anyone.
+      REVIEWER_USER: ${REVIEWER_USER:-reviewer}
+      REVIEWER_PASSWORD: ${REVIEWER_PASSWORD:?set REVIEWER_PASSWORD in .env}
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+    volumes:
+      - backend-data:/app/data
+    expose:
+      - "8080"
+    mem_limit: 2g
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: smart-inbox-caddy
+    depends_on:
+      - backend
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS in .env, e.g. smart-inbox.duckdns.org}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data      # Let's Encrypt account + certificates; losing this re-issues them
+      - caddy-config:/config
+    mem_limit: 256m
+    restart: unless-stopped
+
+volumes:
+  oracle-data:
+  backend-data:
+  caddy-data:
+  caddy-config:

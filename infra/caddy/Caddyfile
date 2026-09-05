@@ -1,0 +1,31 @@
+# Smart Inbox — public edge. Caddy obtains and renews a Let's Encrypt certificate for
+# SITE_ADDRESS automatically; there is nothing to run by hand and nothing to renew.
+#
+# Everything the internet can reach is in this file. The backend, AI service, Oracle and
+# GreenMail have no published ports of their own.
+
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	# The literature bonus accepts a batch of article PDFs; Spring is configured for a 200 MB
+	# request (spring.servlet.multipart.max-request-size). Match it here so the edge is not the
+	# thing that rejects a legitimate upload.
+	request_body {
+		max_size 200MB
+	}
+
+	reverse_proxy backend:8080 {
+		# A parse of a 60-page scanned PDF goes to Claude vision page by page and can sit well
+		# past Caddy's default. inbox.ai.timeout-seconds is 300; leave the edge slightly wider
+		# so the backend's own timeout is the one that fires and gets logged.
+		transport http {
+			read_timeout 360s
+			write_timeout 360s
+		}
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
