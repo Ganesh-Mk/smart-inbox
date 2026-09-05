@@ -1158,5 +1158,14 @@ Root-causing that needs a pipeline re-run, which costs OpenRouter credit that wa
 withheld for this session. It is recorded here and in the write-up's limitations as an open issue
 rather than quietly left in a metrics table.
 
+**Addendum, same day — the same bug was on screen.** Screenshotting the review queue for the
+submission showed the header reading **$3.72 AI SPEND** and 70% cache hit.
+`ReviewController.overview()` summed `AI_CALL_LOG` unfiltered exactly as the eval had, so the
+reviewer UI was quoting the spend of every corpus ever loaded — against a write-up that claims
+$0.0192 per document. Anyone comparing the screenshot with the report would have found the
+contradiction before we did. Scoped through the job's subject like the eval, the header now reads
+**$1.13 / 276 calls / 65% cache**, and the three surfaces finally agree. Found only because the
+screenshots were reviewed rather than filed.
+
 **Affects:** `eval/run_eval.py`, `eval/report.md`, `eval/report.json`, `README.md`,
-`docs/WRITEUP.md`, `docs/PHASES.md`.
+`docs/WRITEUP.md`, `docs/PHASES.md`, `backend/.../api/ReviewController.java`.

@@ -147,10 +147,19 @@ public class ReviewController {
     stats.put("evidenceVerified", verified);
     stats.put("verificationRate", asserted == 0 ? 0.0 : Math.round(1000.0 * verified / asserted) / 1000.0);
 
+    // AI_CALL_LOG is append-only and survives a re-seed; INBOX_MESSAGE does not, because
+    // seeding creates fresh rows with new ids. Summing the table unfiltered therefore reports
+    // the spend of every corpus the database has ever held, not the one on screen — this header
+    // read $3.72 against a corpus that actually cost $1.13. A job's subject is the join back,
+    // so calls whose subject has been deleted are excluded. Same scoping as eval/run_eval.py.
     Map<String, Object> cost = jdbc.queryForMap(
-        "SELECT NVL(SUM(cost_usd),0) AS total_cost, COUNT(*) AS calls,"
-            + " NVL(SUM(cached_tokens),0) AS cached, NVL(SUM(prompt_tokens),0) AS prompt"
-            + " FROM ai_call_log");
+        "SELECT NVL(SUM(a.cost_usd),0) AS total_cost, COUNT(*) AS calls,"
+            + " NVL(SUM(a.cached_tokens),0) AS cached, NVL(SUM(a.prompt_tokens),0) AS prompt"
+            + " FROM ai_call_log a JOIN job j ON j.id = a.job_id"
+            + " WHERE (j.subject_type = 'MESSAGE'"
+            + "        AND j.subject_id IN (SELECT id FROM inbox_message))"
+            + "    OR (j.subject_type = 'DOCUMENT'"
+            + "        AND j.subject_id IN (SELECT id FROM document))");
     stats.put("aiCalls", toLong(cost.get("CALLS")));
     stats.put("totalCostUsd", cost.get("TOTAL_COST"));
     long prompt = toLong(cost.get("PROMPT"));
