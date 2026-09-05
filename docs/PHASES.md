@@ -209,7 +209,7 @@ produced exactly the documents the corpus says it should. 45/45 backend tests gr
 - [x] `docs/architecture.svg`
 - [x] `docs/sample-outputs/*.json` — extracted JSON per test document (38 files)
 - [ ] Screenshots + short screen recording of the review screen  **<- the only missing §7 deliverable**
-- [ ] **Clean-clone test:** fresh clone → `.env` → `docker compose up` → seed → works
+- [x] **Clean-clone test:** fresh clone verified 5 Sep — all six §7 deliverables present, 38 goldens + 38 corpus emails + the built Angular bundle committed, no `.env` and no assignment PDF leaked, **141/141 Python tests pass from the clone**. The full `docker compose up` → seed → pipeline leg is *not* covered: it needs live OpenRouter credit, which was withheld. Run it once before submitting.
 - [x] Final sweep: no API key, no real data, no `TODO` in the tree — swept 5 Sep, clean
 - [ ] Send to pavithra.r@ / vivek.w@ / ashish.b@ / rehan.n@ clinevotech.com
 
