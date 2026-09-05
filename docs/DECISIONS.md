@@ -1101,3 +1101,62 @@ exercised on this machine — that is D-019 again, and it is the thing the VM fi
 
 **Affects:** new `docker-compose.prod.yml`, `backend/Dockerfile`, `ai-service/Dockerfile`,
 `infra/caddy/Caddyfile`, `.env.prod.example`, `scripts/deploy.sh`, `docs/DEPLOY.md`.
+
+---
+
+### D-029 · The eval was reporting the sum of every run ever made · 5 Sep 2026
+
+Chasing the brief's "report how long each one takes" (§3.E) turned up something worse than the
+missing feature.
+
+`AI_CALL_LOG` and `PROCESSING_METRIC` are append-only and survive a re-seed. `INBOX_MESSAGE` does
+not — `seed_mailbox.py` creates fresh rows with new ids, orphaning every metric row from the run
+before. Nothing joins them back, and `score_performance` summed the tables unfiltered. So the
+report did not describe the corpus in the database; it described every corpus that had ever been
+in the database.
+
+It went unnoticed because the first report was generated minutes after the first clean run, when
+the two happened to be the same thing.
+
+**What it was actually reporting.** Unscoped: 966 calls, $3.7191, **$0.0630 per document** — a
+failure against the ≤ $0.05 target stated in the plan. Scoped to the live corpus: 276 calls,
+$1.1344, **$0.0192 per document**. The committed report's $0.0249 was run one alone. Re-running
+the eval during the live walkthrough would have shown the cost target failing, with no way to
+explain it on the spot.
+
+**Fix.** A job's subject is the join back to the corpus, so every performance figure is now scoped
+through it, and rows whose subject has been deleted are excluded. The report states the scoping
+inline and prints the unscoped totals beside it, so the number is checkable rather than trusted.
+`main()` was also overwriting the scoped `by_purpose` with an unscoped re-query; that is gone.
+
+**The timing report itself.** `PROCESSING_METRIC` always held the data — `ProcessingMetricService`
+even cites R17 in its javadoc — but nothing reported it per item, only averaged per stage, which
+answers a different question. Every message now gets a row: parse time, pipeline time, total.
+38 messages / 59 documents, mean **32.6 s** per message and **21.0 s** per document.
+
+**A trap inside that table.** The `PARSE_DOCUMENT` job returns in ~180 ms for these documents,
+which would let the report claim PDF understanding is nearly free. It is not: E9 addresses parse
+results by content hash, so PDFs already parsed under an earlier corpus id came back from cache
+without reaching the model — 8 model calls covered 59 documents. `DOCUMENT.PARSE_MS` records the
+real work, a mean of 6.7 s over the 18 documents that did any. Both are now reported, because
+only publishing the warm number would have been a false claim about the system's cost.
+
+**Re-measuring moved the headline numbers, mostly up.** Verification 98.7% → **99.0%**, category
+F1 micro 0.952 → **1.000** (every category now 1.000; the old ICSR precision of 0.875 was closed
+by the product-role verification of D-026), exact-set accuracy 89.5% → **100.0%**, ICSR element
+agreement 71.9% → **88.4%**. README, WRITEUP and PHASES quoted the stale set and would not have
+matched a live re-run; all three are updated.
+
+**One number moved down, and it is the one that matters most.** Abstention correctness
+47.5% → **35.3%**. The mechanism is in the outcome counts: explicit `NOT_STATED` answers fell
+65 → 36 while "expected field not produced at all" rose 23 → 40. False-confident assertions also
+fell, 72 → 66, so this is not new fabrication — the model stopped *declaring* unknowns and started
+*omitting* them. Against a rule that says "say unknown, never guess", a silently absent field is
+the worse of the two, because only one of them is visible to a reviewer.
+
+Root-causing that needs a pipeline re-run, which costs OpenRouter credit that was explicitly
+withheld for this session. It is recorded here and in the write-up's limitations as an open issue
+rather than quietly left in a metrics table.
+
+**Affects:** `eval/run_eval.py`, `eval/report.md`, `eval/report.json`, `README.md`,
+`docs/WRITEUP.md`, `docs/PHASES.md`.

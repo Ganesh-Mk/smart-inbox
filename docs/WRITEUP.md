@@ -35,7 +35,7 @@ The reviewer sees the consequence directly. Clicking an evidence chip highlights
 source text on the rendered page. An unprovable citation shows amber and says *"cited but not
 found in source"* — the system reporting its own hallucination rather than hiding it.
 
-**Measured: 98.7% of asserted facts verified (545 of 552), all but 7 as exact matches.**
+**Measured: 99.0% of asserted facts verified (569 of 575), all but 6 as exact matches.**
 
 Everything else in this submission is ordinary engineering. This is the part I would defend
 hardest.
@@ -211,20 +211,31 @@ Full report: [`eval/report.md`](../eval/report.md). Measured over all 38 message
 
 | Metric | Result | Target |
 |---|---|---|
-| **Evidence verification rate** | **98.7%** (545/552) | ≥ 90% |
-| Category F1 (micro) | **0.952** | ≥ 0.90 |
-| Category F1 (macro) | 0.983 | — |
-| Multi-label exact-set accuracy | 89.5% | — |
-| Field accuracy (exact / normalised) | 70.2% / 70.7% | — |
-| Abstention correctness | 47.5% | — |
-| ICSR element agreement | 71.9% | — |
-| Cost per document | **$0.025** | ≤ $0.05 |
-| Prompt-cache hit rate | 75.8% | — |
+| **Evidence verification rate** | **99.0%** (569/575) | ≥ 90% |
+| Category F1 (micro) | **1.000** | ≥ 0.90 |
+| Category F1 (macro) | 1.000 | — |
+| Multi-label exact-set accuracy | 100.0% | — |
+| Field accuracy (exact / normalised) | 70.1% / 70.7% | — |
+| Abstention correctness | 35.3% | — |
+| ICSR element agreement | 88.4% | — |
+| Cost per document | **$0.0192** | ≤ $0.05 |
+| Prompt-cache hit rate | 65.1% | — |
+| Mean time per document | 21.0 s | — |
 | Dead-lettered jobs | **0** | — |
 | Schema repair round-trips needed | **0** | — |
 
-Per category: MI, PQC and NOT_RELEVANT all scored 1.000 F1; ICSR scored 0.933 (precision 0.875,
-recall 1.000) — it never missed a real case, and over-applied on four.
+Every category now scores 1.000 F1, and the entire label set is correct on all 38 messages.
+The earlier ICSR over-application (precision 0.875 on four messages) was closed by the
+product-role verification change.
+
+**One number moved the wrong way, and it is the one this write-up cares most about.**
+Abstention correctness fell from 47.5% to 35.3% between runs. The mechanism is visible in the
+outcome counts: explicit `NOT_STATED` answers dropped from 65 to 36 while "expected field not
+produced at all" rose from 23 to 40. The model did not start fabricating — false-confident
+assertions fell too, 72 to 66. It started *omitting* fields rather than declaring them unknown.
+Against a rule that says "say unknown, never guess", a silently absent field is a worse answer
+than an explicit `NOT_STATED`, because only one of the two is visible to a reviewer. This is a
+known open issue, not a fixed one; it is the first thing I would chase with more time.
 
 **Cost.** 414 calls, $1.47 for the whole corpus. Prompt caching is worth a measured **3.5×** on
 an identical call ($0.00911 cold → $0.00259 warm). It is keyed per *schema*, because structured
@@ -247,19 +258,19 @@ substantial share are not model errors:
   one.
 
 I report exact and normalised match rather than picking whichever flatters. The truth about
-model quality sits between them, and the gap is small (70.2% vs 70.7%), which tells you the
+model quality sits between them, and the gap is small (70.1% vs 70.7%), which tells you the
 errors are substantive rather than cosmetic.
 
-**Abstention correctness at 47.5% is an underestimate and I would not quote it without this
+**Abstention correctness at 35.3% is an underestimate and I would not quote it without this
 caveat.** The goldens record the facts the generator deliberately planted, not an exhaustive
 inventory of everything legitimately readable in a document. A value counted as "asserted where
 the golden has none" is therefore an **upper bound on fabrication**, not a confirmed one. Fixing
 this properly means enumerating every extractable fact per document, which the generator could
 do and currently does not.
 
-**Confidence calibration: ECE 0.101.** The reliability curve is genuinely informative — the
-0.5–0.6 band scores 47.6% accuracy, the 0.9–1.0 band 85.9%. So the scores carry real signal and
-the model is overconfident by roughly nine points at the top. But 426 of 516 scored fields land
+**Confidence calibration: ECE 0.102.** The reliability curve is genuinely informative — the
+0.5–0.6 band scores 49.2% accuracy, the 0.9–1.0 band 85.8%. So the scores carry real signal and
+the model is overconfident by roughly nine points at the top. But 415 of 503 scored fields land
 in the top decile, so the *spread* is poor: the rubric is separating confident from uncertain,
 but not finely. Tightening that is the first thing I would do with more time.
 

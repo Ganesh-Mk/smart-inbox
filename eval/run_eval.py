@@ -551,20 +551,120 @@ def score_verification(cursor) -> dict[str, Any]:
     }
 
 
-def score_performance(cursor) -> dict[str, Any]:
+# AI_CALL_LOG and PROCESSING_METRIC are append-only and survive a re-seed, but INBOX_MESSAGE
+# does not: `scripts/seed_mailbox.py` creates fresh rows with new ids, orphaning every metric
+# row from the previous run. Nothing joins them back, so an unscoped SUM silently reports the
+# total of every run the database has ever seen.
+#
+# That is not a rounding error. Unscoped, this database reads 966 calls and $3.7191 — $0.0630
+# per document, failing the <= $0.05 target. The corpus actually in the database cost $1.1344
+# across 276 calls, which is $0.0192. The eval was only ever correct when it happened to run
+# immediately after a clean corpus run, which is exactly how the first report was produced.
+#
+# So every performance figure below is scoped to the corpus in the database *now*. A job's
+# subject is the join back; jobs whose subject has been deleted are excluded.
+_LIVE_CALLS = """
+    FROM ai_call_log a
+    JOIN job j ON j.id = a.job_id
+    WHERE (j.subject_type = 'MESSAGE'  AND j.subject_id IN (SELECT id FROM inbox_message))
+       OR (j.subject_type = 'DOCUMENT' AND j.subject_id IN (SELECT id FROM document))
+"""
+
+_LIVE_METRICS = """
+    FROM processing_metric pm
+    WHERE (pm.subject_type = 'MESSAGE'  AND pm.subject_id IN (SELECT id FROM inbox_message))
+       OR (pm.subject_type = 'DOCUMENT' AND pm.subject_id IN (SELECT id FROM document))
+"""
+
+
+def score_timing_per_document(cursor) -> dict[str, Any]:
+    """Processing time for every message in the corpus, one row each.
+
+    This is deliverable R17 — the brief's "process at least 10-15 sample documents
+    automatically and report how long each one takes" (§3.E). PROCESSING_METRIC has always
+    carried the data; nothing reported it per item, only averaged per stage, which answers a
+    different question. A reviewer asking "how long did *this* take" had nowhere to look.
+
+    A message's time is its own pipeline stages plus the parse time of every PDF attached to
+    it, because that is what elapses between the mail arriving and it reaching the reviewer.
+    Stages run on a four-worker pool, so this is summed work rather than a stopwatch held
+    against the wall: the whole corpus finishes in less than the sum of these rows.
+    """
     cursor.execute("""
-        SELECT stage, COUNT(*), AVG(duration_ms),
-               MEDIAN(duration_ms), MAX(duration_ms)
-        FROM processing_metric GROUP BY stage ORDER BY stage""")
+        SELECT m.id,
+               m.subject,
+               (SELECT COUNT(*) FROM document d WHERE d.message_id = m.id),
+               NVL((SELECT SUM(pm.duration_ms) FROM processing_metric pm
+                     WHERE pm.subject_type = 'DOCUMENT'
+                       AND pm.subject_id IN (SELECT id FROM document WHERE message_id = m.id)), 0),
+               NVL((SELECT SUM(pm.duration_ms) FROM processing_metric pm
+                     WHERE pm.subject_type = 'MESSAGE' AND pm.subject_id = m.id), 0)
+        FROM inbox_message m""")
+
+    rows = []
+    for mid, subject, docs, parse_ms, msg_ms in cursor.fetchall():
+        parse_ms, msg_ms = int(parse_ms or 0), int(msg_ms or 0)
+        rows.append({
+            "message_id": int(mid),
+            "subject": (subject or "")[:70],
+            "documents": int(docs or 0),
+            "parse_ms": parse_ms,
+            "pipeline_ms": msg_ms,
+            "total_ms": parse_ms + msg_ms,
+        })
+    rows.sort(key=lambda r: r["total_ms"], reverse=True)
+
+    timed = [r["total_ms"] for r in rows if r["total_ms"] > 0]
+    doc_count = sum(r["documents"] for r in rows) or 1
+
+    # The PARSE_DOCUMENT *job* can finish in milliseconds without doing any parsing: E9
+    # addresses parse results by content hash, so a PDF already parsed under a previous
+    # corpus id is served from cache and never reaches the model. Reporting only that number
+    # would claim PDF understanding costs 0.2 s, which is not true of a cold document.
+    # DOCUMENT.PARSE_MS records the work itself, so both are reported.
+    cursor.execute("""
+        SELECT COUNT(*), NVL(AVG(parse_ms),0), NVL(MEDIAN(parse_ms),0), NVL(MAX(parse_ms),0)
+        FROM document WHERE parse_ms IS NOT NULL AND parse_ms > 0""")
+    n_cold, cold_mean, cold_p50, cold_max = cursor.fetchone()
+
+    cursor.execute("""
+        SELECT COUNT(*) FROM ai_call_log a JOIN job j ON j.id = a.job_id
+        WHERE j.subject_type = 'DOCUMENT' AND j.subject_id IN (SELECT id FROM document)""")
+    doc_ai_calls = cursor.fetchone()[0] or 0
+
+    return {
+        "per_message": rows,
+        "messages_timed": len(timed),
+        "mean_ms": int(statistics.mean(timed)) if timed else 0,
+        "median_ms": int(statistics.median(timed)) if timed else 0,
+        "min_ms": min(timed) if timed else 0,
+        "max_ms": max(timed) if timed else 0,
+        "total_ms": sum(timed),
+        "mean_per_document_ms": int(sum(timed) / doc_count) if timed else 0,
+        "cold_parse_documents": int(n_cold or 0),
+        "cold_parse_mean_ms": int(cold_mean or 0),
+        "cold_parse_p50_ms": int(cold_p50 or 0),
+        "cold_parse_max_ms": int(cold_max or 0),
+        "document_ai_calls": int(doc_ai_calls),
+        "documents": doc_count,
+    }
+
+
+def score_performance(cursor) -> dict[str, Any]:
+    cursor.execute(f"""
+        SELECT pm.stage, COUNT(*), AVG(pm.duration_ms),
+               MEDIAN(pm.duration_ms), MAX(pm.duration_ms)
+        {_LIVE_METRICS}
+        GROUP BY pm.stage ORDER BY pm.stage""")
     stages = [{"stage": s, "n": int(n), "mean_ms": int(avg or 0),
                "p50_ms": int(med or 0), "max_ms": int(mx or 0)}
               for s, n, avg, med, mx in cursor.fetchall()]
 
-    cursor.execute("""
-        SELECT COUNT(*), NVL(SUM(cost_usd),0), NVL(SUM(prompt_tokens),0),
-               NVL(SUM(completion_tokens),0), NVL(SUM(cached_tokens),0),
-               NVL(AVG(latency_ms),0), NVL(SUM(CASE WHEN repaired='Y' THEN 1 ELSE 0 END),0)
-        FROM ai_call_log""")
+    cursor.execute(f"""
+        SELECT COUNT(*), NVL(SUM(a.cost_usd),0), NVL(SUM(a.prompt_tokens),0),
+               NVL(SUM(a.completion_tokens),0), NVL(SUM(a.cached_tokens),0),
+               NVL(AVG(a.latency_ms),0), NVL(SUM(CASE WHEN a.repaired='Y' THEN 1 ELSE 0 END),0)
+        {_LIVE_CALLS}""")
     calls, cost, prompt, completion, cached, latency, repaired = cursor.fetchone()
 
     cursor.execute("SELECT COUNT(*) FROM document")
@@ -572,13 +672,20 @@ def score_performance(cursor) -> dict[str, Any]:
     cursor.execute("SELECT COUNT(*) FROM inbox_message")
     messages = cursor.fetchone()[0] or 1
 
-    cursor.execute("""SELECT purpose, COUNT(*), NVL(SUM(cost_usd),0), NVL(AVG(latency_ms),0)
-                      FROM ai_call_log GROUP BY purpose ORDER BY 3 DESC""")
+    # How much of the table this run actually is, so a reader can see the scoping is real
+    # rather than take it on trust.
+    cursor.execute("SELECT COUNT(*), NVL(SUM(cost_usd),0) FROM ai_call_log")
+    all_calls, all_cost = cursor.fetchone()
+
+    cursor.execute(f"""SELECT a.purpose, COUNT(*), NVL(SUM(a.cost_usd),0), NVL(AVG(a.latency_ms),0)
+                       {_LIVE_CALLS}
+                       GROUP BY a.purpose ORDER BY 3 DESC""")
     by_purpose = [{"purpose": p, "calls": int(n), "cost_usd": round(float(c), 5),
                    "mean_latency_ms": int(l)} for p, n, c, l in cursor.fetchall()]
 
     return {
         "stages": stages,
+        "by_purpose": by_purpose,
         "ai_calls": int(calls or 0),
         "total_cost_usd": round(float(cost or 0), 5),
         "cost_per_document_usd": round(float(cost or 0) / documents, 5),
@@ -589,6 +696,8 @@ def score_performance(cursor) -> dict[str, Any]:
         "cache_hit_rate": round(int(cached or 0) / int(prompt or 1), 4),
         "mean_latency_ms": int(latency or 0),
         "schema_repairs": int(repaired or 0),
+        "ai_calls_all_runs": int(all_calls or 0),
+        "total_cost_all_runs_usd": round(float(all_cost or 0), 5),
     }
 
 
@@ -758,6 +867,13 @@ def build_report(results: dict[str, Any]) -> str:
 
     add("## Performance and cost")
     add("")
+    if p.get("ai_calls_all_runs", 0) > p["ai_calls"]:
+        add(f"> Scoped to the {p['ai_calls']} calls belonging to the corpus currently in the "
+            f"database. AI_CALL_LOG holds {p['ai_calls_all_runs']} calls "
+            f"(${p['total_cost_all_runs_usd']:.4f}) accumulated across every run ever made; "
+            f"summing those would overstate cost per document by "
+            f"{p['total_cost_all_runs_usd'] / max(p['total_cost_usd'], 1e-9):.1f}x.")
+        add("")
     add(f"- AI calls: **{p['ai_calls']}**")
     add(f"- Total spend: **${p['total_cost_usd']:.4f}**")
     add(f"- Per document: **${p['cost_per_document_usd']:.4f}** "
@@ -785,6 +901,44 @@ def build_report(results: dict[str, Any]) -> str:
         for row in p["by_purpose"]:
             add(f"| {row['purpose']} | {row['calls']} | ${row['cost_usd']:.4f} "
                 f"| {row['mean_latency_ms']} ms |")
+        add("")
+
+    t = results["timing"]
+    if t["per_message"]:
+        add("### How long each document took")
+        add("")
+        add("The brief asks for a batch of 10-15 documents processed automatically, with the "
+            "time each one takes (\u00a73.E). Every message in the corpus is listed, not a "
+            "sample.")
+        add("")
+        add(f"- Messages timed: **{t['messages_timed']}** covering "
+            f"{sum(r['documents'] for r in t['per_message'])} documents")
+        add(f"- Per message: mean **{t['mean_ms'] / 1000:.1f} s** · median "
+            f"{t['median_ms'] / 1000:.1f} s · fastest {t['min_ms'] / 1000:.1f} s · "
+            f"slowest {t['max_ms'] / 1000:.1f} s")
+        add(f"- Per document: mean **{t['mean_per_document_ms'] / 1000:.1f} s**")
+        add("")
+        add("`parse` is PDF understanding across the message's attachments; `pipeline` is "
+            "classify + extract + finalise. These are summed worker time, so the corpus "
+            "finishes in less than their total on a four-worker pool.")
+        add("")
+        add(f"**Read the `parse` column with E9 in mind.** Parse results are addressed by "
+            f"content hash, so a PDF already parsed under an earlier corpus id is served from "
+            f"cache without reaching the model — {t['document_ai_calls']} model calls covered "
+            f"{t['documents']} documents here. The cache makes the job return in milliseconds; "
+            f"it does not make PDF understanding free. Parsing the same documents cold took a "
+            f"mean of **{t['cold_parse_mean_ms'] / 1000:.1f} s** (median "
+            f"{t['cold_parse_p50_ms'] / 1000:.1f} s, slowest "
+            f"{t['cold_parse_max_ms'] / 1000:.1f} s) across "
+            f"the {t['cold_parse_documents']} documents that did real parse work, recorded on "
+            f"DOCUMENT.PARSE_MS. Add that "
+            f"to the pipeline column for a first-time cost.")
+        add("")
+        add("| Message | Docs | parse | pipeline | **total** |")
+        add("|---|---|---|---|---|")
+        for row in t["per_message"]:
+            add(f"| {row['subject']} | {row['documents']} | {row['parse_ms'] / 1000:.1f} s "
+                f"| {row['pipeline_ms'] / 1000:.1f} s | **{row['total_ms'] / 1000:.1f} s** |")
         add("")
 
     add("## Edge-case coverage")
@@ -851,11 +1005,6 @@ def main() -> int:
                 if d["status"] in ("READY_FOR_REVIEW", "REVIEWED"))
 
     performance = score_performance(cursor)
-    cursor.execute("""SELECT purpose, COUNT(*), NVL(SUM(cost_usd),0), NVL(AVG(latency_ms),0)
-                      FROM ai_call_log GROUP BY purpose ORDER BY 3 DESC""")
-    performance["by_purpose"] = [
-        {"purpose": p, "calls": int(n), "cost_usd": round(float(c), 5),
-         "mean_latency_ms": int(l)} for p, n, c, l in cursor.fetchall()]
 
     results = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -866,6 +1015,7 @@ def main() -> int:
         "calibration": score_calibration(actual, goldens, mapping),
         "verification": score_verification(cursor),
         "performance": performance,
+        "timing": score_timing_per_document(cursor),
         "edge_cases": score_edge_cases(goldens, actual, mapping),
         "health": {"messages": len(actual), "ready": ready, "documents": documents,
                    "parsed": parsed, "parse_failed": failed, "dead_jobs": dead,

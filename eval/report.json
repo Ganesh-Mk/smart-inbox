@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04 13:24 UTC",
+  "generated_at": "2026-09-05 13:33 UTC",
   "corpus": {
     "messages": 38,
     "documents": 59,
@@ -7,18 +7,6 @@
   },
   "categories": {
     "per_category": {
-      "MI": {
-        "precision": 1.0,
-        "recall": 1.0,
-        "f1": 1.0,
-        "support": 5
-      },
-      "ICSR": {
-        "precision": 0.875,
-        "recall": 1.0,
-        "f1": 0.9333,
-        "support": 28
-      },
       "NOT_RELEVANT": {
         "precision": 1.0,
         "recall": 1.0,
@@ -30,102 +18,114 @@
         "recall": 1.0,
         "f1": 1.0,
         "support": 4
+      },
+      "MI": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 5
+      },
+      "ICSR": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 28
       }
     },
     "micro": {
-      "precision": 0.9091,
+      "precision": 1.0,
       "recall": 1.0,
-      "f1": 0.9524,
+      "f1": 1.0,
       "support": 40
     },
-    "macro_f1": 0.9833,
-    "exact_set_accuracy": 0.8947,
+    "macro_f1": 1.0,
+    "exact_set_accuracy": 1.0,
     "messages_scored": 38
   },
   "fields": {
     "outcomes": {
-      "correct": 524,
-      "correct_normalised": 528,
-      "wrong": 223,
-      "abstained_correctly": 65,
-      "false_confident": 72,
-      "missing_field": 23
+      "correct": 512,
+      "correct_normalised": 516,
+      "wrong": 218,
+      "abstained_correctly": 36,
+      "false_confident": 66,
+      "missing_field": 40
     },
-    "field_accuracy": 0.7015,
+    "field_accuracy": 0.7014,
     "field_accuracy_normalised": 0.7068,
-    "abstention_correctness": 0.4745,
+    "abstention_correctness": 0.3529,
     "mismatches": [
       {
-        "message": "pqc-03-damaged-carton",
-        "field": "defect.summary",
-        "expected": "damaged packaging in transit",
-        "got": "Shipping carton crushed on one corner. Four of twelve cartons inside torn open and two blisters punctured."
+        "message": "icsr-04-paediatric-weeks",
+        "field": "patient.medical_history",
+        "expected": "born at 38 weeks, otherwise well",
+        "got": "chest infection"
       },
       {
-        "message": "adv-03-encrypted-pdf",
-        "field": "reaction[0].term",
-        "expected": "maculopapular rash",
-        "got": "itchy rash"
-      },
-      {
-        "message": "adv-03-encrypted-pdf",
+        "message": "icsr-04-paediatric-weeks",
         "field": "reaction[0].onset.raw",
-        "expected": "12 March 2026",
-        "got": "nine days after starting Velmoradine 20 mg once daily"
+        "expected": "22 June 2026",
+        "got": "Within two days"
       },
       {
-        "message": "adv-03-encrypted-pdf",
+        "message": "icsr-04-paediatric-weeks",
         "field": "reaction[0].onset.precision",
         "expected": "DAY",
         "got": "UNKNOWN"
       },
       {
-        "message": "adv-03-encrypted-pdf",
+        "message": "icsr-04-paediatric-weeks",
         "field": "reaction[0].onset.iso",
-        "expected": "2026-03-12",
+        "expected": "2026-06-22",
         "got": ""
       },
       {
-        "message": "adv-05-mislabelled-octet-stream",
-        "field": "reporter.role",
-        "expected": "OTHER_HCP",
-        "got": "PHARMACIST"
+        "message": "icsr-05-pregnancy",
+        "field": "patient.medical_history",
+        "expected": "first pregnancy, 22 weeks gestation",
+        "got": "generalised anxiety disorder"
       },
       {
-        "message": "adv-10-corrupt-pdf",
-        "field": "reporter.role",
-        "expected": "OTHER_HCP",
-        "got": "PHYSICIAN"
-      },
-      {
-        "message": "adv-10-corrupt-pdf",
-        "field": "product[0].start_date.raw",
-        "expected": "11 January 2026",
-        "got": "four weeks before 6 February 2026"
-      },
-      {
-        "message": "adv-10-corrupt-pdf",
-        "field": "product[0].start_date.iso",
-        "expected": "2026-01-11",
-        "got": ""
-      },
-      {
-        "message": "adv-10-corrupt-pdf",
+        "message": "icsr-05-pregnancy",
         "field": "reaction[0].term",
-        "expected": "fatal arrhythmia",
-        "got": "ventricular arrhythmia"
+        "expected": "photosensitivity reaction",
+        "got": "erythematous eruption on sun-exposed skin"
       },
       {
-        "message": "adv-10-corrupt-pdf",
-        "field": "reaction[0].onset.raw",
-        "expected": "6 February 2026",
-        "got": "four weeks after starting Cardexatine 5 mg once daily"
+        "message": "icsr-06-relative-dates",
+        "field": "patient.initials",
+        "expected": "S.V.",
+        "got": "TB"
       },
       {
-        "message": "adv-10-corrupt-pdf",
-        "field": "reaction[0].onset.precision",
-        "expected": "DAY",
-        "got": "UNKNOWN"
+        "message": "icsr-06-relative-dates",
+        "field": "patient.medical_history",
+        "expected": "migraine with aura",
+        "got": "migraines"
+      },
+      {
+        "message": "icsr-06-relative-dates",
+        "field": "reaction[0].term",
+        "expected": "dizziness",
+        "got": "light-headedness on standing"
+      },
+      {
+        "message": "icsr-07-multi-product",
+        "field": "patient.medical_history",
+        "expected": "asthma since childhood",
+        "got": "lifelong asthma"
+      },
+      {
+        "message": "icsr-07-multi-product",
+        "field": "product[0].dose.amount",
+        "expected": "100",
+        "got": "2"
+      },
+      {
+        "message": "icsr-07-multi-product",
+        "field": "product[0].dose.unit",
+        "expected": "micrograms/dose",
+        "got": "puffs"
       }
     ],
     "per_field": {
@@ -174,12 +174,12 @@
       "patient.age": {
         "correct": 0,
         "wrong": 0,
-        "abstained_correctly": 5,
+        "abstained_correctly": 1,
         "false_confident": 0
       },
       "patient.age.raw": {
-        "correct": 21,
-        "wrong": 6,
+        "correct": 20,
+        "wrong": 7,
         "abstained_correctly": 0,
         "false_confident": 0
       },
@@ -190,33 +190,33 @@
         "false_confident": 0
       },
       "patient.age.value": {
-        "correct": 20,
-        "wrong": 5,
+        "correct": 19,
+        "wrong": 6,
         "abstained_correctly": 0,
         "false_confident": 0
       },
       "patient.initials": {
         "correct": 13,
         "wrong": 14,
-        "abstained_correctly": 5,
+        "abstained_correctly": 1,
         "false_confident": 0
       },
       "patient.medical_history": {
         "correct": 14,
         "wrong": 13,
-        "abstained_correctly": 5,
+        "abstained_correctly": 1,
         "false_confident": 0
       },
       "patient.sex": {
         "correct": 26,
         "wrong": 1,
-        "abstained_correctly": 5,
+        "abstained_correctly": 1,
         "false_confident": 0
       },
       "patient.weight": {
         "correct": 0,
         "wrong": 0,
-        "abstained_correctly": 6,
+        "abstained_correctly": 2,
         "false_confident": 0
       },
       "patient.weight.raw": {
@@ -226,7 +226,7 @@
         "false_confident": 0
       },
       "product.batch": {
-        "correct": 3,
+        "correct": 1,
         "wrong": 0,
         "abstained_correctly": 0,
         "false_confident": 0
@@ -252,13 +252,7 @@
       "product[0].dose.amount": {
         "correct": 21,
         "wrong": 5,
-        "abstained_correctly": 1,
-        "false_confident": 1
-      },
-      "product[0].dose.frequency": {
-        "correct": 0,
-        "wrong": 0,
-        "abstained_correctly": 2,
+        "abstained_correctly": 0,
         "false_confident": 0
       },
       "product[0].dose.frequency_raw": {
@@ -270,31 +264,25 @@
       "product[0].dose.unit": {
         "correct": 22,
         "wrong": 4,
-        "abstained_correctly": 1,
-        "false_confident": 1
+        "abstained_correctly": 0,
+        "false_confident": 0
       },
       "product[0].name": {
         "correct": 24,
         "wrong": 2,
         "abstained_correctly": 0,
-        "false_confident": 2
+        "false_confident": 0
       },
       "product[0].role": {
         "correct": 26,
         "wrong": 0,
         "abstained_correctly": 0,
-        "false_confident": 2
+        "false_confident": 0
       },
       "product[0].route": {
         "correct": 16,
         "wrong": 10,
-        "abstained_correctly": 2,
-        "false_confident": 0
-      },
-      "product[0].start_date": {
-        "correct": 0,
-        "wrong": 0,
-        "abstained_correctly": 2,
+        "abstained_correctly": 0,
         "false_confident": 0
       },
       "product[0].start_date.iso": {
@@ -364,8 +352,8 @@
         "false_confident": 1
       },
       "product[1].start_date.iso": {
-        "correct": 1,
-        "wrong": 2,
+        "correct": 2,
+        "wrong": 1,
         "abstained_correctly": 0,
         "false_confident": 0
       },
@@ -521,25 +509,25 @@
       },
       "reporter.country": {
         "correct": 14,
-        "wrong": 17,
+        "wrong": 13,
         "abstained_correctly": 1,
         "false_confident": 0
       },
       "reporter.name": {
-        "correct": 26,
+        "correct": 22,
         "wrong": 5,
         "abstained_correctly": 1,
         "false_confident": 0
       },
       "reporter.organisation": {
-        "correct": 17,
+        "correct": 14,
         "wrong": 10,
-        "abstained_correctly": 5,
+        "abstained_correctly": 4,
         "false_confident": 0
       },
       "reporter.role": {
-        "correct": 19,
-        "wrong": 12,
+        "correct": 17,
+        "wrong": 10,
         "abstained_correctly": 1,
         "false_confident": 0
       },
@@ -554,23 +542,23 @@
   "icsr_elements": {
     "per_element": {
       "has_identifiable_patient": {
-        "agreement": 0.7188,
-        "n": 32
+        "agreement": 0.8571,
+        "n": 28
       },
       "has_identifiable_reporter": {
-        "agreement": 0.875,
-        "n": 32
+        "agreement": 1.0,
+        "n": 28
       },
       "has_suspect_product": {
-        "agreement": 0.625,
-        "n": 32
+        "agreement": 0.8571,
+        "n": 28
       },
       "has_adverse_event": {
-        "agreement": 0.6562,
-        "n": 32
+        "agreement": 0.8214,
+        "n": 28
       }
     },
-    "overall": 0.7188
+    "overall": 0.8839
   },
   "calibration": {
     "curve": [
@@ -581,21 +569,27 @@
         "mean_confidence": 0.25
       },
       {
+        "band": "0.3-0.4",
+        "n": 1,
+        "accuracy": 1.0,
+        "mean_confidence": 0.35
+      },
+      {
         "band": "0.4-0.5",
-        "n": 5,
+        "n": 3,
         "accuracy": 1.0,
         "mean_confidence": 0.45
       },
       {
         "band": "0.5-0.6",
-        "n": 63,
-        "accuracy": 0.4762,
+        "n": 61,
+        "accuracy": 0.4918,
         "mean_confidence": 0.55
       },
       {
         "band": "0.6-0.7",
-        "n": 4,
-        "accuracy": 0.5,
+        "n": 2,
+        "accuracy": 0.0,
         "mean_confidence": 0.65
       },
       {
@@ -606,99 +600,89 @@
       },
       {
         "band": "0.8-0.9",
-        "n": 11,
-        "accuracy": 0.4545,
+        "n": 14,
+        "accuracy": 0.5,
         "mean_confidence": 0.85
       },
       {
         "band": "0.9-1.0",
-        "n": 426,
-        "accuracy": 0.8592,
+        "n": 415,
+        "accuracy": 0.8578,
         "mean_confidence": 0.95
       }
     ],
-    "expected_calibration_error": 0.1013,
-    "n": 516
+    "expected_calibration_error": 0.1025,
+    "n": 503
   },
   "verification": {
-    "asserted_with_evidence": 552,
-    "verified": 545,
-    "exact": 545,
+    "asserted_with_evidence": 575,
+    "verified": 569,
+    "exact": 569,
     "fuzzy": 0,
-    "unverified": 7,
-    "rate": 0.9873
+    "unverified": 6,
+    "rate": 0.9896
   },
   "performance": {
     "stages": [
       {
         "stage": "CLASSIFY_MESSAGE",
-        "n": 80,
-        "mean_ms": 8512,
-        "p50_ms": 6005,
-        "max_ms": 55694
+        "n": 38,
+        "mean_ms": 8997,
+        "p50_ms": 9498,
+        "max_ms": 16932
       },
       {
         "stage": "EXTRACT_CASE",
-        "n": 53,
-        "mean_ms": 17748,
-        "p50_ms": 14292,
-        "max_ms": 45190
+        "n": 35,
+        "mean_ms": 17981,
+        "p50_ms": 21258,
+        "max_ms": 43851
       },
       {
         "stage": "FINALISE_MESSAGE",
         "n": 38,
-        "mean_ms": 8235,
-        "p50_ms": 6157,
-        "max_ms": 19011
+        "mean_ms": 6767,
+        "p50_ms": 4858,
+        "max_ms": 13728
       },
       {
         "stage": "PARSE_DOCUMENT",
         "n": 59,
-        "mean_ms": 4183,
-        "p50_ms": 1084,
-        "max_ms": 33314
+        "mean_ms": 181,
+        "p50_ms": 61,
+        "max_ms": 1863
       }
     ],
-    "ai_calls": 414,
-    "total_cost_usd": 1.47103,
-    "cost_per_document_usd": 0.02493,
-    "cost_per_message_usd": 0.03871,
-    "prompt_tokens": 2065507,
-    "completion_tokens": 161660,
-    "cached_tokens": 1564973,
-    "cache_hit_rate": 0.7577,
-    "mean_latency_ms": 4400,
-    "schema_repairs": 0,
     "by_purpose": [
-      {
-        "purpose": "P1_classify",
-        "calls": 104,
-        "cost_usd": 0.36228,
-        "mean_latency_ms": 5246
-      },
       {
         "purpose": "P6_summarise",
         "calls": 56,
-        "cost_usd": 0.32883,
-        "mean_latency_ms": 4629
+        "cost_usd": 0.32882,
+        "mean_latency_ms": 4265
       },
       {
-        "purpose": "P2a_extract_parties",
-        "calls": 78,
-        "cost_usd": 0.24542,
-        "mean_latency_ms": 4138
+        "purpose": "P1_classify",
+        "calls": 59,
+        "cost_usd": 0.22323,
+        "mean_latency_ms": 5476
       },
       {
         "purpose": "P2b_extract_products",
-        "calls": 78,
-        "cost_usd": 0.22197,
-        "mean_latency_ms": 3648
+        "calls": 48,
+        "cost_usd": 0.16817,
+        "mean_latency_ms": 4297
+      },
+      {
+        "purpose": "P2a_extract_parties",
+        "calls": 48,
+        "cost_usd": 0.16063,
+        "mean_latency_ms": 4276
       },
       {
         "purpose": "P2c_extract_reactions",
-        "calls": 78,
-        "cost_usd": 0.18884,
-        "mean_latency_ms": 3337
+        "calls": 48,
+        "cost_usd": 0.13488,
+        "mean_latency_ms": 3448
       },
       {
         "purpose": "P8_translate",
@@ -707,24 +691,357 @@
         "mean_latency_ms": 6482
       },
       {
-        "purpose": "P3_extract_pqc",
-        "calls": 5,
-        "cost_usd": 0.03086,
-        "mean_latency_ms": 3506
-      },
-      {
         "purpose": "P5_transcribe",
         "calls": 3,
         "cost_usd": 0.02864,
         "mean_latency_ms": 25525
       },
       {
+        "purpose": "P3_extract_pqc",
+        "calls": 4,
+        "cost_usd": 0.02485,
+        "mean_latency_ms": 3954
+      },
+      {
         "purpose": "P4_extract_mi",
-        "calls": 7,
-        "cost_usd": 0.01819,
-        "mean_latency_ms": 3240
+        "calls": 5,
+        "cost_usd": 0.01917,
+        "mean_latency_ms": 3260
       }
-    ]
+    ],
+    "ai_calls": 276,
+    "total_cost_usd": 1.13439,
+    "cost_per_document_usd": 0.01923,
+    "cost_per_message_usd": 0.02985,
+    "prompt_tokens": 1382682,
+    "completion_tokens": 109192,
+    "cached_tokens": 900175,
+    "cache_hit_rate": 0.651,
+    "mean_latency_ms": 4638,
+    "schema_repairs": 0,
+    "ai_calls_all_runs": 966,
+    "total_cost_all_runs_usd": 3.71914
+  },
+  "timing": {
+    "per_message": [
+      {
+        "message_id": 665,
+        "subject": "Report form (sending twice in case the first did not arrive)",
+        "documents": 3,
+        "parse_ms": 3854,
+        "pipeline_ms": 65036,
+        "total_ms": 68890
+      },
+      {
+        "message_id": 694,
+        "subject": "Literature alert: Cholestatic hepatitis following short-course fenaqui",
+        "documents": 2,
+        "parse_ms": 91,
+        "pipeline_ms": 66224,
+        "total_ms": 66315
+      },
+      {
+        "message_id": 683,
+        "subject": "Handwritten report form — agranulocytosis",
+        "documents": 3,
+        "parse_ms": 181,
+        "pipeline_ms": 62241,
+        "total_ms": 62422
+      },
+      {
+        "message_id": 696,
+        "subject": "Literature alert: Cutaneous and neurological reactions to velmoradine:",
+        "documents": 2,
+        "parse_ms": 122,
+        "pipeline_ms": 53196,
+        "total_ms": 53318
+      },
+      {
+        "message_id": 695,
+        "subject": "Literature alert: Angioedema and neutropenia in two patients receiving",
+        "documents": 2,
+        "parse_ms": 114,
+        "pipeline_ms": 52255,
+        "total_ms": 52369
+      },
+      {
+        "message_id": 666,
+        "subject": "FW: patient reaction — please pass to safety",
+        "documents": 2,
+        "parse_ms": 850,
+        "pipeline_ms": 49712,
+        "total_ms": 50562
+      },
+      {
+        "message_id": 678,
+        "subject": "URGENT — fatal outcome following Cardexatine initiation",
+        "documents": 2,
+        "parse_ms": 137,
+        "pipeline_ms": 46186,
+        "total_ms": 46323
+      },
+      {
+        "message_id": 670,
+        "subject": "Typed cover sheet with handwritten annex",
+        "documents": 2,
+        "parse_ms": 341,
+        "pipeline_ms": 44710,
+        "total_ms": 45051
+      },
+      {
+        "message_id": 685,
+        "subject": "Fall on the ward — medicine unknown",
+        "documents": 2,
+        "parse_ms": 93,
+        "pipeline_ms": 44353,
+        "total_ms": 44446
+      },
+      {
+        "message_id": 671,
+        "subject": "Photosensitivity report — form attached",
+        "documents": 2,
+        "parse_ms": 174,
+        "pipeline_ms": 44197,
+        "total_ms": 44371
+      },
+      {
+        "message_id": 690,
+        "subject": "UAW-Meldung — Agranulozytose unter Domitrelle",
+        "documents": 2,
+        "parse_ms": 123,
+        "pipeline_ms": 44111,
+        "total_ms": 44234
+      },
+      {
+        "message_id": 669,
+        "subject": "Report attached (our system mangles the file type)",
+        "documents": 2,
+        "parse_ms": 240,
+        "pipeline_ms": 42982,
+        "total_ms": 43222
+      },
+      {
+        "message_id": 677,
+        "subject": "Serious ADR report — hepatitis, Fenaquil (form attached)",
+        "documents": 2,
+        "parse_ms": 157,
+        "pipeline_ms": 42466,
+        "total_ms": 42623
+      },
+      {
+        "message_id": 692,
+        "subject": "副作用報告 — Nuvexoral 経口懸濁液",
+        "documents": 2,
+        "parse_ms": 102,
+        "pipeline_ms": 42256,
+        "total_ms": 42358
+      },
+      {
+        "message_id": 691,
+        "subject": "Déclaration d'effet indésirable — Domitrelle, grossesse",
+        "documents": 2,
+        "parse_ms": 124,
+        "pipeline_ms": 41845,
+        "total_ms": 41969
+      },
+      {
+        "message_id": 693,
+        "subject": "ADR report form (English form, German narrative)",
+        "documents": 2,
+        "parse_ms": 112,
+        "pipeline_ms": 41250,
+        "total_ms": 41362
+      },
+      {
+        "message_id": 675,
+        "subject": "Contaminated vial AND reaction in the same patient",
+        "documents": 1,
+        "parse_ms": 501,
+        "pipeline_ms": 35439,
+        "total_ms": 35940
+      },
+      {
+        "message_id": 676,
+        "subject": "Possible reaction to Velmoradine — 58F, rash",
+        "documents": 1,
+        "parse_ms": 63,
+        "pipeline_ms": 34276,
+        "total_ms": 34339
+      },
+      {
+        "message_id": 674,
+        "subject": "Form attached — apologies if it is damaged",
+        "documents": 2,
+        "parse_ms": 695,
+        "pipeline_ms": 28925,
+        "total_ms": 29620
+      },
+      {
+        "message_id": 667,
+        "subject": "Completed form attached (password protected)",
+        "documents": 2,
+        "parse_ms": 1364,
+        "pipeline_ms": 26654,
+        "total_ms": 28018
+      },
+      {
+        "message_id": 687,
+        "subject": "my rash is worse, should I stop the tablets?",
+        "documents": 1,
+        "parse_ms": 36,
+        "pipeline_ms": 26461,
+        "total_ms": 26497
+      },
+      {
+        "message_id": 682,
+        "subject": "Angioedema then dizziness — two medicines involved",
+        "documents": 1,
+        "parse_ms": 61,
+        "pipeline_ms": 26004,
+        "total_ms": 26065
+      },
+      {
+        "message_id": 672,
+        "subject": "RE: Possible reaction to Velmoradine — 58F, rash",
+        "documents": 1,
+        "parse_ms": 121,
+        "pipeline_ms": 24901,
+        "total_ms": 25022
+      },
+      {
+        "message_id": 681,
+        "subject": "dizzy since starting migraine tablets",
+        "documents": 1,
+        "parse_ms": 41,
+        "pipeline_ms": 24111,
+        "total_ms": 24152
+      },
+      {
+        "message_id": 686,
+        "subject": "not sure who to tell",
+        "documents": 1,
+        "parse_ms": 35,
+        "pipeline_ms": 23060,
+        "total_ms": 23095
+      },
+      {
+        "message_id": 680,
+        "subject": "Photosensitivity in pregnancy — Domitrelle",
+        "documents": 1,
+        "parse_ms": 61,
+        "pipeline_ms": 23033,
+        "total_ms": 23094
+      },
+      {
+        "message_id": 679,
+        "subject": "Report — 6-week-old infant, vomiting after Nuvexoral",
+        "documents": 1,
+        "parse_ms": 60,
+        "pipeline_ms": 22788,
+        "total_ms": 22848
+      },
+      {
+        "message_id": 684,
+        "subject": "Anonymous website submission — rash on Velmoradine",
+        "documents": 1,
+        "parse_ms": 49,
+        "pipeline_ms": 21521,
+        "total_ms": 21570
+      },
+      {
+        "message_id": 701,
+        "subject": "Particles visible in Zorbitran vials — photo attached",
+        "documents": 2,
+        "parse_ms": 325,
+        "pipeline_ms": 18080,
+        "total_ms": 18405
+      },
+      {
+        "message_id": 697,
+        "subject": "Enquiry — dosing in renal impairment",
+        "documents": 1,
+        "parse_ms": 42,
+        "pipeline_ms": 14193,
+        "total_ms": 14235
+      },
+      {
+        "message_id": 699,
+        "subject": "Enquiry — drug interaction",
+        "documents": 1,
+        "parse_ms": 39,
+        "pipeline_ms": 13640,
+        "total_ms": 13679
+      },
+      {
+        "message_id": 673,
+        "subject": "FW: Enquiry — storage temperature",
+        "documents": 1,
+        "parse_ms": 86,
+        "pipeline_ms": 13393,
+        "total_ms": 13479
+      },
+      {
+        "message_id": 702,
+        "subject": "Damaged delivery — Nuvexoral cartons torn",
+        "documents": 1,
+        "parse_ms": 37,
+        "pipeline_ms": 13155,
+        "total_ms": 13192
+      },
+      {
+        "message_id": 700,
+        "subject": "Complaint — broken tamper seal, Velmoradine 20 mg",
+        "documents": 1,
+        "parse_ms": 38,
+        "pipeline_ms": 12826,
+        "total_ms": 12864
+      },
+      {
+        "message_id": 698,
+        "subject": "Enquiry — storage temperature",
+        "documents": 1,
+        "parse_ms": 34,
+        "pipeline_ms": 12620,
+        "total_ms": 12654
+      },
+      {
+        "message_id": 688,
+        "subject": "Register now: 14th Annual Pharmacovigilance Excellence Summit",
+        "documents": 1,
+        "parse_ms": 50,
+        "pipeline_ms": 12560,
+        "total_ms": 12610
+      },
+      {
+        "message_id": 689,
+        "subject": "Automatic reply: Serious ADR report — hepatitis, Fenaquil",
+        "documents": 1,
+        "parse_ms": 37,
+        "pipeline_ms": 9891,
+        "total_ms": 9928
+      },
+      {
+        "message_id": 668,
+        "subject": "Guidance document and case bundle",
+        "documents": 1,
+        "parse_ms": 125,
+        "pipeline_ms": 7868,
+        "total_ms": 7993
+      }
+    ],
+    "messages_timed": 38,
+    "mean_ms": 32608,
+    "median_ms": 28819,
+    "min_ms": 7993,
+    "max_ms": 68890,
+    "total_ms": 1239134,
+    "mean_per_document_ms": 21002,
+    "cold_parse_documents": 18,
+    "cold_parse_mean_ms": 6710,
+    "cold_parse_p50_ms": 730,
+    "cold_parse_max_ms": 32776,
+    "document_ai_calls": 8,
+    "documents": 59
   },
   "edge_cases": {
     "E3": {

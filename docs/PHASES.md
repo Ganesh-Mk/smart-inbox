@@ -203,14 +203,14 @@ produced exactly the documents the corpus says it should. 45/45 backend tests gr
 
 ## P7 — Documentation & submission · Day 7
 
-- [ ] `README.md` — setup, run, env vars (**placeholders only**), Gmail recipe
-- [ ] `docs/WRITEUP.md` (2–5 pages) — architecture diagram, tech choices, **prompting approach**,
+- [x] `README.md` — setup, run, env vars (**placeholders only**), Gmail recipe
+- [x] `docs/WRITEUP.md` (2–5 pages) — architecture diagram, tech choices, **prompting approach**,
       known limitations, what I'd change for production, the 10 declared assumptions
-- [ ] `docs/architecture.svg`
-- [ ] `docs/sample-outputs/*.json` — extracted JSON per test document
-- [ ] Screenshots + short screen recording of the review screen
+- [x] `docs/architecture.svg`
+- [x] `docs/sample-outputs/*.json` — extracted JSON per test document (38 files)
+- [ ] Screenshots + short screen recording of the review screen  **<- the only missing §7 deliverable**
 - [ ] **Clean-clone test:** fresh clone → `.env` → `docker compose up` → seed → works
-- [ ] Final sweep: no API key, no real data, no `TODO` in the tree
+- [x] Final sweep: no API key, no real data, no `TODO` in the tree — swept 5 Sep, clean
 - [ ] Send to pavithra.r@ / vivek.w@ / ashish.b@ / rehan.n@ clinevotech.com
 
 **Exit criteria:** all six brief §7 deliverables present and verified on a clean clone.
@@ -246,17 +246,19 @@ corpus ingested and the queue drained.
 
 _(none currently)_
 
-## Measured results (full corpus, 4 Sep 2026)
+## Measured results (full corpus, re-measured 5 Sep 2026)
 
 | Metric | Result | Target |
 |---|---|---|
-| Evidence verification rate | **98.7%** (545/552) | >= 90% |
-| Category F1 micro / macro | **0.952** / 0.983 | >= 0.90 |
-| Multi-label exact-set accuracy | 89.5% | - |
-| Field accuracy (exact / normalised) | 70.2% / 70.7% | - |
-| ICSR element agreement | 71.9% | - |
-| Cost per document | **$0.025** | <= $0.05 |
-| Prompt-cache hit rate | 75.8% | - |
+| Evidence verification rate | **99.0%** (569/575) | >= 90% |
+| Category F1 micro / macro | **1.000** / 1.000 | >= 0.90 |
+| Multi-label exact-set accuracy | 100.0% | - |
+| Field accuracy (exact / normalised) | 70.1% / 70.7% | - |
+| Abstention correctness | 35.3% (was 47.5% — see D-029) | - |
+| ICSR element agreement | 88.4% | - |
+| Cost per document | **$0.0192** | <= $0.05 |
+| Mean time per document / per message | 21.0 s / 32.6 s | - |
+| Prompt-cache hit rate | 65.1% | - |
 | Dead-lettered jobs | **0** | - |
 | Schema repairs needed | **0** | - |
 | Messages reaching review | 38 / 38 | - |
@@ -268,6 +270,7 @@ Bonus verified: `article_A03` (3-patient case series) split into exactly 3 cases
 
 | Date | Session | What happened |
 |---|---|---|
+| 2026-09-05 | 5 | Added the per-document timing report the brief asks for (§3.E) and, while doing it, found the eval was summing every run ever stored rather than the corpus in the database — cost per document read $0.0630 against a $0.05 target; correctly scoped it is $0.0192. Re-measured headline numbers moved up (verification 99.0%, F1 1.000, exact-set 100.0%, ICSR agreement 88.4%); abstention fell 47.5% -> 35.3% and is recorded as an open issue. README, WRITEUP and PHASES had quoted the stale set and are updated. Final sweep clean. Decision D-029. No OpenRouter calls were made. |
 | 2026-09-05 | 4 | Deployment built: production compose (Caddy + backend + ai-service + Oracle + GreenMail), a Dockerfile each for backend and ai-service, `infra/caddy/Caddyfile`, `.env.prod.example`, `scripts/deploy.sh` and `docs/DEPLOY.md`. Target is an OCI Ampere A1 Always Free VM; all six images verified arm64 first. Both images build and were smoke-tested locally. Decision D-028 recorded; it retires the D-019 memory constraint. Remaining work is account-side: OCI signup, VM, security list, DNS. |
 | 2026-09-04 | 2 | P0 closed and P1 built: both Docker images confirmed; `docker compose up` brings up Oracle 23ai Free + GreenMail healthy; Flyway V1–V4 apply clean (20 tables, 33 indexes, 3 PL/SQL packages, 4 triggers, `V_REVIEW_QUEUE`, zero compile errors); `JobQueueRepository` + `JobWorkerPool`; **10/10 backend tests green** incl. 8-way SKIP LOCKED concurrency and autonomous-transaction audit survival; LLM client + smoke test proving schema-valid output, abstention, measured cost and an 11.8× prompt-cache saving. Decisions D-007..D-010 recorded. |
 | 2026-09-04 | 1 | Assignment analysed; `PROJECT_PLAN.md` written; OpenRouter model verified and key smoke-tested; Docker data relocated to D: (freed 22.5 GB); repo + tracking docs created |

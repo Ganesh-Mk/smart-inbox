@@ -26,7 +26,7 @@ found. Unverifiable evidence caps the field's confidence at 0.40 and shows the r
 amber chip reading *"cited but not found in source"* — the system reporting its own
 hallucinations instead of hiding them.
 
-**Measured on the full 38-message corpus: 98.7% of asserted facts verified (545 / 552).**
+**Measured on the full 38-message corpus: 99.0% of asserted facts verified (569 / 575).**
 
 ---
 
